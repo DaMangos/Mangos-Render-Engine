@@ -1,0 +1,27 @@
+#pragma once
+
+#include <vk/buffer.hpp>
+#include <vk/buffer_view.hpp>
+#include <vk/command_buffer.hpp>
+#include <vk/command_pool.hpp>
+#include <vk/descriptor_pool.hpp>
+#include <vk/descriptor_set.hpp>
+#include <vk/descriptor_set_layout.hpp>
+#include <vk/device.hpp>
+#include <vk/ext/debug_report_callback.hpp>
+#include <vk/ext/debug_utils_messenger.hpp>
+#include <vk/fence.hpp>
+#include <vk/framebuffer.hpp>
+#include <vk/image.hpp>
+#include <vk/image_view.hpp>
+#include <vk/instance.hpp>
+#include <vk/khr/surface.hpp>
+#include <vk/khr/swapchain.hpp>
+#include <vk/physical_device.hpp>
+#include <vk/pipeline.hpp>
+#include <vk/pipeline_cache.hpp>
+#include <vk/pipeline_layout.hpp>
+#include <vk/render_pass.hpp>
+#include <vk/sampler.hpp>
+#include <vk/semaphore.hpp>
+#include <vk/shader_module.hpp>

@@ -1,6 +1,6 @@
-PROGRAM = MangosGameEngine.app
+PROGRAM = MangosGameEngine
 
-BINDIR    = bin
+BINDIR    = .bin
 OBJDIR    = $(BINDIR)/obj
 DEPDIR    = $(BINDIR)/dep
 EXEDIR    = $(BINDIR)/exe
@@ -18,33 +18,19 @@ LDLIBS    = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulka
 target debug   : CPPFLAGS += -D DEBUG=1
 traget release : CXXFLAGS += -O
 
-.PHONY: defualt
-defualt: $(EXEDIR)/$(PROGRAM)
-
 .PHONY: debug
-debug: defualt
+debug: $(EXEDIR)/$(PROGRAM)
 
 .PHONY: release
-release: defualt
+release: $(EXEDIR)/$(PROGRAM)
 
 .PHONY: run
-run: defualt
-	@$(EXEDIR)/$(PROGRAM)
+run: $(EXEDIR)/$(PROGRAM)
+	@$<
 
 .PHONY: clean
 clean:
 	@rm -rf $(BINDIR)
-
-.PHONY: clean-clangd
-clean-clangd:
-	@rm -rf .cache
-	@rm -rf compile_commands.json
-
-.PHONY: clangd
-clangd:
-	@make clean
-	@make clean-clangd
-	@bear -- make
 
 $(EXEDIR)/$(PROGRAM): $(OBJS)
 	@mkdir -p $(@D)

@@ -14,14 +14,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_descriptor_set_layout.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_descriptor_set_layout.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/render_pass.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/render_pass.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_descriptor_set_layout.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_descriptor_set_layout.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/render_pass.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/render_pass.o"
   },
   {
     "arguments": [
@@ -38,14 +41,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_sampler.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_sampler.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/pipeline_cache.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/pipeline_cache.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_sampler.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_sampler.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/pipeline_cache.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/pipeline_cache.o"
   },
   {
     "arguments": [
@@ -62,14 +68,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_pipeline.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_pipeline.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/image.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/image.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_pipeline.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_pipeline.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/image.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/image.o"
   },
   {
     "arguments": [
@@ -86,14 +95,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_ext_debug_utils_messenger.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_ext_debug_utils_messenger.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/pipeline_layout.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/pipeline_layout.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_ext_debug_utils_messenger.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_ext_debug_utils_messenger.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/pipeline_layout.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/pipeline_layout.o"
   },
   {
     "arguments": [
@@ -110,14 +122,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_render_pass.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_render_pass.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/command_pool.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/command_pool.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_render_pass.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_render_pass.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/command_pool.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/command_pool.o"
   },
   {
     "arguments": [
@@ -134,14 +149,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_pipeline_cache.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_pipeline_cache.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/ext/debug_utils_messenger.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/ext/debug_utils_messenger.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_pipeline_cache.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_pipeline_cache.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/ext/debug_utils_messenger.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/ext/debug_utils_messenger.o"
   },
   {
     "arguments": [
@@ -158,14 +176,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_image_view.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_image_view.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/ext/debug_report_callback.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/ext/debug_report_callback.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_image_view.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_image_view.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/ext/debug_report_callback.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/ext/debug_report_callback.o"
   },
   {
     "arguments": [
@@ -182,14 +203,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_fence.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_fence.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/framebuffer.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/framebuffer.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_fence.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_fence.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/framebuffer.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/framebuffer.o"
   },
   {
     "arguments": [
@@ -206,14 +230,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_descriptor_set.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_descriptor_set.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/descriptor_set.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/descriptor_set.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_descriptor_set.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_descriptor_set.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/descriptor_set.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/descriptor_set.o"
   },
   {
     "arguments": [
@@ -230,14 +257,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_command_buffer.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_command_buffer.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/device.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/device.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_command_buffer.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_command_buffer.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/device.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/device.o"
   },
   {
     "arguments": [
@@ -254,14 +284,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_pipeline_layout.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_pipeline_layout.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/sampler.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/sampler.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_pipeline_layout.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_pipeline_layout.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/sampler.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/sampler.o"
   },
   {
     "arguments": [
@@ -278,14 +311,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_command_pool.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_command_pool.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/command_buffer.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/command_buffer.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_command_pool.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_command_pool.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/command_buffer.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/command_buffer.o"
   },
   {
     "arguments": [
@@ -302,14 +338,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_framebuffer.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_framebuffer.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/pipeline.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/pipeline.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_framebuffer.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_framebuffer.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/pipeline.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/pipeline.o"
   },
   {
     "arguments": [
@@ -326,14 +365,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_semaphore.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_semaphore.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/buffer.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/buffer.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_semaphore.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_semaphore.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/buffer.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/buffer.o"
   },
   {
     "arguments": [
@@ -350,14 +392,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_buffer.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_buffer.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/khr/swapchain.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/khr/swapchain.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_buffer.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_buffer.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/khr/swapchain.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/khr/swapchain.o"
   },
   {
     "arguments": [
@@ -374,14 +419,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_device.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_device.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/khr/surface.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/khr/surface.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_device.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_device.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/khr/surface.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/khr/surface.o"
   },
   {
     "arguments": [
@@ -398,14 +446,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_physical_device.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_physical_device.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/descriptor_pool.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/descriptor_pool.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_physical_device.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_physical_device.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/descriptor_pool.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/descriptor_pool.o"
   },
   {
     "arguments": [
@@ -422,14 +473,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_descriptor_pool.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_descriptor_pool.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/physical_device.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/physical_device.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_descriptor_pool.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_descriptor_pool.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/physical_device.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/physical_device.o"
   },
   {
     "arguments": [
@@ -446,14 +500,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_image.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_image.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/buffer_view.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/buffer_view.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_image.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_image.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/buffer_view.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/buffer_view.o"
   },
   {
     "arguments": [
@@ -470,14 +527,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_instance.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_instance.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/descriptor_set_layout.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/descriptor_set_layout.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_instance.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_instance.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/descriptor_set_layout.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/descriptor_set_layout.o"
   },
   {
     "arguments": [
@@ -494,14 +554,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_shader_module.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_shader_module.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/instance.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/instance.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_shader_module.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_shader_module.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/instance.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/instance.o"
   },
   {
     "arguments": [
@@ -518,14 +581,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_khr_swapchain.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_khr_swapchain.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/fence.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/fence.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_khr_swapchain.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_khr_swapchain.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/fence.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/fence.o"
   },
   {
     "arguments": [
@@ -542,14 +608,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_buffer_view.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_buffer_view.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/semaphore.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/semaphore.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_buffer_view.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_buffer_view.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/semaphore.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/semaphore.o"
   },
   {
     "arguments": [
@@ -566,14 +635,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_ext_debug_report_callback.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_ext_debug_report_callback.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/shader_module.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/shader_module.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_ext_debug_report_callback.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_ext_debug_report_callback.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/shader_module.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/shader_module.o"
   },
   {
     "arguments": [
@@ -590,14 +662,17 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/graphics/src/wrappers/vk_khr_surface.o",
-      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_khr_surface.cpp"
+      ".bin/obj/graphics/src/wrappers/src/vk/image_view.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/image_view.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
-    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/vk_khr_surface.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/graphics/src/wrappers/vk_khr_surface.o"
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/src/vk/image_view.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/graphics/src/wrappers/src/vk/image_view.o"
   },
   {
     "arguments": [
@@ -614,13 +689,16 @@
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/wrappers/include",
       "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/handles/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/graphics/src/functions/include",
+      "-D",
+      "DEBUG=1",
       "-c",
       "-o",
-      "bin/obj/src/main.o",
+      ".bin/obj/src/main.o",
       "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/src/main.cpp"
     ],
     "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
     "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/src/main.cpp",
-    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/bin/obj/src/main.o"
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/src/main.o"
   }
 ]
