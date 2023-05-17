@@ -1,0 +1,28 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wconversion",
+      "-Wshadow",
+      "-Werror",
+      "-O",
+      "-I/opt/homebrew/Cellar/glfw/3.3.8/include",
+      "-I/opt/homebrew/opt/vulkan-headers/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/src/graphics/src/include",
+      "-I/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/src/logging/src/include",
+      "-D",
+      "DEBUG=1",
+      "-c",
+      "-o",
+      ".bin/obj/src/graphics/src/vulkan/device.o",
+      "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/src/graphics/src/vulkan/device.cpp"
+    ],
+    "directory": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine",
+    "file": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/src/graphics/src/vulkan/device.cpp",
+    "output": "/Users/oliverhorriganpierre/Documents/GitHub/Mangos-Game-Engine/.bin/obj/src/graphics/src/vulkan/device.o"
+  }
+]

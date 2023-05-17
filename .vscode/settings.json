@@ -6,5 +6,8 @@
     ],
     "files.associations": {
         ".clang-format": "yaml"
-    }
+    },
+    "cSpell.words": [
+        "entrywise"
+    ]
 }

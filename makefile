@@ -3,7 +3,7 @@ PROGRAM = MangosGameEngine
 BINDIR    = .bin
 OBJDIR    = $(BINDIR)/obj
 DEPDIR    = $(BINDIR)/dep
-EXEDIR    = $(BINDIR)/exe
+EXEDIR    = $(BINDIR)
 
 INCLUDES := $(shell find -L $(CURDIR) -name "include")
 SRCS     := $(shell find -L $(CURDIR) -name "*.cpp")
@@ -11,12 +11,11 @@ OBJS      = $(patsubst $(CURDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 DEPS      = $(patsubst $(CURDIR)/%.cpp, $(DEPDIR)/%.d, $(SRCS))
 
 CXX       = clang++
-CXXFLAGS  = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror
+CXXFLAGS  = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
 CPPFLAGS  = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(INCLUDES))
 LDLIBS    = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 
 target debug   : CPPFLAGS += -D DEBUG=1
-traget release : CXXFLAGS += -O
 
 .PHONY: debug
 debug: $(EXEDIR)/$(PROGRAM)

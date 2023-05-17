@@ -1,6 +1,5 @@
-#include <graphic.hpp>
+#include <graphics.hpp>
 
 int main()
 {
-  return 0;
 }
