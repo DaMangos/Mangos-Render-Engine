@@ -1,4 +1,4 @@
-.bin
-.cache
+.bin/
+.cache/
 .DS_Store
 compile_commands.json
