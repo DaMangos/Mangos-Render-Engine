@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "[MGE] debug",
+            "type": "shell",
+            "command": [
+                "make debug"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "[MGE] release",
+            "type": "shell",
+            "command": [
+                "make release"
+            ]
+        },
+        {
+            "label": "[MGE] clean",
+            "type": "shell",
+            "command": [
+                "make clean"
+            ]
+        },
+        {
+            "label": "[MGE] run ",
+            "type": "shell",
+            "command": [
+                "make run"
+            ]
+        },
+        {
+            "label": "[MGE] clean complier commands",
+            "type": "shell",
+            "command": [
+                "rm -rf .cache compile_commands.json"
+            ]
+        },
+        {
+            "label": "[MGE] generate complier commands",
+            "dependsOn": "[MGE] clean complier commands",
+            "type": "shell",
+            "command": [
+                "bear -- make clean debug"
+            ]
+        }
+    ]
+}
