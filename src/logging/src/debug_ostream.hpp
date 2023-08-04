@@ -10,38 +10,47 @@ namespace logging
 
 struct debug_info_ostream
 {
-    std::ostream &operator<<([[maybe_unused]] auto const &input) const
-    {
 #ifdef DEBUG
+    std::ostream &operator<<(auto const &input) const
+    {
       return std::cerr << font::reset << input;
-#else
-      return empty_ostream();
-#endif
     }
+#else
+    constexpr empty_ostream operator<<(auto const &) const noexcept
+    {
+      return empty_ostream();
+    }
+#endif
 };
 
 struct debug_warning_ostream
 {
-    std::ostream &operator<<([[maybe_unused]] auto const &input) const
-    {
 #ifdef DEBUG
+    std::ostream &operator<<(auto const &input) const
+    {
       return std::cerr << font::bold << font::magenta << "warning: " << font::reset << input;
-#else
-      return empty_ostream();
-#endif
     }
+#else
+    constexpr empty_ostream operator<<(auto const &) const noexcept
+    {
+      return empty_ostream();
+    }
+#endif
 };
 
 struct debug_error_ostream
 {
 #ifdef DEBUG
-    std::ostream &operator<<([[maybe_unused]] auto const &input) const
+    std::ostream &operator<<(auto const &input) const
     {
       return std::cerr << font::bold << font::red << "error: " << font::reset << input;
-#else
-    return empty_ostream();
-#endif
     }
+#else
+    constexpr empty_ostream operator<<(auto const &) const noexcept
+    {
+      return empty_ostream();
+    }
+#endif
 };
 
 extern debug_info_ostream    debug_info;
