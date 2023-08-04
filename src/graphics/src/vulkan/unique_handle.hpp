@@ -88,10 +88,10 @@ template <class managed_type>
 struct unique_handle<managed_type *[]>
 {
   using deleter_type = handle_deleter<managed_type *[]>;
-  using element_type = managed_type;
-  using pointer      = managed_type *;
+  using element_type = managed_type *;
+  using pointer      = managed_type **;
 
-  unique_handle(std::vector<pointer> & array, auto &&...deleter_args) noexcept
+  unique_handle(std::vector<element_type> & array, auto &&...deleter_args) noexcept
   : _array(std::move(array)),
     _deleter(std::forward<decltype(deleter_args)>(deleter_args)...)
   {
@@ -126,7 +126,7 @@ struct unique_handle<managed_type *[]>
     return _array.data();
   }
 
-  pointer operator[](typename std::vector<pointer>::size_type i) const noexcept
+  element_type operator[](typename std::vector<element_type>::size_type i) const noexcept
   {
     return _array[i];
   }
@@ -137,12 +137,12 @@ struct unique_handle<managed_type *[]>
   }
 
   [[nodiscard]]
-  std::vector<pointer> release() noexcept
+  std::vector<element_type> release() noexcept
   {
     return std::move(_array);
   }
 
-  void reset(std::vector<pointer> & new_array) noexcept
+  void reset(std::vector<element_type> & new_array) noexcept
   {
     if(_array.empty())
       _deleter(_array);
@@ -166,8 +166,8 @@ struct unique_handle<managed_type *[]>
   unique_handle &operator=(unique_handle const &) = delete;
 
 private:
-  std::vector<pointer> _array;
-  deleter_type         _deleter;
+  std::vector<element_type> _array;
+  deleter_type              _deleter;
 };
 
 template <class managed_type>
