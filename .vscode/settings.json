@@ -1,0 +1,13 @@
+{
+    "githubPullRequests.remotes": [
+        "origin",
+        "upstream",
+        "https://github.com/DaMangos/Mangos-Game-Engine"
+    ],
+    "files.associations": {
+        ".clang-format": "yaml"
+    },
+    "cSpell.words": [
+        "entrywise"
+    ]
+}
