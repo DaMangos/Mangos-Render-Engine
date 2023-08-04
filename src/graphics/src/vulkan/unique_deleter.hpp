@@ -48,23 +48,20 @@ struct handle_deleter<VkBufferView>
 template <>
 struct handle_deleter<VkCommandBuffer[]>
 {
-    handle_deleter(std::vector<VkCommandBuffer> &command_buffers, VkDevice device, VkCommandPool command_pool) noexcept
+    handle_deleter(VkDevice device, VkCommandPool command_pool) noexcept
     : _device(device),
-      _command_pool(command_pool),
-      _command_buffers(std::move(command_buffers))
+      _command_pool(command_pool)
     {
     }
 
-    void operator()(VkCommandBuffer *) noexcept
+    void operator()(std::vector<VkCommandBuffer> &command_buffers) noexcept
     {
-      vkFreeCommandBuffers(_device, _command_pool, to_count(_command_buffers), _command_buffers.data());
-      _command_buffers.clear();
+      vkFreeCommandBuffers(_device, _command_pool, to_count(command_buffers), command_buffers.data());
     }
 
   private:
-    VkDevice                     _device;
-    VkCommandPool                _command_pool;
-    std::vector<VkCommandBuffer> _command_buffers;
+    VkDevice      _device;
+    VkCommandPool _command_pool;
 };
 
 template <>
