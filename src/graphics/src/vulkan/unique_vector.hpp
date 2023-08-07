@@ -48,7 +48,8 @@ struct _unique_vector_deallocator
     {
     }
 
-    constexpr void operator()(value_type *data) noexcept requires std::invocable<deleter<value_type>, value_type *, std::size_t>
+    constexpr void operator()(value_type *data) const noexcept
+      requires std::invocable<deleter<value_type>, value_type *, std::size_t>
     {
       using alloc_traits = std::allocator_traits<alloc_type>;
       alloc_type alloc;
@@ -58,7 +59,7 @@ struct _unique_vector_deallocator
       alloc_traits::deallocate(alloc, data, _count);
     }
 
-    constexpr void operator()(value_type *data) noexcept requires std::invocable<deleter<value_type>, value_type>
+    constexpr void operator()(value_type *data) const noexcept requires std::invocable<deleter<value_type>, value_type>
     {
       using alloc_traits = std::allocator_traits<alloc_type>;
       alloc_type alloc;
@@ -70,7 +71,7 @@ struct _unique_vector_deallocator
       alloc_traits::deallocate(alloc, data, _count);
     }
 
-    constexpr void operator()(value_type *data) noexcept
+    constexpr void operator()(value_type *data) const noexcept
     {
       using alloc_traits = std::allocator_traits<alloc_type>;
       alloc_type alloc;
