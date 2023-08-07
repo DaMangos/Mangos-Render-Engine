@@ -87,8 +87,7 @@ struct _unique_vector_deallocator
     std::size_t _count;
 };
 
-template <class container, class alloc_type = std::allocator<typename container::value_type>>
-requires std::ranges::contiguous_range<container>
+template <std::ranges::contiguous_range container, class alloc_type = std::allocator<typename container::value_type>>
 constexpr unique_vector<typename container::value_type> make_unique_vector(container &values, auto &&...deleter_args)
 {
   using unique_vector = unique_vector<typename container::value_type, alloc_type>;
