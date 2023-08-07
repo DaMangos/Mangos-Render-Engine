@@ -15,9 +15,7 @@ VkPhysicalDevice physical_device::get() const noexcept
 unique_handle<VkDevice> physical_device::create_device(VkDeviceCreateInfo create_info) const
 {
   VkDevice device;
-  return return_or_throw(vkCreateDevice(get(), &create_info, nullptr, &device),
-                         "vkCreateDevice",
-                         unique_handle<VkDevice>(device));
+  return return_or_throw(vkCreateDevice(get(), &create_info, nullptr, &device), "vkCreateDevice", make_unique_handle(device));
 }
 
 bool physical_device::check_surface_support(VkSurfaceKHR surface, std::uint32_t queue_family) const

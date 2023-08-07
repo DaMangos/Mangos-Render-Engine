@@ -27,6 +27,13 @@ constexpr std::uint32_t to_count(std::ranges::contiguous_range auto &container)
   throw std::out_of_range("container size is too large");
 }
 
+constexpr std::uint32_t to_count(std::integral auto count)
+{
+  if(count < std::numeric_limits<std::uint32_t>::max())
+    return static_cast<std::uint32_t>(count);
+  throw std::out_of_range("container size is too large");
+}
+
 auto return_or_throw(VkResult result, std::string const &function_name, auto &&return_value)
 {
   switch(result)

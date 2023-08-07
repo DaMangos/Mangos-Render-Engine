@@ -1,6 +1,8 @@
 #pragma once
 
+#include "deleter.hpp"
 #include "unique_handle.hpp"
+#include "unique_vector.hpp"
 
 namespace graphics::vulkan
 {
@@ -10,8 +12,8 @@ struct device
 
     VkDevice get() const noexcept;
 
-    unique_handle<VkCommandBuffer[]> allocate_command_buffers(VkCommandPool               command_pool,
-                                                              VkCommandBufferAllocateInfo allocate_info) const;
+    unique_vector<VkCommandBuffer> allocate_command_buffers(VkCommandPool               command_pool,
+                                                            VkCommandBufferAllocateInfo allocate_info) const;
 
     unique_handle<VkCommandPool> create_command_pool(VkCommandPoolCreateInfo create_info) const;
 
@@ -23,11 +25,11 @@ struct device
 
     unique_handle<VkPipelineLayout> create_pipeline_layout(VkPipelineLayoutCreateInfo create_info) const;
 
-    unique_handle<VkPipeline[]> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
-                                                        std::vector<VkComputePipelineCreateInfo> create_infos) const;
+    unique_vector<VkPipeline> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
+                                                      std::vector<VkComputePipelineCreateInfo> create_infos) const;
 
-    unique_handle<VkPipeline[]> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
-                                                         std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
+    unique_vector<VkPipeline> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
+                                                       std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
 
     unique_handle<VkRenderPass> create_render_pass(VkRenderPassCreateInfo create_info) const;
 
