@@ -5,9 +5,7 @@ namespace graphics::vulkan
 unique_handle<VkInstance> create_instance(VkInstanceCreateInfo create_info)
 {
   VkInstance instance;
-  return return_or_throw(vkCreateInstance(&create_info, nullptr, &instance),
-                         "vkCreateInstance",
-                         unique_handle<VkInstance>(instance));
+  return return_or_throw(vkCreateInstance(&create_info, nullptr, &instance), "vkCreateInstance", make_unique_handle(instance));
 }
 
 instance::instance(unique_handle<VkInstance> underling_instance) noexcept
@@ -40,7 +38,7 @@ instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create
                                                                     nullptr,
                                                                     &debug_utils_messenger),
                          "vkCreateDebugUtilsMessengerEXT",
-                         unique_handle<VkDebugUtilsMessengerEXT>(debug_utils_messenger, get()));
+                         make_unique_handle(debug_utils_messenger, get()));
 }
 
 unique_handle<VkDebugReportCallbackEXT>
@@ -53,7 +51,7 @@ instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT create
                                                                     nullptr,
                                                                     &debug_report_callback),
                          "vkCreateDebugReportCallbackEXT",
-                         unique_handle<VkDebugReportCallbackEXT>(debug_report_callback, get()));
+                         make_unique_handle(debug_report_callback, get()));
 }
 
 unique_handle<VkSurfaceKHR> instance::create_surface(GLFWwindow *window) const
@@ -61,6 +59,6 @@ unique_handle<VkSurfaceKHR> instance::create_surface(GLFWwindow *window) const
   VkSurfaceKHR surface;
   return return_or_throw(glfwCreateWindowSurface(get(), window, nullptr, &surface),
                          "glfwCreateWindowSurface",
-                         unique_handle<VkSurfaceKHR>(surface, get()));
+                         make_unique_handle(surface, get()));
 }
 }

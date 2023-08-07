@@ -2,19 +2,15 @@
 
 #include "funtional.hpp"
 
-#include <cstdint>
-#include <vector>
-
 namespace graphics::vulkan
 {
-template <class managed_type>
-struct handle_deleter;
+template <class value_type>
+struct deleter;
 
 template <>
-struct handle_deleter<VkBuffer>
-
+struct deleter<VkBuffer>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -29,9 +25,9 @@ struct handle_deleter<VkBuffer>
 };
 
 template <>
-struct handle_deleter<VkBufferView>
+struct deleter<VkBufferView>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -46,17 +42,17 @@ struct handle_deleter<VkBufferView>
 };
 
 template <>
-struct handle_deleter<VkCommandBuffer[]>
+struct deleter<VkCommandBuffer>
 {
-    handle_deleter(VkDevice device, VkCommandPool command_pool) noexcept
+    deleter(VkDevice device, VkCommandPool command_pool) noexcept
     : _device(device),
       _command_pool(command_pool)
     {
     }
 
-    void operator()(std::vector<VkCommandBuffer> &command_buffers) noexcept
+    void operator()(VkCommandBuffer *command_buffers, std::size_t count) noexcept
     {
-      vkFreeCommandBuffers(_device, _command_pool, to_count(command_buffers), command_buffers.data());
+      vkFreeCommandBuffers(_device, _command_pool, to_count(count), command_buffers);
     }
 
   private:
@@ -65,9 +61,9 @@ struct handle_deleter<VkCommandBuffer[]>
 };
 
 template <>
-struct handle_deleter<VkCommandPool>
+struct deleter<VkCommandPool>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -82,9 +78,9 @@ struct handle_deleter<VkCommandPool>
 };
 
 template <>
-struct handle_deleter<VkDebugReportCallbackEXT>
+struct deleter<VkDebugReportCallbackEXT>
 {
-    handle_deleter(VkInstance instance)
+    deleter(VkInstance instance)
     : _instance(instance)
     {
     }
@@ -103,9 +99,9 @@ struct handle_deleter<VkDebugReportCallbackEXT>
 };
 
 template <>
-struct handle_deleter<VkDebugUtilsMessengerEXT>
+struct deleter<VkDebugUtilsMessengerEXT>
 {
-    handle_deleter(VkInstance instance)
+    deleter(VkInstance instance)
     : _instance(instance)
     {
     }
@@ -124,9 +120,9 @@ struct handle_deleter<VkDebugUtilsMessengerEXT>
 };
 
 template <>
-struct handle_deleter<VkDescriptorPool>
+struct deleter<VkDescriptorPool>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -141,9 +137,9 @@ struct handle_deleter<VkDescriptorPool>
 };
 
 template <>
-struct handle_deleter<VkDescriptorSetLayout>
+struct deleter<VkDescriptorSetLayout>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -158,7 +154,7 @@ struct handle_deleter<VkDescriptorSetLayout>
 };
 
 template <>
-struct handle_deleter<VkDevice>
+struct deleter<VkDevice>
 {
     void operator()(VkDevice device) const noexcept
     {
@@ -167,9 +163,9 @@ struct handle_deleter<VkDevice>
 };
 
 template <>
-struct handle_deleter<VkFence>
+struct deleter<VkFence>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -184,9 +180,9 @@ struct handle_deleter<VkFence>
 };
 
 template <>
-struct handle_deleter<VkFramebuffer>
+struct deleter<VkFramebuffer>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -201,9 +197,9 @@ struct handle_deleter<VkFramebuffer>
 };
 
 template <>
-struct handle_deleter<VkImage>
+struct deleter<VkImage>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -218,9 +214,9 @@ struct handle_deleter<VkImage>
 };
 
 template <>
-struct handle_deleter<VkImageView>
+struct deleter<VkImageView>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -235,7 +231,7 @@ struct handle_deleter<VkImageView>
 };
 
 template <>
-struct handle_deleter<VkInstance>
+struct deleter<VkInstance>
 {
     void operator()(VkInstance instance) const noexcept
     {
@@ -244,9 +240,9 @@ struct handle_deleter<VkInstance>
 };
 
 template <>
-struct handle_deleter<VkSurfaceKHR>
+struct deleter<VkSurfaceKHR>
 {
-    handle_deleter(VkInstance instance) noexcept
+    deleter(VkInstance instance) noexcept
     : _instance(instance)
     {
     }
@@ -261,9 +257,9 @@ struct handle_deleter<VkSurfaceKHR>
 };
 
 template <>
-struct handle_deleter<VkSwapchainKHR>
+struct deleter<VkSwapchainKHR>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -278,9 +274,9 @@ struct handle_deleter<VkSwapchainKHR>
 };
 
 template <>
-struct handle_deleter<VkPipeline>
+struct deleter<VkPipeline>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -295,27 +291,9 @@ struct handle_deleter<VkPipeline>
 };
 
 template <>
-struct handle_deleter<VkPipeline[]>
+struct deleter<VkPipelineCache>
 {
-    handle_deleter(VkDevice device) noexcept
-    : _device(device)
-    {
-    }
-
-    void operator()(std::vector<VkPipeline> &pipelines) noexcept
-    {
-      for(VkPipeline pipeline : pipelines)
-        vkDestroyPipeline(_device, pipeline, nullptr);
-    }
-
-  private:
-    VkDevice _device;
-};
-
-template <>
-struct handle_deleter<VkPipelineCache>
-{
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -330,9 +308,9 @@ struct handle_deleter<VkPipelineCache>
 };
 
 template <>
-struct handle_deleter<VkPipelineLayout>
+struct deleter<VkPipelineLayout>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -347,9 +325,9 @@ struct handle_deleter<VkPipelineLayout>
 };
 
 template <>
-struct handle_deleter<VkRenderPass>
+struct deleter<VkRenderPass>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -364,9 +342,9 @@ struct handle_deleter<VkRenderPass>
 };
 
 template <>
-struct handle_deleter<VkSampler>
+struct deleter<VkSampler>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -381,9 +359,9 @@ struct handle_deleter<VkSampler>
 };
 
 template <>
-struct handle_deleter<VkSemaphore>
+struct deleter<VkSemaphore>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
@@ -397,9 +375,9 @@ struct handle_deleter<VkSemaphore>
 };
 
 template <>
-struct handle_deleter<VkShaderModule>
+struct deleter<VkShaderModule>
 {
-    handle_deleter(VkDevice device) noexcept
+    deleter(VkDevice device) noexcept
     : _device(device)
     {
     }
