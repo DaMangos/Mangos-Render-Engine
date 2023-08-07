@@ -23,7 +23,9 @@ struct instance
     template <class function_pointer>
     auto invoke(std::string const &function_name, auto &&...function_args) const
     {
-      return graphics::vulkan::invoke<function_pointer>(get(), function_name, std::move(function_args)...);
+      return graphics::vulkan::invoke<function_pointer>(get(),
+                                                        function_name,
+                                                        std::forward<decltype(function_args)>(function_args)...);
     }
 
   private:
