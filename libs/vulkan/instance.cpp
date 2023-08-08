@@ -7,7 +7,7 @@ mgo::unique_handle<VkInstance> create_instance(VkInstanceCreateInfo create_info)
   VkInstance instance;
   return return_or_throw(vkCreateInstance(&create_info, nullptr, &instance),
                          "vkCreateInstance",
-                         mgo::make_unique_handle(instance));
+                         mgo::make_unique_handle<VkInstance>(instance));
 }
 
 instance::instance(mgo::unique_handle<VkInstance> underling_instance) noexcept
@@ -18,6 +18,11 @@ instance::instance(mgo::unique_handle<VkInstance> underling_instance) noexcept
 VkInstance instance::get() const noexcept
 {
   return _underling_instance.get();
+}
+
+mgo::shared_handle<VkInstance> instance::get_handle() const noexcept
+{
+  return _underling_instance;
 }
 
 std::vector<VkPhysicalDevice> instance::enumerate_Physical_device() const
@@ -40,7 +45,7 @@ instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create
                                                                     nullptr,
                                                                     &debug_utils_messenger),
                          "vkCreateDebugUtilsMessengerEXT",
-                         mgo::make_unique_handle(debug_utils_messenger, get()));
+                         mgo::make_unique_handle<VkDebugUtilsMessengerEXT>(debug_utils_messenger, get_handle()));
 }
 
 mgo::unique_handle<VkDebugReportCallbackEXT>
@@ -53,7 +58,7 @@ instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT create
                                                                     nullptr,
                                                                     &debug_report_callback),
                          "vkCreateDebugReportCallbackEXT",
-                         mgo::make_unique_handle(debug_report_callback, get()));
+                         mgo::make_unique_handle<VkDebugReportCallbackEXT>(debug_report_callback, get_handle()));
 }
 
 mgo::unique_handle<VkSurfaceKHR> instance::create_surface(GLFWwindow *window) const
@@ -61,6 +66,6 @@ mgo::unique_handle<VkSurfaceKHR> instance::create_surface(GLFWwindow *window) co
   VkSurfaceKHR surface;
   return return_or_throw(glfwCreateWindowSurface(get(), window, nullptr, &surface),
                          "glfwCreateWindowSurface",
-                         mgo::make_unique_handle(surface, get()));
+                         mgo::make_unique_handle<VkSurfaceKHR>(surface, get_handle()));
 }
 }
