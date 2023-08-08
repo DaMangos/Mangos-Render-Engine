@@ -2,6 +2,8 @@
 
 #include "../../deleter.hpp"
 
+#include <memory>
+
 namespace vulkan
 {
 struct device
@@ -10,8 +12,10 @@ struct device
 
     VkDevice get() const noexcept;
 
-    mgo::unique_vector<VkCommandBuffer> allocate_command_buffers(VkCommandPool               command_pool,
-                                                                 VkCommandBufferAllocateInfo allocate_info) const;
+    mgo::shared_handle<VkDevice> get_handle() const noexcept;
+
+    mgo::unique_handle<VkCommandBuffer[]> allocate_command_buffers(mgo::shared_handle<VkCommandPool> command_pool,
+                                                                   VkCommandBufferAllocateInfo       allocate_info) const;
 
     mgo::unique_handle<VkCommandPool> create_command_pool(VkCommandPoolCreateInfo create_info) const;
 
@@ -23,11 +27,11 @@ struct device
 
     mgo::unique_handle<VkPipelineLayout> create_pipeline_layout(VkPipelineLayoutCreateInfo create_info) const;
 
-    mgo::unique_vector<VkPipeline> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
-                                                           std::vector<VkComputePipelineCreateInfo> create_infos) const;
+    std::vector<mgo::unique_handle<VkPipeline>>
+    create_compute_pipeline(VkPipelineCache pipeline_cache, std::vector<VkComputePipelineCreateInfo> create_infos) const;
 
-    mgo::unique_vector<VkPipeline> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
-                                                            std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
+    std::vector<mgo::unique_handle<VkPipeline>>
+    create_graphics_pipeline(VkPipelineCache pipeline_cache, std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
 
     mgo::unique_handle<VkRenderPass> create_render_pass(VkRenderPassCreateInfo create_info) const;
 
@@ -40,6 +44,6 @@ struct device
     mgo::unique_handle<VkSwapchainKHR> create_swapchain(VkSwapchainCreateInfoKHR create_info) const;
 
   private:
-    mgo::unique_handle<VkDevice> _underling_device;
+    mgo::shared_handle<VkDevice> _underling_device;
 };
 }

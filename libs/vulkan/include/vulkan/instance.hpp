@@ -12,6 +12,8 @@ struct instance
 
     VkInstance get() const noexcept;
 
+    mgo::shared_handle<VkInstance> get_handle() const noexcept;
+
     std::vector<VkPhysicalDevice> enumerate_Physical_device() const;
 
     mgo::unique_handle<VkDebugUtilsMessengerEXT>
@@ -29,6 +31,6 @@ struct instance
     }
 
   private:
-    mgo::unique_handle<VkInstance> _underling_instance;
+    mgo::shared_handle<VkInstance> _underling_instance;
 };
 }

@@ -1,3 +1,4 @@
+#include <memory>
 #include <vulkan/device.hpp>
 
 namespace vulkan
@@ -12,13 +13,19 @@ VkDevice device::get() const noexcept
   return _underling_device.get();
 }
 
-mgo::unique_vector<VkCommandBuffer> device::allocate_command_buffers(VkCommandPool               command_pool,
-                                                                     VkCommandBufferAllocateInfo allocate_info) const
+mgo::shared_handle<VkDevice> device::get_handle() const noexcept
 {
-  std::vector<VkCommandBuffer> command_buffers(allocate_info.commandBufferCount);
-  return return_or_throw(vkAllocateCommandBuffers(get(), &allocate_info, command_buffers.data()),
-                         "vkAllocateCommandBuffers",
-                         mgo::make_unique_vector(command_buffers, get(), command_pool));
+  return _underling_device;
+}
+
+mgo::unique_handle<VkCommandBuffer[]> device::allocate_command_buffers(mgo::shared_handle<VkCommandPool> command_pool,
+                                                                       VkCommandBufferAllocateInfo       allocate_info) const
+{
+  VkCommandBuffer *command_buffers = new VkCommandBuffer[allocate_info.commandBufferCount];
+  return return_or_throw(
+    vkAllocateCommandBuffers(get(), &allocate_info, command_buffers),
+    "vkAllocateCommandBuffers",
+    mgo::make_unique_handle<VkCommandBuffer[]>(command_buffers, get_handle(), command_pool, allocate_info.commandBufferCount));
 }
 
 mgo::unique_handle<VkCommandPool> device::create_command_pool(VkCommandPoolCreateInfo create_info) const
@@ -26,7 +33,7 @@ mgo::unique_handle<VkCommandPool> device::create_command_pool(VkCommandPoolCreat
   VkCommandPool command_pool;
   return return_or_throw(vkCreateCommandPool(get(), &create_info, nullptr, &command_pool),
                          "vkCreateCommandPool",
-                         mgo::make_unique_handle(command_pool, get()));
+                         mgo::make_unique_handle<VkCommandPool>(command_pool, get_handle()));
 }
 
 mgo::unique_handle<VkFence> device::create_fence(VkFenceCreateInfo create_info) const
@@ -34,7 +41,7 @@ mgo::unique_handle<VkFence> device::create_fence(VkFenceCreateInfo create_info) 
   VkFence fence;
   return return_or_throw(vkCreateFence(get(), &create_info, nullptr, &fence),
                          "vkCreateFence",
-                         mgo::make_unique_handle(fence, get()));
+                         mgo::make_unique_handle<VkFence>(fence, get_handle()));
 }
 
 mgo::unique_handle<VkFramebuffer> device::create_framebuffer(VkFramebufferCreateInfo create_info) const
@@ -42,7 +49,7 @@ mgo::unique_handle<VkFramebuffer> device::create_framebuffer(VkFramebufferCreate
   VkFramebuffer framebuffer;
   return return_or_throw(vkCreateFramebuffer(get(), &create_info, nullptr, &framebuffer),
                          "vkCreateFramebuffer",
-                         mgo::make_unique_handle(framebuffer, get()));
+                         mgo::make_unique_handle<VkFramebuffer>(framebuffer, get_handle()));
 }
 
 mgo::unique_handle<VkImageView> device::create_image_view(VkImageViewCreateInfo create_info) const
@@ -50,7 +57,7 @@ mgo::unique_handle<VkImageView> device::create_image_view(VkImageViewCreateInfo 
   VkImageView image_view;
   return return_or_throw(vkCreateImageView(get(), &create_info, nullptr, &image_view),
                          "vkCreateImageView",
-                         mgo::make_unique_handle(image_view, get()));
+                         mgo::make_unique_handle<VkImageView>(image_view, get_handle()));
 }
 
 mgo::unique_handle<VkPipelineLayout> device::create_pipeline_layout(VkPipelineLayoutCreateInfo create_info) const
@@ -58,27 +65,39 @@ mgo::unique_handle<VkPipelineLayout> device::create_pipeline_layout(VkPipelineLa
   VkPipelineLayout pipeline_layout;
   return return_or_throw(vkCreatePipelineLayout(get(), &create_info, nullptr, &pipeline_layout),
                          "vkCreatePipelineLayout",
-                         mgo::make_unique_handle(pipeline_layout, get()));
+                         mgo::make_unique_handle<VkPipelineLayout>(pipeline_layout, get_handle()));
 }
 
-mgo::unique_vector<VkPipeline> device::create_compute_pipeline(VkPipelineCache                          pipeline_cache,
-                                                               std::vector<VkComputePipelineCreateInfo> create_infos) const
+std::vector<mgo::unique_handle<VkPipeline>>
+device::create_compute_pipeline(VkPipelineCache pipeline_cache, std::vector<VkComputePipelineCreateInfo> create_infos) const
 {
   std::vector<VkPipeline> pipelines(create_infos.size());
   return return_or_throw(
     vkCreateComputePipelines(get(), pipeline_cache, to_count(create_infos), create_infos.data(), nullptr, pipelines.data()),
     "vkCreateComputePipelines",
-    mgo::make_unique_vector(pipelines, get()));
+    [&]() -> std::vector<mgo::unique_handle<VkPipeline>>
+    {
+      std::vector<mgo::unique_handle<VkPipeline>> pipeline_handles;
+      for(VkPipeline pipeline : pipelines)
+        pipeline_handles.emplace_back(mgo::make_unique_handle<VkPipeline>(pipeline, get_handle()));
+      return pipeline_handles;
+    }());
 }
 
-mgo::unique_vector<VkPipeline> device::create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
-                                                                std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
+std::vector<mgo::unique_handle<VkPipeline>>
+device::create_graphics_pipeline(VkPipelineCache pipeline_cache, std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
 {
   std::vector<VkPipeline> pipelines(create_infos.size());
   return return_or_throw(
     vkCreateGraphicsPipelines(get(), pipeline_cache, to_count(create_infos), create_infos.data(), nullptr, pipelines.data()),
     "vkCreateGraphicsPipelines",
-    mgo::make_unique_vector(pipelines, get()));
+    [&]() -> std::vector<mgo::unique_handle<VkPipeline>>
+    {
+      std::vector<mgo::unique_handle<VkPipeline>> pipeline_handles;
+      for(VkPipeline pipeline : pipelines)
+        pipeline_handles.emplace_back(mgo::make_unique_handle<VkPipeline>(pipeline, get_handle()));
+      return pipeline_handles;
+    }());
 }
 
 mgo::unique_handle<VkRenderPass> device::create_render_pass(VkRenderPassCreateInfo create_info) const
@@ -86,7 +105,7 @@ mgo::unique_handle<VkRenderPass> device::create_render_pass(VkRenderPassCreateIn
   VkRenderPass render_pass;
   return return_or_throw(vkCreateRenderPass(get(), &create_info, nullptr, &render_pass),
                          "vkCreateRenderPass",
-                         mgo::make_unique_handle(render_pass, get()));
+                         mgo::make_unique_handle<VkRenderPass>(render_pass, get_handle()));
 }
 
 mgo::unique_handle<VkRenderPass> device::create_render_pass(VkRenderPassCreateInfo2 create_info) const
@@ -94,7 +113,7 @@ mgo::unique_handle<VkRenderPass> device::create_render_pass(VkRenderPassCreateIn
   VkRenderPass render_pass;
   return return_or_throw(vkCreateRenderPass2(get(), &create_info, nullptr, &render_pass),
                          "vkCreateRenderPass2",
-                         mgo::make_unique_handle(render_pass, get()));
+                         mgo::make_unique_handle<VkRenderPass>(render_pass, get_handle()));
 }
 
 mgo::unique_handle<VkSemaphore> device::create_semaphore(VkSemaphoreCreateInfo create_info) const
@@ -102,7 +121,7 @@ mgo::unique_handle<VkSemaphore> device::create_semaphore(VkSemaphoreCreateInfo c
   VkSemaphore semaphore;
   return return_or_throw(vkCreateSemaphore(get(), &create_info, nullptr, &semaphore),
                          "vkCreateSemaphore",
-                         mgo::make_unique_handle(semaphore, get()));
+                         mgo::make_unique_handle<VkSemaphore>(semaphore, get_handle()));
 }
 
 mgo::unique_handle<VkShaderModule> device::create_shader_module(VkShaderModuleCreateInfo create_info) const
@@ -110,7 +129,7 @@ mgo::unique_handle<VkShaderModule> device::create_shader_module(VkShaderModuleCr
   VkShaderModule shader_module;
   return return_or_throw(vkCreateShaderModule(get(), &create_info, nullptr, &shader_module),
                          "vkCreateShaderModule",
-                         mgo::make_unique_handle(shader_module, get()));
+                         mgo::make_unique_handle<VkShaderModule>(shader_module, get_handle()));
 }
 
 mgo::unique_handle<VkSwapchainKHR> device::create_swapchain(VkSwapchainCreateInfoKHR create_info) const
@@ -118,6 +137,6 @@ mgo::unique_handle<VkSwapchainKHR> device::create_swapchain(VkSwapchainCreateInf
   VkSwapchainKHR shader_module;
   return return_or_throw(vkCreateSwapchainKHR(get(), &create_info, nullptr, &shader_module),
                          "vkCreateSwapchainKHR",
-                         mgo::make_unique_handle(shader_module, get()));
+                         mgo::make_unique_handle<VkSwapchainKHR>(shader_module, get_handle()));
 }
 }
