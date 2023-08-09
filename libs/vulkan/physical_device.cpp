@@ -1,23 +1,26 @@
-#include <vulkan/physical_device.hpp>
+#include "physical_device.hpp"
+
+#include "device.hpp"
+#include "functional.hpp"
 
 namespace vulkan
 {
-physical_device::physical_device(VkPhysicalDevice physical_device) noexcept
-: _underling_physical_device(physical_device)
+physical_device::physical_device(pointer physical_device)
+: _physical_device(physical_device)
 {
 }
 
 VkPhysicalDevice physical_device::get() const noexcept
 {
-  return _underling_physical_device;
+  return _physical_device;
 }
 
-mgo::unique_handle<VkDevice> physical_device::create_device(VkDeviceCreateInfo create_info) const
+device physical_device::create_device(VkDeviceCreateInfo create_info) const
 {
-  VkDevice device;
-  return return_or_throw(vkCreateDevice(get(), &create_info, nullptr, &device),
+  device::pointer ptr;
+  return return_or_throw(vkCreateDevice(get(), &create_info, nullptr, &ptr),
                          "vkCreateDevice",
-                         mgo::make_unique_handle(device));
+                         device(ptr, [](device::pointer ptr) { vkDestroyDevice(ptr, nullptr); }));
 }
 
 bool physical_device::check_surface_support(VkSurfaceKHR surface, std::uint32_t queue_family) const

@@ -1,16 +1,23 @@
 #pragma once
 
-#include "../../deleter.hpp"
+#include "non_dispatchable_handles.hpp"
 
 namespace vulkan
 {
 struct physical_device
 {
-    physical_device(VkPhysicalDevice physical_device) noexcept;
+    friend instance;
 
-    VkPhysicalDevice get() const noexcept;
+    using pointer       = typename handle_traits<VkPhysicalDevice>::pointer;
+    using const_pointer = typename handle_traits<VkPhysicalDevice>::const_pointer;
+    using element_type  = typename handle_traits<VkPhysicalDevice>::element_type;
+    using deleter_type  = typename handle_traits<VkPhysicalDevice>::deleter_type;
+    using unique_type   = typename handle_traits<VkPhysicalDevice>::unique_type;
+    using shared_type   = typename handle_traits<VkPhysicalDevice>::shared_type;
 
-    mgo::unique_handle<VkDevice> create_device(VkDeviceCreateInfo create_info) const;
+    pointer get() const noexcept;
+
+    device create_device(VkDeviceCreateInfo create_info) const;
 
     bool check_surface_support(VkSurfaceKHR surface, std::uint32_t queue_family) const;
 
@@ -31,6 +38,8 @@ struct physical_device
     std::vector<VkExtensionProperties> get_extension_properties(std::string const &layer_name) const;
 
   private:
-    VkPhysicalDevice _underling_physical_device;
+    physical_device(pointer physical_device);
+
+    pointer _physical_device;
 };
 }
