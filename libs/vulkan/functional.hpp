@@ -1,14 +1,14 @@
 #pragma once
 
-#define VK_ENABLE_BETA_EXTENSIONS
-#define GLFW_INCLUDE_VULKAN
-
 #include <functional>
-#include <GLFW/glfw3.h>
 #include <mgo/iostream.hpp>
 #include <ranges>
 #include <stdexcept>
 #include <string>
+
+#define VK_ENABLE_BETA_EXTENSIONS
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 namespace vulkan
 {
@@ -24,14 +24,14 @@ constexpr std::uint32_t to_count(std::ranges::contiguous_range auto &container)
 {
   if(container.size() < std::numeric_limits<std::uint32_t>::max())
     return static_cast<std::uint32_t>(container.size());
-  throw std::out_of_range("container size is too large");
+  throw std::out_of_range("vulkan::to_count");
 }
 
 constexpr std::uint32_t to_count(std::integral auto count)
 {
   if(count < std::numeric_limits<std::uint32_t>::max())
     return static_cast<std::uint32_t>(count);
-  throw std::out_of_range("container size is too large");
+  throw std::out_of_range("vulkan::to_count");
 }
 
 auto return_or_throw(VkResult result, std::string const &function_name, auto &&return_value)
