@@ -1,6 +1,6 @@
 #pragma once
 
-#include "non_dispatchable_handle.hpp"
+#include "fwd.hpp"
 
 #include <iterator>
 

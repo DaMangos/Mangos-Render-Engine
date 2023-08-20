@@ -1,12 +1,11 @@
 #pragma once
 
-#include "non_dispatchable_handle.hpp"
+#include "fwd.hpp"
 
 #include <string>
 
 namespace vulkan
 {
-
 struct instance
 {
     using element_type = typename instance_handle::element_type;
@@ -25,12 +24,18 @@ struct instance
     khr::surface create_surface(GLFWwindow *window) const;
 
     template <class function_pointer>
-    auto invoke(std::string const &function_name, auto &&...args)
+    function_pointer get_proc_addr(std::string const &function_name) const
     {
       if(PFN_vkVoidFunction function = vkGetInstanceProcAddr(get(), function_name.c_str()))
-        return std::invoke(reinterpret_cast<function_pointer>(function), std::forward<decltype(args)>(args)...);
-      throw std::runtime_error("failed to find: " + function_name);
+        return reinterpret_cast<function_pointer>(function);
+      throw std::runtime_error("failed get protocol address: " + function_name);
     }
+
+    instance &operator=(instance const &) = delete;
+    instance &operator=(instance &&)      = default;
+    instance(instance const &)            = delete;
+    instance(instance &&)                 = default;
+    ~instance()                           = default;
 
   private:
     instance_handle _instance;

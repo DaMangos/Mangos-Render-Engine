@@ -1,6 +1,6 @@
 #pragma once
 
-#include "non_dispatchable_handle.hpp"
+#include "fwd.hpp"
 
 namespace vulkan
 {
@@ -14,6 +14,8 @@ struct queue
     VkQueue get() const noexcept;
 
   private:
+    friend struct device;
+
     VkQueue _queue;
 };
 }

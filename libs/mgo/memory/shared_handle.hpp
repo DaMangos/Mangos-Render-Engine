@@ -2,8 +2,6 @@
 
 #include "handle_deleter.hpp"
 
-#include <memory>
-
 namespace mgo
 {
 template <std::size_t ptr_index, class... arg_types>

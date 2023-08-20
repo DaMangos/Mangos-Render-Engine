@@ -1,6 +1,6 @@
 #pragma once
 
-#include "non_dispatchable_handle.hpp"
+#include "fwd.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -64,11 +64,11 @@ struct device
 
     khr::swapchain create_swapchain(VkSwapchainCreateInfoKHR create_info) const;
 
-    device(device const &) noexcept            = delete;
-    device &operator=(device const &) noexcept = delete;
-    device(device &&) noexcept                 = default;
-    device &operator=(device &&) noexcept      = default;
-    ~device()                                  = default;
+    device &operator=(device const &) = delete;
+    device &operator=(device &&)      = default;
+    device(device const &)            = delete;
+    device(device &&)                 = default;
+    ~device()                         = default;
 
   private:
     friend struct physical_device;

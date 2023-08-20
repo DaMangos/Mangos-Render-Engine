@@ -3,8 +3,6 @@
 #include "shared_handle.hpp"
 #include "unique_handle.hpp"
 
-#include <memory>
-
 namespace mgo
 {
 template <std::size_t ptr_index, class... arg_types>

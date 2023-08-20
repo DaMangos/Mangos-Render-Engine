@@ -1,7 +1,5 @@
 #include "command_buffers.hpp"
 
-#include "non_dispatchable_handle.hpp"
-
 namespace vulkan
 {
 VkCommandBuffer const *command_buffers::get() const noexcept
