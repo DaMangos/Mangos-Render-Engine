@@ -1,61 +1,52 @@
 #pragma once
 
-#include "non_dispatchable_handles.hpp"
+#include "non_dispatchable_handle.hpp"
 
-#include <vector>
+#include <iterator>
 
 namespace vulkan
 {
 struct command_buffers
 {
-    friend device;
+    using element_type = VkCommandBuffer;
+    using pointer      = VkCommandBuffer *;
 
-    using size_type              = typename handle_traits<VkCommandBuffer[]>::size_type;
-    using value_type             = typename handle_traits<VkCommandBuffer[]>::value_type;
-    using difference_type        = typename handle_traits<VkCommandBuffer[]>::difference_type;
-    using pointer                = typename handle_traits<VkCommandBuffer[]>::pointer;
-    using const_pointer          = typename handle_traits<VkCommandBuffer[]>::const_pointer;
-    using reference              = typename handle_traits<VkCommandBuffer[]>::reference;
-    using const_reference        = typename handle_traits<VkCommandBuffer[]>::const_reference;
-    using iterator               = typename handle_traits<VkCommandBuffer[]>::iterator;
-    using const_iterator         = typename handle_traits<VkCommandBuffer[]>::const_iterator;
-    using reverse_iterator       = typename handle_traits<VkCommandBuffer[]>::reverse_iterator;
-    using const_reverse_iterator = typename handle_traits<VkCommandBuffer[]>::const_reverse_iterator;
-    using element_type           = typename handle_traits<VkCommandBuffer[]>::element_type;
-    using deleter_type           = typename handle_traits<VkCommandBuffer[]>::deleter_type;
-    using unique_type            = typename handle_traits<VkCommandBuffer[]>::unique_type;
-    using shared_type            = typename handle_traits<VkCommandBuffer[]>::shared_type;
+    VkCommandBuffer const *get() const noexcept;
 
-    size_type size() const noexcept;
+    VkDevice get_device() const noexcept;
 
-    pointer get() const noexcept;
+    VkCommandPool get_command_pool() const noexcept;
 
-    pointer data() const noexcept;
+    std::uint32_t size() const noexcept;
 
-    reference operator[](size_type i) const noexcept;
+    VkCommandBuffer const *data() const noexcept;
 
-    reference at(size_type i) const;
+    VkCommandBuffer const *begin() const noexcept;
 
-    iterator begin() const noexcept;
+    VkCommandBuffer const *end() const noexcept;
 
-    iterator end() const noexcept;
+    VkCommandBuffer const *cbegin() const noexcept;
 
-    iterator cbegin() const noexcept;
+    VkCommandBuffer const *cend() const noexcept;
 
-    iterator cend() const noexcept;
+    std::reverse_iterator<VkCommandBuffer const *> rbegin() const noexcept;
 
-    reverse_iterator rbegin() const noexcept;
+    std::reverse_iterator<VkCommandBuffer const *> rend() const noexcept;
 
-    reverse_iterator rend() const noexcept;
+    std::reverse_iterator<VkCommandBuffer const *> crbegin() const noexcept;
 
-    reverse_iterator crbegin() const noexcept;
+    std::reverse_iterator<VkCommandBuffer const *> crend() const noexcept;
 
-    reverse_iterator crend() const noexcept;
+    VkCommandBuffer at(std::uint32_t i) const;
+
+    VkCommandBuffer operator[](std::uint32_t i) const noexcept;
 
   private:
-    command_buffers(size_type count, pointer ptr, deleter_type &&deleter);
+    friend struct device;
 
-    size_type   _count;
-    unique_type _command_buffers;
+    command_buffers(command_pool_handle command_pool, command_buffers_handle command_buffers);
+
+    command_pool_handle    _command_pool;
+    command_buffers_handle _command_buffers;
 };
 }

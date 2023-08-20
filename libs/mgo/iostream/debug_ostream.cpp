@@ -1,8 +1,8 @@
 #include "debug_ostream.hpp"
 
-namespace mgo
+namespace mgo::debug
 {
-debug_info_ostream    log_debug_info;
-debug_warning_ostream log_debug_warning;
-debug_error_ostream   log_debug_error;
+info_ostream    cout_info;
+warning_ostream cerr_warning;
+error_ostream   cerr_error;
 }

@@ -5,15 +5,15 @@
 
 #include <iostream>
 
-namespace mgo
+namespace mgo::debug
 {
 
-struct debug_info_ostream
+struct info_ostream
 {
 #ifdef DEBUG
     std::ostream &operator<<(auto const &input) const
     {
-      return std::cerr << font::reset << input;
+      return std::cout << font::reset << input;
     }
 #else
     constexpr empty_ostream operator<<(auto const &) const noexcept
@@ -23,7 +23,7 @@ struct debug_info_ostream
 #endif
 };
 
-struct debug_warning_ostream
+struct warning_ostream
 {
 #ifdef DEBUG
     std::ostream &operator<<(auto const &input) const
@@ -38,7 +38,7 @@ struct debug_warning_ostream
 #endif
 };
 
-struct debug_error_ostream
+struct error_ostream
 {
 #ifdef DEBUG
     std::ostream &operator<<(auto const &input) const
@@ -53,7 +53,7 @@ struct debug_error_ostream
 #endif
 };
 
-extern debug_info_ostream    log_debug_info;
-extern debug_warning_ostream log_debug_warning;
-extern debug_error_ostream   log_debug_error;
+extern info_ostream    cout_info;
+extern warning_ostream cerr_warning;
+extern error_ostream   cerr_error;
 }
