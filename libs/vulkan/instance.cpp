@@ -62,9 +62,17 @@ std::vector<physical_device> instance::enumerate_physical_device() const
 
 ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create_info) const
 {
-  VkDebugUtilsMessengerEXT          ptr;
-  VkResult                          result = vkCreateDebugUtilsMessengerEXT(get(), &create_info, nullptr, &ptr);
-  ext::debug_utils_messenger_handle handle(vkDestroyDebugUtilsMessengerEXT, get(), ptr, nullptr);
+  VkDebugUtilsMessengerEXT ptr;
+  VkResult result = std::invoke(get_proc_addr<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT"),
+                                get(),
+                                &create_info,
+                                nullptr,
+                                &ptr);
+  ext::debug_utils_messenger_handle handle(
+    get_proc_addr<PFN_vkDestroyDebugUtilsMessengerEXT>("vkDestroyDebugUtilsMessengerEXT"),
+    get(),
+    ptr,
+    nullptr);
   switch(result)
   {
     case VK_SUCCESS :
@@ -78,9 +86,17 @@ ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMe
 
 ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT create_info) const
 {
-  VkDebugReportCallbackEXT          ptr;
-  VkResult                          result = vkCreateDebugReportCallbackEXT(get(), &create_info, nullptr, &ptr);
-  ext::debug_report_callback_handle handle(vkDestroyDebugReportCallbackEXT, get(), ptr, nullptr);
+  VkDebugReportCallbackEXT ptr;
+  VkResult result = std::invoke(get_proc_addr<PFN_vkCreateDebugReportCallbackEXT>("vkCreateDebugReportCallbackEXT"),
+                                get(),
+                                &create_info,
+                                nullptr,
+                                &ptr);
+  ext::debug_report_callback_handle handle(
+    get_proc_addr<PFN_vkDestroyDebugReportCallbackEXT>("vkDestroyDebugReportCallbackEXT"),
+    get(),
+    ptr,
+    nullptr);
   switch(result)
   {
     case VK_SUCCESS :

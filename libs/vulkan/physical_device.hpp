@@ -1,6 +1,6 @@
 #pragma once
 
-#include "non_dispatchable_handle.hpp"
+#include "fwd.hpp"
 
 #include <string>
 
@@ -11,7 +11,7 @@ struct physical_device
     using element_type = typename std::pointer_traits<VkPhysicalDevice>::element_type;
     using pointer      = typename std::pointer_traits<VkPhysicalDevice>::pointer;
 
-    physical_device(VkPhysicalDevice shared_physical_device) noexcept;
+    physical_device(VkPhysicalDevice physical_device) noexcept;
 
     VkPhysicalDevice get() const noexcept;
 
@@ -36,6 +36,8 @@ struct physical_device
     std::vector<VkExtensionProperties> get_extension_properties(std::string const &layer_name) const;
 
   private:
+    friend struct instance;
+
     VkPhysicalDevice _physical_device;
 };
 }

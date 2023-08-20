@@ -1,12 +1,11 @@
 #pragma once
 
 #include "device.hpp"
-#include "non_dispatchable_handle.hpp"
 
 namespace vulkan
 {
 template <>
-struct non_dispatchable_handle<device_handle, descriptor_sets_handle>
+struct non_dispatchable<device_handle, descriptor_sets_handle>
 {
     using element_type = typename descriptor_sets_handle::element_type;
     using pointer      = typename descriptor_sets_handle::pointer;
@@ -91,7 +90,7 @@ struct non_dispatchable_handle<device_handle, descriptor_sets_handle>
   private:
     friend struct device;
 
-    non_dispatchable_handle(descriptor_pool_handle descriptor_pool, descriptor_sets_handle descriptor_sets)
+    non_dispatchable(descriptor_pool_handle descriptor_pool, descriptor_sets_handle descriptor_sets)
     : _descriptor_pool(descriptor_pool),
       _descriptor_sets(std::move(descriptor_sets))
     {

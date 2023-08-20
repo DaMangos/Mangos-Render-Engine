@@ -2,7 +2,6 @@
 
 #include "command_buffers.hpp"
 #include "descriptor_sets.hpp"
-#include "non_dispatchable_handle.hpp"
 #include "queue.hpp"
 
 namespace vulkan
