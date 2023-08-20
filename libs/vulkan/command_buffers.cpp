@@ -1,77 +1,89 @@
 #include "command_buffers.hpp"
 
+#include "non_dispatchable_handle.hpp"
+
 namespace vulkan
 {
-command_buffers::command_buffers(size_type count, pointer ptr, deleter_type &&deleter)
-: _count(count),
-  _command_buffers(ptr, deleter)
-{
-}
-
-command_buffers::size_type command_buffers::size() const noexcept
-{
-  return _count;
-}
-
-command_buffers::pointer command_buffers::get() const noexcept
+VkCommandBuffer const *command_buffers::get() const noexcept
 {
   return _command_buffers.get();
 }
 
-command_buffers::pointer command_buffers::data() const noexcept
+VkDevice command_buffers::get_device() const noexcept
+{
+  return _command_buffers.get_deleter().get_arg<0>();
+}
+
+VkCommandPool command_buffers::get_command_pool() const noexcept
+{
+  return _command_buffers.get_deleter().get_arg<1>();
+}
+
+std::uint32_t command_buffers::size() const noexcept
+{
+  return _command_buffers.get_deleter().get_arg<2>();
+}
+
+VkCommandBuffer const *command_buffers::data() const noexcept
 {
   return get();
 }
 
-command_buffers::reference command_buffers::operator[](size_type i) const noexcept
-{
-  return data()[i];
-}
-
-command_buffers::reference command_buffers::at(size_type i) const
-{
-  if(i < _count)
-    return data()[i];
-  throw std::out_of_range("command_buffers::at");
-}
-
-command_buffers::iterator command_buffers::begin() const noexcept
+VkCommandBuffer const *command_buffers::begin() const noexcept
 {
   return data();
 }
 
-command_buffers::iterator command_buffers::end() const noexcept
+VkCommandBuffer const *command_buffers::end() const noexcept
 {
   return data() + size();
 }
 
-command_buffers::iterator command_buffers::cbegin() const noexcept
+VkCommandBuffer const *command_buffers::cbegin() const noexcept
 {
-  return begin();
+  return data();
 }
 
-command_buffers::iterator command_buffers::cend() const noexcept
+VkCommandBuffer const *command_buffers::cend() const noexcept
 {
-  return begin();
+  return data() + size();
 }
 
-command_buffers::reverse_iterator command_buffers::command_buffers::rbegin() const noexcept
+std::reverse_iterator<VkCommandBuffer const *> command_buffers::rbegin() const noexcept
 {
-  return reverse_iterator(end());
+  return std::reverse_iterator<VkCommandBuffer const *>(begin());
 }
 
-command_buffers::reverse_iterator command_buffers::rend() const noexcept
+std::reverse_iterator<VkCommandBuffer const *> command_buffers::rend() const noexcept
 {
-  return reverse_iterator(begin());
+  return std::reverse_iterator<VkCommandBuffer const *>(end());
 }
 
-command_buffers::reverse_iterator command_buffers::crbegin() const noexcept
+std::reverse_iterator<VkCommandBuffer const *> command_buffers::crbegin() const noexcept
 {
-  return rbegin();
+  return std::reverse_iterator<VkCommandBuffer const *>(cbegin());
 }
 
-command_buffers::reverse_iterator command_buffers::crend() const noexcept
+std::reverse_iterator<VkCommandBuffer const *> command_buffers::crend() const noexcept
 {
-  return rbegin();
+  return std::reverse_iterator<VkCommandBuffer const *>(cend());
+}
+
+command_buffers::element_type command_buffers::at(std::uint32_t i) const
+{
+  if(i >= size())
+    throw std::out_of_range("command_buffers::at");
+  return data()[i];
+}
+
+command_buffers::element_type command_buffers::operator[](std::uint32_t i) const noexcept
+{
+  return data()[i];
+}
+
+command_buffers::command_buffers(command_pool_handle command_pool, command_buffers_handle command_buffers)
+: _command_pool(command_pool),
+  _command_buffers(std::move(command_buffers))
+{
 }
 }

@@ -2,12 +2,12 @@
 
 namespace vulkan
 {
-queue::queue(pointer queue)
+queue::queue(VkQueue queue) noexcept
 : _queue(queue)
 {
 }
 
-queue::pointer queue::get() const noexcept
+VkQueue queue::get() const noexcept
 {
   return _queue;
 }

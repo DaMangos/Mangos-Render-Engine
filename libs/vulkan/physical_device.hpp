@@ -1,21 +1,19 @@
 #pragma once
 
-#include "non_dispatchable_handles.hpp"
+#include "non_dispatchable_handle.hpp"
+
+#include <string>
 
 namespace vulkan
 {
 struct physical_device
 {
-    friend instance;
+    using element_type = typename std::pointer_traits<VkPhysicalDevice>::element_type;
+    using pointer      = typename std::pointer_traits<VkPhysicalDevice>::pointer;
 
-    using pointer       = typename handle_traits<VkPhysicalDevice>::pointer;
-    using const_pointer = typename handle_traits<VkPhysicalDevice>::const_pointer;
-    using element_type  = typename handle_traits<VkPhysicalDevice>::element_type;
-    using deleter_type  = typename handle_traits<VkPhysicalDevice>::deleter_type;
-    using unique_type   = typename handle_traits<VkPhysicalDevice>::unique_type;
-    using shared_type   = typename handle_traits<VkPhysicalDevice>::shared_type;
+    physical_device(VkPhysicalDevice shared_physical_device) noexcept;
 
-    pointer get() const noexcept;
+    VkPhysicalDevice get() const noexcept;
 
     device create_device(VkDeviceCreateInfo create_info) const;
 
@@ -38,8 +36,6 @@ struct physical_device
     std::vector<VkExtensionProperties> get_extension_properties(std::string const &layer_name) const;
 
   private:
-    physical_device(pointer physical_device);
-
-    pointer _physical_device;
+    VkPhysicalDevice _physical_device;
 };
 }

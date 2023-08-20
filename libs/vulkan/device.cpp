@@ -1,342 +1,526 @@
 #include "device.hpp"
 
 #include "command_buffers.hpp"
-#include "functional.hpp"
+#include "descriptor_sets.hpp"
+#include "non_dispatchable_handle.hpp"
 #include "queue.hpp"
-
-#include <vector>
 
 namespace vulkan
 {
-device::device(pointer device, deleter_type &&deleter)
-: _device(device, deleter)
-{
-}
-
-device::pointer device::get() const noexcept
+VkDevice device::get() const noexcept
 {
   return _device.get();
 }
 
 buffer device::create_buffer(VkBufferCreateInfo create_info) const
 {
-  buffer::pointer ptr;
-  return return_or_throw(vkCreateBuffer(get(), &create_info, nullptr, &ptr),
-                         "vkCreateBuffer",
-                         buffer(ptr, [device = get()](buffer::pointer ptr) { vkDestroyBuffer(device, ptr, nullptr); }));
-}
-
-image device::create_image(VkImageCreateInfo create_info) const
-{
-  image::pointer ptr;
-  return return_or_throw(vkCreateImage(get(), &create_info, nullptr, &ptr),
-                         "vkCreateImage",
-                         image(ptr, [device = get()](image::pointer ptr) -> void { vkDestroyImage(device, ptr, nullptr); }));
-}
-
-semaphore device::create_semaphore(VkSemaphoreCreateInfo create_info) const
-{
-  semaphore::pointer ptr;
-  return return_or_throw(
-    vkCreateSemaphore(get(), &create_info, nullptr, &ptr),
-    "vkCreateSemaphore",
-    semaphore(ptr, [device = get()](semaphore::pointer ptr) -> void { vkDestroySemaphore(device, ptr, nullptr); }));
-}
-
-fence device::create_fence(VkFenceCreateInfo create_info) const
-{
-  fence::pointer ptr;
-  return return_or_throw(vkCreateFence(get(), &create_info, nullptr, &ptr),
-                         "vkCreateFence",
-                         fence(ptr, [device = get()](fence::pointer ptr) -> void { vkDestroyFence(device, ptr, nullptr); }));
-}
-
-device_memory device::allocate_device_memory(VkMemoryAllocateInfo allocate_info) const
-{
-  device_memory::pointer ptr;
-  return return_or_throw(
-    vkAllocateMemory(get(), &allocate_info, nullptr, &ptr),
-    "vkAllocateMemory",
-    device_memory(ptr, [device = get()](device_memory::pointer ptr) -> void { vkFreeMemory(device, ptr, nullptr); }));
-}
-
-event device::create_event(VkEventCreateInfo create_info) const
-{
-  event::pointer ptr;
-  return return_or_throw(vkCreateEvent(get(), &create_info, nullptr, &ptr),
-                         "vkCreateEvent",
-                         event(ptr, [device = get()](event::pointer ptr) -> void { vkDestroyEvent(device, ptr, nullptr); }));
-}
-
-query_pool device::create_query_pool(VkQueryPoolCreateInfo create_info) const
-{
-  query_pool::pointer ptr;
-  return return_or_throw(
-    vkCreateQueryPool(get(), &create_info, nullptr, &ptr),
-    "vkCreateQueryPool",
-    query_pool(ptr, [device = get()](query_pool::pointer ptr) -> void { vkDestroyQueryPool(device, ptr, nullptr); }));
+  VkBuffer      ptr;
+  VkResult      result = vkCreateBuffer(get(), &create_info, nullptr, &ptr);
+  buffer_handle handle(vkDestroyBuffer, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return buffer(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkBuffer: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkBuffer: out of device memory");
+    case VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR :
+      throw std::runtime_error("failed to create VkBuffer: invalid opaque capture address");
+    default :
+      throw std::runtime_error("failed to create VkBuffer: unknown error");
+  }
 }
 
 buffer_view device::create_buffer_view(VkBufferViewCreateInfo create_info) const
 {
-  buffer_view::pointer ptr;
-  return return_or_throw(
-    vkCreateBufferView(get(), &create_info, nullptr, &ptr),
-    "vkCreateBufferView",
-    buffer_view(ptr, [device = get()](buffer_view::pointer ptr) -> void { vkDestroyBufferView(device, ptr, nullptr); }));
-}
-
-image_view device::create_image_view(VkImageViewCreateInfo create_info) const
-{
-  image_view::pointer ptr;
-  return return_or_throw(
-    vkCreateImageView(get(), &create_info, nullptr, &ptr),
-    "vkCreateImageView",
-    image_view(ptr, [device = get()](image_view::pointer ptr) -> void { vkDestroyImageView(device, ptr, nullptr); }));
-}
-
-shader_module device::create_shader_module(VkShaderModuleCreateInfo create_info) const
-{
-  shader_module::pointer ptr;
-  return return_or_throw(
-    vkCreateShaderModule(get(), &create_info, nullptr, &ptr),
-    "vkCreateShaderModule",
-    shader_module(ptr, [device = get()](shader_module::pointer ptr) -> void { vkDestroyShaderModule(device, ptr, nullptr); }));
-}
-
-pipeline_cache device::create_pipeline_cache(VkPipelineCacheCreateInfo create_info) const
-{
-  pipeline_cache::pointer ptr;
-  return return_or_throw(vkCreatePipelineCache(get(), &create_info, nullptr, &ptr),
-                         "vkCreatePipelineCache",
-                         pipeline_cache(ptr,
-                                        [device = get()](pipeline_cache::pointer ptr) -> void
-                                        { vkDestroyPipelineCache(device, ptr, nullptr); }));
-}
-
-pipeline_layout device::create_pipeline_layout(VkPipelineLayoutCreateInfo create_info) const
-{
-  pipeline_layout::pointer ptr;
-  return return_or_throw(vkCreatePipelineLayout(get(), &create_info, nullptr, &ptr),
-                         "vkCreatePipelineLayout",
-                         pipeline_layout(ptr,
-                                         [device = get()](pipeline_layout::pointer ptr) -> void
-                                         { vkDestroyPipelineLayout(device, ptr, nullptr); }));
-}
-
-render_pass device::create_render_pass(VkRenderPassCreateInfo create_info) const
-{
-  render_pass::pointer ptr;
-  return return_or_throw(
-    vkCreateRenderPass(get(), &create_info, nullptr, &ptr),
-    "vkCreateRenderPass",
-    render_pass(ptr, [device = get()](render_pass::pointer ptr) -> void { vkDestroyRenderPass(device, ptr, nullptr); }));
-}
-
-descriptor_set_layout device::create_descriptor_set_layout(VkDescriptorSetLayoutCreateInfo create_info) const
-{
-  descriptor_set_layout::pointer ptr;
-  return return_or_throw(vkCreateDescriptorSetLayout(get(), &create_info, nullptr, &ptr),
-                         "vkCreateDescriptorSetLayout",
-                         descriptor_set_layout(ptr,
-                                               [device = get()](descriptor_set_layout::pointer ptr) -> void
-                                               { vkDestroyDescriptorSetLayout(device, ptr, nullptr); }));
-}
-
-sampler device::create_sampler(VkSamplerCreateInfo create_info) const
-{
-  sampler::pointer ptr;
-  return return_or_throw(
-    vkCreateSampler(get(), &create_info, nullptr, &ptr),
-    "vkCreateSampler",
-    sampler(ptr, [device = get()](sampler::pointer ptr) -> void { vkDestroySampler(device, ptr, nullptr); }));
-}
-
-descriptor_sets device::allocate_descriptor_sets(VkDescriptorSetAllocateInfo allocate_info) const
-{
-  descriptor_sets::pointer ptr = new descriptor_sets::element_type[allocate_info.descriptorSetCount];
-  return return_or_throw(vkAllocateDescriptorSets(get(), &allocate_info, ptr),
-                         "vkAllocateDescriptorSets",
-                         descriptor_sets(allocate_info.descriptorSetCount,
-                                         ptr,
-                                         [device          = get(),
-                                          descriptor_pool = allocate_info.descriptorPool,
-                                          count = allocate_info.descriptorSetCount](descriptor_sets::pointer ptr) -> void
-                                         {
-                                           vkFreeDescriptorSets(device, descriptor_pool, count, ptr);
-                                           delete[] ptr;
-                                         }));
-}
-
-descriptor_pool device::create_descriptor_pool(VkDescriptorPoolCreateInfo create_info) const
-{
-  descriptor_pool::pointer ptr;
-  return return_or_throw(vkCreateDescriptorPool(get(), &create_info, nullptr, &ptr),
-                         "vkCreateDescriptorPool",
-                         descriptor_pool(ptr,
-                                         [device = get()](descriptor_pool::pointer ptr) -> void
-                                         { vkDestroyDescriptorPool(device, ptr, nullptr); }));
-}
-
-framebuffer device::create_framebuffer(VkFramebufferCreateInfo create_info) const
-{
-  framebuffer::pointer ptr;
-  return return_or_throw(
-    vkCreateFramebuffer(get(), &create_info, nullptr, &ptr),
-    "vkCreateFramebuffer",
-    framebuffer(ptr, [device = get()](framebuffer::pointer ptr) -> void { vkDestroyFramebuffer(device, ptr, nullptr); }));
-}
-
-command_pool device::create_command_pool(VkCommandPoolCreateInfo create_info) const
-{
-  command_pool::pointer ptr;
-  return return_or_throw(
-    vkCreateCommandPool(get(), &create_info, nullptr, &ptr),
-    "vkCreateCommandPool",
-    command_pool(ptr, [device = get()](command_pool::pointer ptr) -> void { vkDestroyCommandPool(device, ptr, nullptr); }));
+  VkBufferView       ptr;
+  VkResult           result = vkCreateBufferView(get(), &create_info, nullptr, &ptr);
+  buffer_view_handle handle(vkDestroyBufferView, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return buffer_view(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkBufferView: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkBufferView: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkBufferView: unknown error");
+  }
 }
 
 command_buffers device::allocate_command_buffers(VkCommandBufferAllocateInfo allocate_info) const
 {
-  command_buffers::pointer ptr = new command_buffers::element_type[allocate_info.commandBufferCount];
-  return return_or_throw(vkAllocateCommandBuffers(get(), &allocate_info, ptr),
-                         "vkAllocateCommandBuffers",
-                         command_buffers(allocate_info.commandBufferCount,
-                                         ptr,
-                                         [device       = get(),
-                                          command_pool = allocate_info.commandPool,
-                                          count        = allocate_info.commandBufferCount](command_buffers::pointer ptr) -> void
-                                         {
-                                           vkFreeCommandBuffers(device, command_pool, count, ptr);
-                                           delete[] ptr;
-                                         }));
+  auto registered_command_pool = _registered_command_pools.find(allocate_info.commandPool);
+  if(registered_command_pool == _registered_command_pools.end() or registered_command_pool->second.expired())
+    throw std::runtime_error("failed to allocate VkCommandBuffers: command pool not found");
+  VkCommandBuffer       *ptr    = new VkCommandBuffer[allocate_info.commandBufferCount];
+  VkResult               result = vkAllocateCommandBuffers(get(), &allocate_info, ptr);
+  command_buffers_handle handle(
+    [](VkDevice device, VkCommandPool pool, uint32_t count, VkCommandBuffer const *ptr)
+    {
+      vkFreeCommandBuffers(device, pool, count, ptr);
+      delete[] ptr;
+    },
+    get(),
+    allocate_info.commandPool,
+    allocate_info.commandBufferCount,
+    ptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return command_buffers(registered_command_pool->second.lock(), std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to allocate VkCommandBuffers: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to allocate VkCommandBuffers: out of device memory");
+    case VK_ERROR_OUT_OF_POOL_MEMORY :
+      throw std::runtime_error("failed to allocate VkCommandBuffers: out of pool memory");
+    default :
+      throw std::runtime_error("failed to allocate VkCommandBuffers: unknown error");
+  }
 }
 
-queue device::get_device_queue(VkDeviceQueueInfo2 queue_info) const
+command_pool device::create_command_pool(VkCommandPoolCreateInfo create_info)
 {
-  queue::pointer ptr;
-  vkGetDeviceQueue2(get(), &queue_info, &ptr);
-  return queue(ptr);
+  VkCommandPool       ptr;
+  VkResult            result = vkCreateCommandPool(get(), &create_info, nullptr, &ptr);
+  command_pool_handle handle(vkDestroyCommandPool, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      _registered_command_pools.emplace(ptr, handle);
+      return command_pool(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkCommandPool: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkCommandPool: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkCommandPool: unknown error");
+  }
+}
+
+descriptor_pool device::create_descriptor_pool(VkDescriptorPoolCreateInfo create_info)
+{
+  VkDescriptorPool       ptr;
+  VkResult               result = vkCreateDescriptorPool(get(), &create_info, nullptr, &ptr);
+  descriptor_pool_handle handle(vkDestroyDescriptorPool, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      _registered_descriptor_pools.emplace(ptr, handle);
+      return descriptor_pool(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkDescriptorPool: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkDescriptorPool: out of device memory");
+    case VK_ERROR_FRAGMENTATION_EXT :
+      throw std::runtime_error("failed to create VkDescriptorPool: fragmentation");
+    default :
+      throw std::runtime_error("failed to create VkDescriptorPool: unknown error");
+  }
+}
+
+descriptor_set_layout device::create_descriptor_set_layout(VkDescriptorSetLayoutCreateInfo create_info) const
+{
+  VkDescriptorSetLayout        ptr;
+  VkResult                     result = vkCreateDescriptorSetLayout(get(), &create_info, nullptr, &ptr);
+  descriptor_set_layout_handle handle(vkDestroyDescriptorSetLayout, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return descriptor_set_layout(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkDescriptorSetLayout: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkDescriptorSetLayout: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkDescriptorSetLayout: unknown error");
+  }
+}
+
+descriptor_sets device::allocate_descriptor_sets(VkDescriptorSetAllocateInfo allocate_info) const
+{
+  auto registered_descriptor_pool = _registered_descriptor_pools.find(allocate_info.descriptorPool);
+  if(registered_descriptor_pool == _registered_descriptor_pools.end() or registered_descriptor_pool->second.expired())
+    throw std::runtime_error("failed to allocate VkDescriptorSets: descriptor pool not found");
+  VkDescriptorSet       *ptr    = new VkDescriptorSet[allocate_info.descriptorSetCount];
+  VkResult               result = vkAllocateDescriptorSets(get(), &allocate_info, ptr);
+  descriptor_sets_handle handle(
+    [](VkDevice device, VkDescriptorPool pool, uint32_t count, VkDescriptorSet const *ptr)
+    {
+      vkFreeDescriptorSets(device, pool, count, ptr);
+      delete[] ptr;
+    },
+    get(),
+    allocate_info.descriptorPool,
+    allocate_info.descriptorSetCount,
+    ptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return descriptor_sets(registered_descriptor_pool->second.lock(), std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to allocate VkDescriptorSets: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to allocate VkDescriptorSets: out of device memory");
+    case VK_ERROR_FRAGMENTED_POOL :
+      throw std::runtime_error("failed to allocate VkDescriptorSets: fragmented pool");
+    case VK_ERROR_OUT_OF_POOL_MEMORY :
+      throw std::runtime_error("failed to allocate VkDescriptorSets: out of pool memory");
+    default :
+      throw std::runtime_error("failed to allocate VkDescriptorSets: unknown error");
+  }
+}
+
+device_memory device::allocate_memory(VkMemoryAllocateInfo allocate_info) const
+{
+  VkDeviceMemory       ptr;
+  VkResult             result = vkAllocateMemory(get(), &allocate_info, nullptr, &ptr);
+  device_memory_handle handle(vkFreeMemory, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return device_memory(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to allocate VkDeviceMemory: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to allocate VkDeviceMemory: out of device memory");
+    case VK_ERROR_INVALID_EXTERNAL_HANDLE :
+      throw std::runtime_error("failed to allocate VkDeviceMemory: invalid external handle");
+    case VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR :
+      throw std::runtime_error("failed to allocate VkDeviceMemory: invalid opaque capture address");
+    default :
+      throw std::runtime_error("failed to allocate VkDeviceMemory: unknown error");
+  }
+}
+
+event device::create_event(VkEventCreateInfo create_info) const
+{
+  VkEvent      ptr;
+  VkResult     result = vkCreateEvent(get(), &create_info, nullptr, &ptr);
+  event_handle handle(vkDestroyEvent, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return event(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkEvent: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkEvent: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkEvent: unknown error");
+  }
+}
+
+fence device::create_fence(VkFenceCreateInfo create_info) const
+{
+  VkFence      ptr;
+  VkResult     result = vkCreateFence(get(), &create_info, nullptr, &ptr);
+  fence_handle handle(vkDestroyFence, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return fence(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkFence: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkFence: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkFence: unknown error");
+  }
+}
+
+framebuffer device::create_framebuffer(VkFramebufferCreateInfo create_info) const
+{
+  VkFramebuffer      ptr;
+  VkResult           result = vkCreateFramebuffer(get(), &create_info, nullptr, &ptr);
+  framebuffer_handle handle(vkDestroyFramebuffer, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return framebuffer(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkFramebuffer: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkFramebuffer: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkFramebuffer: unknown error");
+  }
+}
+
+image device::create_image(VkImageCreateInfo create_info) const
+{
+  VkImage      ptr;
+  VkResult     result = vkCreateImage(get(), &create_info, nullptr, &ptr);
+  image_handle handle(vkDestroyImage, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return image(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkImage: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkImage: out of device memory");
+    case VK_ERROR_COMPRESSION_EXHAUSTED_EXT :
+      throw std::runtime_error("failed to create VkImage: compression exhausted");
+    case VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR :
+      throw std::runtime_error("failed to create VkImage: invalid opaque capture address");
+    default :
+      throw std::runtime_error("failed to create VkImage: unknown error");
+  }
+}
+
+image_view device::create_image_view(VkImageViewCreateInfo create_info) const
+{
+  VkImageView       ptr;
+  VkResult          result = vkCreateImageView(get(), &create_info, nullptr, &ptr);
+  image_view_handle handle(vkDestroyImageView, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return image_view(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkImageView: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkImageView: out of device memory");
+    case VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR :
+      throw std::runtime_error("failed to create VkImageView: invalid opaque capture address");
+    default :
+      throw std::runtime_error("failed to create VkImageView: unknown error");
+  }
 }
 
 std::vector<pipeline> device::create_compute_pipeline(VkPipelineCache                          pipeline_cache,
                                                       std::vector<VkComputePipelineCreateInfo> create_infos) const
 {
-  std::vector<pipeline::pointer> ptrs;
-  return return_or_throw(
-    vkCreateComputePipelines(get(), pipeline_cache, to_count(create_infos), create_infos.data(), nullptr, ptrs.data()),
-    "vkCreateComputePipelines",
-    [&]() -> std::vector<pipeline>
-    {
-      std::vector<pipeline> pipelines;
-      for(auto ptr : ptrs)
-        pipelines.emplace_back(
-          pipeline(ptr, [device = get()](pipeline::pointer ptr) -> void { vkDestroyPipeline(device, ptr, nullptr); }));
-      return pipelines;
-    }());
+  if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
+    throw std::runtime_error("failed to create VkPipeline: too many VkComputePipelineCreateInfo");
+  std::vector<VkPipeline> ptrs(create_infos.size());
+  std::vector<pipeline>   handles;
+  handles.reserve(create_infos.size());
+  VkResult result = vkCreateComputePipelines(get(),
+                                             pipeline_cache,
+                                             static_cast<std::uint32_t>(create_infos.size()),
+                                             create_infos.data(),
+                                             nullptr,
+                                             ptrs.data());
+  for(VkPipeline ptr : ptrs)
+    handles.emplace_back(pipeline(_device, pipeline_handle(vkDestroyPipeline, get(), ptr, nullptr)));
+  switch(result)
+  {
+    case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
+      return handles;
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkPipeline: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkPipeline: out of device memory");
+    case VK_ERROR_INVALID_SHADER_NV :
+      throw std::runtime_error("failed to create VkPipeline: invalid shader");
+    default :
+      throw std::runtime_error("failed to create VkPipeline: unknown error");
+  }
 }
 
 std::vector<pipeline> device::create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
                                                        std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
 {
-  std::vector<pipeline::pointer> ptrs;
-  return return_or_throw(
-    vkCreateGraphicsPipelines(get(), pipeline_cache, to_count(create_infos), create_infos.data(), nullptr, ptrs.data()),
-    "vkCreateGraphicsPipelines",
-    [&]() -> std::vector<pipeline>
-    {
-      std::vector<pipeline> pipelines;
-      for(auto ptr : ptrs)
-        pipelines.emplace_back(
-          pipeline(ptr, [device = get()](pipeline::pointer ptr) -> void { vkDestroyPipeline(device, ptr, nullptr); }));
-      return pipelines;
-    }());
+  if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
+    throw std::runtime_error("failed to create VkPipeline: too many VkGraphicsPipelineCreateInfo");
+  std::vector<VkPipeline> ptrs(create_infos.size());
+  std::vector<pipeline>   handles;
+  handles.reserve(create_infos.size());
+  VkResult result = vkCreateGraphicsPipelines(get(),
+                                              pipeline_cache,
+                                              static_cast<std::uint32_t>(create_infos.size()),
+                                              create_infos.data(),
+                                              nullptr,
+                                              ptrs.data());
+  for(VkPipeline ptr : ptrs)
+    handles.emplace_back(pipeline(_device, pipeline_handle(vkDestroyPipeline, get(), ptr, nullptr)));
+  switch(result)
+  {
+    case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
+      return handles;
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkPipeline: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkPipeline: out of device memory");
+    case VK_ERROR_INVALID_SHADER_NV :
+      throw std::runtime_error("failed to create VkPipeline: invalid shader");
+    default :
+      throw std::runtime_error("failed to create VkPipeline: unknown error");
+  }
+}
+
+pipeline_cache device::create_pipeline_cache(VkPipelineCacheCreateInfo create_info) const
+{
+  VkPipelineCache       ptr;
+  VkResult              result = vkCreatePipelineCache(get(), &create_info, nullptr, &ptr);
+  pipeline_cache_handle handle(vkDestroyPipelineCache, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return pipeline_cache(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkPipelineCache: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkPipelineCache: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkPipelineCache: unknown error");
+  }
+}
+
+pipeline_layout device::create_pipeline_layout(VkPipelineLayoutCreateInfo create_info) const
+{
+  VkPipelineLayout       ptr;
+  VkResult               result = vkCreatePipelineLayout(get(), &create_info, nullptr, &ptr);
+  pipeline_layout_handle handle(vkDestroyPipelineLayout, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return pipeline_layout(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkPipelineLayout: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkPipelineLayout: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkPipelineLayout: unknown error");
+  }
+}
+
+query_pool device::create_query_pool(VkQueryPoolCreateInfo create_info) const
+{
+  VkQueryPool       ptr;
+  VkResult          result = vkCreateQueryPool(get(), &create_info, nullptr, &ptr);
+  query_pool_handle handle(vkDestroyQueryPool, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return query_pool(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkQueryPool: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkQueryPool: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkQueryPool: unknown error");
+  }
+}
+
+queue device::get_device_queue(VkDeviceQueueInfo2 create_info) const
+{
+  VkQueue ptr;
+  vkGetDeviceQueue2(get(), &create_info, &ptr);
+  return queue(ptr);
+}
+
+render_pass device::create_render_pass(VkRenderPassCreateInfo2 create_info) const
+{
+  VkRenderPass       ptr;
+  VkResult           result = vkCreateRenderPass2(get(), &create_info, nullptr, &ptr);
+  render_pass_handle handle(vkDestroyRenderPass, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return render_pass(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkRenderPass: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkRenderPass: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkRenderPass: unknown error");
+  }
+}
+
+sampler device::create_sampler(VkSamplerCreateInfo create_info) const
+{
+  VkSampler      ptr;
+  VkResult       result = vkCreateSampler(get(), &create_info, nullptr, &ptr);
+  sampler_handle handle(vkDestroySampler, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return sampler(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkSampler: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkSampler: out of device memory");
+    case VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR :
+      throw std::runtime_error("failed to create VkSampler: invalid opaque capture address");
+    default :
+      throw std::runtime_error("failed to create VkSampler: unknown error");
+  }
+}
+
+semaphore device::create_semaphore(VkSemaphoreCreateInfo create_info) const
+{
+  VkSemaphore      ptr;
+  VkResult         result = vkCreateSemaphore(get(), &create_info, nullptr, &ptr);
+  semaphore_handle handle(vkDestroySemaphore, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return semaphore(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkSemaphore: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkSemaphore: out of device memory");
+    default :
+      throw std::runtime_error("failed to create VkSemaphore: unknown error");
+  }
+}
+
+shader_module device::create_shader_module(VkShaderModuleCreateInfo create_info) const
+{
+  VkShaderModule       ptr;
+  VkResult             result = vkCreateShaderModule(get(), &create_info, nullptr, &ptr);
+  shader_module_handle handle(vkDestroyShaderModule, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return shader_module(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkShaderModule: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkShaderModule: out of device memory");
+    case VK_ERROR_INVALID_SHADER_NV :
+      throw std::runtime_error("failed to create VkShaderModule: invalid shader");
+    default :
+      throw std::runtime_error("failed to create VkShaderModule: unknown error");
+  }
 }
 
 khr::swapchain device::create_swapchain(VkSwapchainCreateInfoKHR create_info) const
 {
-  khr::swapchain::pointer ptr;
-  return return_or_throw(vkCreateSwapchainKHR(get(), &create_info, nullptr, &ptr),
-                         "vkCreateSwapchainKHR",
-                         khr::swapchain(ptr,
-                                        [device = get()](khr::swapchain::pointer ptr) -> void
-                                        { vkDestroySwapchainKHR(device, ptr, nullptr); }));
+  VkSwapchainKHR        ptr;
+  VkResult              result = vkCreateSwapchainKHR(get(), &create_info, nullptr, &ptr);
+  khr::swapchain_handle handle(vkDestroySwapchainKHR, get(), ptr, nullptr);
+  switch(result)
+  {
+    case VK_SUCCESS :
+      return khr::swapchain(_device, std::move(handle));
+    case VK_ERROR_OUT_OF_HOST_MEMORY :
+      throw std::runtime_error("failed to create VkSwapchainKHR: out of host memory");
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+      throw std::runtime_error("failed to create VkSwapchainKHR: out of device memory");
+    case VK_ERROR_DEVICE_LOST :
+      throw std::runtime_error("failed to create VkSwapchainKHR: device lost");
+    case VK_ERROR_SURFACE_LOST_KHR :
+      throw std::runtime_error("failed to create VkSwapchainKHR: surface lost");
+    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR :
+      throw std::runtime_error("failed to create VkSwapchainKHR: native window in use");
+    case VK_ERROR_INITIALIZATION_FAILED :
+      throw std::runtime_error("failed to create VkSwapchainKHR: initialization failed");
+    case VK_ERROR_COMPRESSION_EXHAUSTED_EXT :
+      throw std::runtime_error("failed to create VkSwapchainKHR: compression exhausted");
+    default :
+      throw std::runtime_error("failed to create VkSwapchainKHR: unknown error");
+  }
 }
 
-// khr::video_session device::create_video_session(VkVideoSessionCreateInfoKHR create_info) const
-// {
-//   khr::video_session::pointer ptr;
-//   return return_or_throw(vkCreateVideoSessionKHR(get(), &create_info, nullptr, &ptr),
-//                          "vkCreateVideoSessionKHR",
-//                          khr::video_session(ptr,
-//                                             [device = get()](khr::video_session::pointer ptr) -> void
-//                                            { vkDestroyVideoSessionKHR(device, ptr, nullptr); }));
-// }
-
-// khr::video_session_parameters device::create_video_session_parameters(VkVideoSessionParametersCreateInfoKHR create_info)
-// const
-// {
-//   khr::video_session_parameters::pointer ptr;
-//   return return_or_throw(vkCreateVideoSessionParametersKHR(get(), &create_info, nullptr, &ptr),
-//                          "vkCreateVideoSessionParametersKHR",
-//                          khr::video_session_parameters(ptr,
-//                                                        [device = get()](khr::video_session_parameters::pointer ptr) -> void
-//                                                        { vkDestroyVideoSessionParametersKHR(device, ptr, nullptr); }));
-// }
-
-// khr::deferred_operation device::create_deferred_operation() const
-// {
-//   khr::deferred_operation::pointer ptr;
-//   return return_or_throw(vkCreateDeferredOperationKHR(get(), nullptr, &ptr),
-//                          "vkCreateDeferredOperationKHR",
-//                          khr::deferred_operation(ptr,
-//                                                  [device = get()](khr::deferred_operation::pointer ptr) -> void
-//                                                  { vkDestroyDeferredOperationKHR(device, ptr, nullptr); }));
-// }
-
-// khr::acceleration_structure device::create_acceleration_structure(VkAccelerationStructureCreateInfoKHR create_info) const
-// {
-//   khr::acceleration_structure::pointer ptr;
-//   return return_or_throw(vkCreateAccelerationStructureKHR(get(), &create_info, nullptr, &ptr),
-//                          "vkCreateAccelerationStructureKHR",
-//                          khr::acceleration_structure(ptr,
-//                                                      [device = get()](khr::acceleration_structure::pointer ptr) -> void
-//                                                      { vkDestroyAccelerationStructureKHR(device, ptr, nullptr); }));
-// }
-
-// ext::validation_cache device::create_validation_cache(VkValidationCacheCreateInfoEXT create_info) const
-// {
-//   ext::validation_cache::pointer ptr;
-//   return return_or_throw(vkCreateValidationCacheEXT(get(), &create_info, nullptr, &ptr),
-//                          "vkCreateValidationCacheEXT",
-//                          ext::validation_cache(ptr,
-//                                                [device = get()](ext::validation_cache::pointer ptr) -> void
-//                                                { vkDestroyValidationCacheEXT(device, ptr, nullptr); }));
-// }
-
-// ext::micromap device::create_micromap(VkMicromapCreateInfoEXT create_info) const
-// {
-//   ext::micromap::pointer ptr;
-//   return return_or_throw(
-//     vkCreateMicromapEXT(get(), &create_info, nullptr, &ptr),
-//     "vkCreateMicromapEXT",
-//     ext::micromap(ptr, [device = get()](ext::micromap::pointer ptr) -> void { vkDestroyMicromapEXT(device, ptr, nullptr);
-//     }));
-// }
-
-// std::vector<ext::shader> device::create_shader(std::vector<VkShaderCreateInfoEXT> create_infos) const
-// {
-//   std::vector<ext::shader::pointer> ptrs;
-//   return return_or_throw(vkCreateShadersEXT(get(), to_count(create_infos), create_infos.data(), nullptr, ptrs.data()),
-//                          "vkCreateShadersEXT",
-//                          [&]() -> std::vector<ext::shader>
-//                          {
-//                            std::vector<ext::shader> pipelines;
-//                            for(auto ptr : ptrs)
-//                              pipelines.emplace_back(ext::shader(ptr,
-//                                                                 [device = get()](ext::shader::pointer ptr) -> void
-//                                                                 { vkDestroyShaderEXT(device, ptr, nullptr); }));
-//                            return pipelines;
-//                          }());
-// }
+device::device(device_handle device) noexcept
+: _device(device)
+{
+}
 }

@@ -2,7 +2,7 @@
 
 namespace mgo
 {
-general_info_ostream    log_general_info;
-general_warning_ostream log_general_warning;
-general_error_ostream   log_general_error;
+info_ostream    cout_info;
+warning_ostream cerr_warning;
+error_ostream   cerr_error;
 }

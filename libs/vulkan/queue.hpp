@@ -1,25 +1,19 @@
 #pragma once
 
-#include "non_dispatchable_handles.hpp"
+#include "non_dispatchable_handle.hpp"
 
 namespace vulkan
 {
 struct queue
 {
-    friend device;
+    using element_type = typename std::pointer_traits<VkQueue>::element_type;
+    using pointer      = typename std::pointer_traits<VkQueue>::pointer;
 
-    using pointer       = typename handle_traits<VkQueue>::pointer;
-    using const_pointer = typename handle_traits<VkQueue>::const_pointer;
-    using element_type  = typename handle_traits<VkQueue>::element_type;
-    using deleter_type  = typename handle_traits<VkQueue>::deleter_type;
-    using unique_type   = typename handle_traits<VkQueue>::unique_type;
-    using shared_type   = typename handle_traits<VkQueue>::shared_type;
+    queue(VkQueue queue) noexcept;
 
-    pointer get() const noexcept;
+    VkQueue get() const noexcept;
 
   private:
-    queue(pointer queue);
-
-    pointer _queue;
+    VkQueue _queue;
 };
 }

@@ -6,16 +6,15 @@
 
 namespace mgo
 {
-
-struct general_info_ostream
+struct info_ostream
 {
     std::ostream &operator<<(auto const &input) const
     {
-      return std::cerr << font::reset << input;
+      return std::cout << font::reset << input;
     }
 };
 
-struct general_warning_ostream
+struct warning_ostream
 {
     std::ostream &operator<<(auto const &input) const
     {
@@ -23,7 +22,7 @@ struct general_warning_ostream
     }
 };
 
-struct general_error_ostream
+struct error_ostream
 {
     std::ostream &operator<<(auto const &input) const
     {
@@ -31,7 +30,7 @@ struct general_error_ostream
     }
 };
 
-extern general_info_ostream    log_general_info;
-extern general_warning_ostream log_general_warning;
-extern general_error_ostream   log_general_error;
+extern info_ostream    cout_info;
+extern warning_ostream cerr_warning;
+extern error_ostream   cerr_error;
 }
