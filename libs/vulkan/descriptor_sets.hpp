@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.hpp"
+#include "non_dispatchable.hpp"
 
 namespace vulkan
 {
