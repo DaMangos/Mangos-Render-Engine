@@ -2,86 +2,75 @@
 
 namespace vulkan
 {
-VkCommandBuffer const *command_buffers::get() const noexcept
-{
-  return _command_buffers.get();
-}
-
-VkDevice command_buffers::get_device() const noexcept
-{
-  return _command_buffers.get_deleter().get_arg<0>();
-}
-
-VkCommandPool command_buffers::get_command_pool() const noexcept
-{
-  return _command_buffers.get_deleter().get_arg<1>();
-}
-
 std::uint32_t command_buffers::size() const noexcept
 {
-  return _command_buffers.get_deleter().get_arg<2>();
+  return static_cast<std::uint32_t>(_command_buffers.get<2>().size());
 }
 
 VkCommandBuffer const *command_buffers::data() const noexcept
 {
-  return get();
+  return _command_buffers.get<2>().data();
 }
 
-VkCommandBuffer const *command_buffers::begin() const noexcept
+std::vector<VkCommandBuffer>::const_iterator command_buffers::begin() const noexcept
 {
-  return data();
+  return _command_buffers.get<2>().begin();
 }
 
-VkCommandBuffer const *command_buffers::end() const noexcept
+std::vector<VkCommandBuffer>::const_iterator command_buffers::end() const noexcept
 {
-  return data() + size();
+  return _command_buffers.get<2>().end();
 }
 
-VkCommandBuffer const *command_buffers::cbegin() const noexcept
+std::vector<VkCommandBuffer>::const_iterator command_buffers::cbegin() const noexcept
 {
-  return data();
+  return _command_buffers.get<2>().cbegin();
 }
 
-VkCommandBuffer const *command_buffers::cend() const noexcept
+std::vector<VkCommandBuffer>::const_iterator command_buffers::cend() const noexcept
 {
-  return data() + size();
+  return _command_buffers.get<2>().cend();
 }
 
-std::reverse_iterator<VkCommandBuffer const *> command_buffers::rbegin() const noexcept
+std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::rbegin() const noexcept
 {
-  return std::reverse_iterator<VkCommandBuffer const *>(begin());
+  return _command_buffers.get<2>().rbegin();
 }
 
-std::reverse_iterator<VkCommandBuffer const *> command_buffers::rend() const noexcept
+std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::rend() const noexcept
 {
-  return std::reverse_iterator<VkCommandBuffer const *>(end());
+  return _command_buffers.get<2>().rend();
 }
 
-std::reverse_iterator<VkCommandBuffer const *> command_buffers::crbegin() const noexcept
+std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::crbegin() const noexcept
 {
-  return std::reverse_iterator<VkCommandBuffer const *>(cbegin());
+  return _command_buffers.get<2>().crbegin();
 }
 
-std::reverse_iterator<VkCommandBuffer const *> command_buffers::crend() const noexcept
+std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::crend() const noexcept
 {
-  return std::reverse_iterator<VkCommandBuffer const *>(cend());
+  return _command_buffers.get<2>().crend();
 }
 
-command_buffers::element_type command_buffers::at(std::uint32_t i) const
+VkCommandBuffer command_buffers::at(std::uint32_t i) const
 {
-  if(i >= size())
-    throw std::out_of_range("command_buffers::at");
-  return data()[i];
+  return _command_buffers.get<2>().at(i);
 }
 
-command_buffers::element_type command_buffers::operator[](std::uint32_t i) const noexcept
+VkCommandBuffer command_buffers::get(std::uint32_t i) const noexcept
 {
-  return data()[i];
+  return _command_buffers.get<2>()[i];
 }
 
-command_buffers::command_buffers(command_pool_handle command_pool, command_buffers_handle command_buffers)
-: _command_pool(command_pool),
-  _command_buffers(std::move(command_buffers))
+VkCommandBuffer command_buffers::operator[](std::uint32_t i) const noexcept
+{
+  return _command_buffers.get<2>()[i];
+}
+
+command_buffers::command_buffers(VkDevice                       device,
+                                 VkCommandPool                  command_pool,
+                                 std::vector<VkCommandBuffer> &&command_buffers) noexcept
+: _command_buffers(device, command_pool, std::move(command_buffers))
 {
 }
 }

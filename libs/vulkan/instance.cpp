@@ -6,15 +6,13 @@ namespace vulkan
 {
 instance::instance(VkInstanceCreateInfo create_info)
 : _instance(
-    [](VkInstanceCreateInfo &create_info) -> instance_handle
+    [&]()
     {
-      VkInstance      ptr;
-      VkResult        result = vkCreateInstance(&create_info, nullptr, &ptr);
-      instance_handle handle(vkDestroyInstance, ptr, nullptr);
-      switch(result)
+      VkInstance ptr;
+      switch(vkCreateInstance(&create_info, nullptr, &ptr))
       {
         case VK_SUCCESS :
-          return handle;
+          return ptr;
         case VK_ERROR_OUT_OF_HOST_MEMORY :
           throw std::runtime_error("failed to create VkInstance: out of host memory");
         case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -30,13 +28,13 @@ instance::instance(VkInstanceCreateInfo create_info)
         default :
           throw std::runtime_error("failed to create VkInstance: unknown error");
       }
-    }(create_info))
+    }())
 {
 }
 
 VkInstance instance::get() const noexcept
 {
-  return _instance.get();
+  return _instance.get<0>();
 }
 
 std::vector<physical_device> instance::enumerate_physical_device() const
@@ -57,26 +55,26 @@ std::vector<physical_device> instance::enumerate_physical_device() const
   }
   std::vector<VkPhysicalDevice> ptrs(count);
   vkEnumeratePhysicalDevices(get(), &count, ptrs.data());
-  return std::vector<physical_device>(ptrs.begin(), ptrs.end());
+  std::vector<physical_device> physical_devices;
+  physical_devices.reserve(count);
+  std::transform(std::make_move_iterator(ptrs.begin()),
+                 std::make_move_iterator(ptrs.end()),
+                 std::back_inserter(physical_devices),
+                 [](VkPhysicalDevice ptr) { return physical_device(std::move(ptr)); });
+  return physical_devices;
 }
 
 ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create_info) const
 {
   VkDebugUtilsMessengerEXT ptr;
-  VkResult result = std::invoke(get_proc_addr<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT"),
-                                get(),
-                                &create_info,
-                                nullptr,
-                                &ptr);
-  ext::debug_utils_messenger_handle handle(
-    get_proc_addr<PFN_vkDestroyDebugUtilsMessengerEXT>("vkDestroyDebugUtilsMessengerEXT"),
-    get(),
-    ptr,
-    nullptr);
-  switch(result)
+  switch(std::invoke(get_proc_addr<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT"),
+                     get(),
+                     &create_info,
+                     nullptr,
+                     &ptr))
   {
     case VK_SUCCESS :
-      return ext::debug_utils_messenger(_instance, std::move(handle));
+      return ext::debug_utils_messenger(get(), std::move(ptr));
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to create VkDebugUtilsMessengerEXT: out of host memory");
     default :
@@ -87,20 +85,14 @@ ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMe
 ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT create_info) const
 {
   VkDebugReportCallbackEXT ptr;
-  VkResult result = std::invoke(get_proc_addr<PFN_vkCreateDebugReportCallbackEXT>("vkCreateDebugReportCallbackEXT"),
-                                get(),
-                                &create_info,
-                                nullptr,
-                                &ptr);
-  ext::debug_report_callback_handle handle(
-    get_proc_addr<PFN_vkDestroyDebugReportCallbackEXT>("vkDestroyDebugReportCallbackEXT"),
-    get(),
-    ptr,
-    nullptr);
-  switch(result)
+  switch(std::invoke(get_proc_addr<PFN_vkCreateDebugReportCallbackEXT>("vkCreateDebugReportCallbackEXT"),
+                     get(),
+                     &create_info,
+                     nullptr,
+                     &ptr))
   {
     case VK_SUCCESS :
-      return ext::debug_report_callback(_instance, std::move(handle));
+      return ext::debug_report_callback(get(), std::move(ptr));
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to create VkDebugReportCallbackEXT: out of host memory");
     default :
@@ -110,13 +102,11 @@ ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportC
 
 khr::surface instance::create_surface(GLFWwindow *window) const
 {
-  VkSurfaceKHR        ptr;
-  VkResult            result = glfwCreateWindowSurface(get(), window, nullptr, &ptr);
-  khr::surface_handle handle(vkDestroySurfaceKHR, get(), ptr, nullptr);
-  switch(result)
+  VkSurfaceKHR ptr;
+  switch(glfwCreateWindowSurface(get(), window, nullptr, &ptr))
   {
     case VK_SUCCESS :
-      return khr::surface(_instance, std::move(handle));
+      return khr::surface(get(), std::move(ptr));
     case VK_ERROR_INITIALIZATION_FAILED :
       throw std::runtime_error("failed to create VkSurfaceKHR: initialization failed");
     case VK_ERROR_EXTENSION_NOT_PRESENT :
