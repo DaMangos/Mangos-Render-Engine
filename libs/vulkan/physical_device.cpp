@@ -12,13 +12,11 @@ VkPhysicalDevice physical_device::get() const noexcept
 
 device physical_device::create_device(VkDeviceCreateInfo create_info) const
 {
-  VkDevice      ptr;
-  VkResult      result = vkCreateDevice(get(), &create_info, nullptr, &ptr);
-  device_handle handle(vkDestroyDevice, ptr, nullptr);
-  switch(result)
+  VkDevice ptr;
+  switch(vkCreateDevice(get(), &create_info, nullptr, &ptr))
   {
     case VK_SUCCESS :
-      return device(std::move(handle));
+      return device(std::move(ptr));
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to create VkDevice: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -181,8 +179,8 @@ std::vector<VkExtensionProperties> physical_device::get_extension_properties(std
   return properties;
 }
 
-physical_device::physical_device(VkPhysicalDevice physical_device) noexcept
-: _physical_device(physical_device)
+physical_device::physical_device(VkPhysicalDevice &&physical_device) noexcept
+: _physical_device(std::move(physical_device))
 {
 }
 }

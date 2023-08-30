@@ -1,6 +1,7 @@
-
-#include "glfw/wrappers.hpp"
-#include "vulkan/wrappers.hpp"
+#include <iostream>
+#include <memory>
+#include <tuple>
+#include <type_traits>
 
 int main()
 {

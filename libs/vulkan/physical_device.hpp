@@ -1,18 +1,14 @@
 #pragma once
 
-#include "fwd.hpp"
+#include "device.hpp"
+#include "non_dispatchable.hpp"
 
 #include <string>
 
 namespace vulkan
 {
-struct physical_device
+struct physical_device final
 {
-    using element_type = typename std::pointer_traits<VkPhysicalDevice>::element_type;
-    using pointer      = typename std::pointer_traits<VkPhysicalDevice>::pointer;
-
-    physical_device(VkPhysicalDevice physical_device) noexcept;
-
     VkPhysicalDevice get() const noexcept;
 
     device create_device(VkDeviceCreateInfo create_info) const;
@@ -37,6 +33,8 @@ struct physical_device
 
   private:
     friend struct instance;
+
+    physical_device(VkPhysicalDevice &&physical_device) noexcept;
 
     VkPhysicalDevice _physical_device;
 };

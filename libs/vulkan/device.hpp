@@ -1,17 +1,17 @@
 #pragma once
 
-#include "fwd.hpp"
+#include "command_buffers.hpp"
+#include "descriptor_sets.hpp"
+#include "non_dispatchable.hpp"
+#include "queue.hpp"
 
-#include <unordered_map>
+#include <forward_list>
 #include <vector>
 
 namespace vulkan
 {
-struct device
+struct device final
 {
-    using element_type = typename device_handle::element_type;
-    using pointer      = typename device_handle::pointer;
-
     VkDevice get() const noexcept;
 
     buffer create_buffer(VkBufferCreateInfo create_info) const;
@@ -40,11 +40,11 @@ struct device
 
     image_view create_image_view(VkImageViewCreateInfo create_info) const;
 
-    std::vector<pipeline> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
-                                                  std::vector<VkComputePipelineCreateInfo> create_infos) const;
+    std::forward_list<pipeline> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
+                                                        std::vector<VkComputePipelineCreateInfo> create_infos) const;
 
-    std::vector<pipeline> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
-                                                   std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
+    std::forward_list<pipeline> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
+                                                         std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
 
     pipeline_cache create_pipeline_cache(VkPipelineCacheCreateInfo create_info) const;
 
@@ -64,19 +64,11 @@ struct device
 
     khr::swapchain create_swapchain(VkSwapchainCreateInfoKHR create_info) const;
 
-    device &operator=(device const &) = delete;
-    device &operator=(device &&)      = default;
-    device(device const &)            = delete;
-    device(device &&)                 = default;
-    ~device()                         = default;
-
   private:
     friend struct physical_device;
 
-    device(device_handle device) noexcept;
+    device(VkDevice &&device) noexcept;
 
-    device_handle                                                                    _device;
-    std::unordered_map<VkCommandPool, typename command_pool_handle::weak_type>       _registered_command_pools;
-    std::unordered_map<VkDescriptorPool, typename descriptor_pool_handle::weak_type> _registered_descriptor_pools;
+    mgo::apply_in_destructor<[](VkDevice device) { vkDestroyDevice(device, nullptr); }, VkDevice> _device;
 };
 }

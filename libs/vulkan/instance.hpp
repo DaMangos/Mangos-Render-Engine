@@ -1,16 +1,14 @@
 #pragma once
 
-#include "fwd.hpp"
+#include "non_dispatchable.hpp"
+#include "physical_device.hpp"
 
 #include <string>
 
 namespace vulkan
 {
-struct instance
+struct instance final
 {
-    using element_type = typename instance_handle::element_type;
-    using pointer      = typename instance_handle::pointer;
-
     instance(VkInstanceCreateInfo create_info);
 
     VkInstance get() const noexcept;
@@ -31,13 +29,9 @@ struct instance
       throw std::runtime_error("failed get protocol address: " + function_name);
     }
 
-    instance &operator=(instance const &) = delete;
-    instance &operator=(instance &&)      = default;
-    instance(instance const &)            = delete;
-    instance(instance &&)                 = default;
-    ~instance()                           = default;
-
   private:
-    instance_handle _instance;
+    instance(VkInstance &&instance) noexcept;
+
+    mgo::apply_in_destructor<[](VkInstance instance) { vkDestroyInstance(instance, nullptr); }, VkInstance> _instance;
 };
 }

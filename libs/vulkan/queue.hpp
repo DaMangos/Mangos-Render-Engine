@@ -1,20 +1,17 @@
 #pragma once
 
-#include "fwd.hpp"
+#include "non_dispatchable.hpp"
 
 namespace vulkan
 {
-struct queue
+struct queue final
 {
-    using element_type = typename std::pointer_traits<VkQueue>::element_type;
-    using pointer      = typename std::pointer_traits<VkQueue>::pointer;
-
-    queue(VkQueue queue) noexcept;
-
     VkQueue get() const noexcept;
 
   private:
     friend struct device;
+
+    queue(VkQueue &&queue) noexcept;
 
     VkQueue _queue;
 };

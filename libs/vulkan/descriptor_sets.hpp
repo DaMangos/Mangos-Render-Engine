@@ -1,102 +1,54 @@
 #pragma once
 
-#include "device.hpp"
+#include "non_dispatchable.hpp"
+
+#include <vector>
 
 namespace vulkan
 {
-template <>
-struct non_dispatchable<device_handle, descriptor_sets_handle>
+struct descriptor_sets final
 {
-    using element_type = typename descriptor_sets_handle::element_type;
-    using pointer      = typename descriptor_sets_handle::pointer;
+    std::uint32_t size() const noexcept;
 
-    VkDescriptorSet const *get() const noexcept
-    {
-      return _descriptor_sets.get();
-    }
+    VkDescriptorSet const *data() const noexcept;
 
-    VkDevice get_device() const noexcept
-    {
-      return _descriptor_sets.get_deleter().get_arg<0>();
-    }
+    std::vector<VkDescriptorSet>::const_iterator begin() const noexcept;
 
-    VkDescriptorPool get_descriptor_pool() const noexcept
-    {
-      return _descriptor_sets.get_deleter().get_arg<1>();
-    }
+    std::vector<VkDescriptorSet>::const_iterator end() const noexcept;
 
-    std::uint32_t size() const noexcept
-    {
-      return _descriptor_sets.get_deleter().get_arg<2>();
-    }
+    std::vector<VkDescriptorSet>::const_iterator cbegin() const noexcept;
 
-    VkDescriptorSet const *data() const noexcept
-    {
-      return get();
-    }
+    std::vector<VkDescriptorSet>::const_iterator cend() const noexcept;
 
-    VkDescriptorSet const *begin() const noexcept
-    {
-      return data();
-    }
+    std::vector<VkDescriptorSet>::const_reverse_iterator rbegin() const noexcept;
 
-    VkDescriptorSet const *end() const noexcept
-    {
-      return data() + size();
-    }
+    std::vector<VkDescriptorSet>::const_reverse_iterator rend() const noexcept;
 
-    VkDescriptorSet const *cbegin() const noexcept
-    {
-      return data();
-    }
+    std::vector<VkDescriptorSet>::const_reverse_iterator crbegin() const noexcept;
 
-    VkDescriptorSet const *cend() const noexcept
-    {
-      return data() + size();
-    }
+    std::vector<VkDescriptorSet>::const_reverse_iterator crend() const noexcept;
 
-    std::reverse_iterator<VkDescriptorSet const *> rbegin() const noexcept
-    {
-      return std::reverse_iterator<VkDescriptorSet const *>(begin());
-    }
+    VkDescriptorSet at(std::uint32_t i) const;
 
-    std::reverse_iterator<VkDescriptorSet const *> rend() const noexcept
-    {
-      return std::reverse_iterator<VkDescriptorSet const *>(end());
-    }
+    VkDescriptorSet get(std::uint32_t i) const noexcept;
 
-    std::reverse_iterator<VkDescriptorSet const *> crbegin() const noexcept
-    {
-      return std::reverse_iterator<VkDescriptorSet const *>(cbegin());
-    }
-
-    std::reverse_iterator<VkDescriptorSet const *> crend() const noexcept
-    {
-      return std::reverse_iterator<VkDescriptorSet const *>(cend());
-    }
-
-    VkDescriptorSet at(std::uint32_t i) const
-    {
-      if(i >= size())
-        throw std::out_of_range("descriptor_sets::at");
-      return data()[i];
-    }
-
-    VkDescriptorSet operator[](std::uint32_t i) const noexcept
-    {
-      return data()[i];
-    }
+    VkDescriptorSet operator[](std::uint32_t i) const noexcept;
 
   private:
     friend struct device;
 
-    non_dispatchable(descriptor_pool_handle descriptor_pool, descriptor_sets_handle descriptor_sets)
-    : _descriptor_pool(descriptor_pool),
-      _descriptor_sets(std::move(descriptor_sets))
-    {
-    }
+    descriptor_sets(VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) noexcept;
 
-    descriptor_pool_handle _descriptor_pool;
-    descriptor_sets_handle _descriptor_sets;
+    mgo::apply_in_destructor<
+      [](VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) {
+        vkFreeDescriptorSets(device,
+                             descriptor_pool,
+                             static_cast<std::uint32_t>(descriptor_sets.size()),
+                             descriptor_sets.data());
+      },
+      VkDevice,
+      VkDescriptorPool,
+      std::vector<VkDescriptorSet>>
+      _descriptor_sets;
 };
 }
