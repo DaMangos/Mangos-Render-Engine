@@ -57,11 +57,6 @@ VkDescriptorSet descriptor_sets::at(std::uint32_t i) const
   return _descriptor_sets.get<2>().at(i);
 }
 
-VkDescriptorSet descriptor_sets::get(std::uint32_t i) const noexcept
-{
-  return _descriptor_sets.get<2>()[i];
-}
-
 VkDescriptorSet descriptor_sets::operator[](std::uint32_t i) const noexcept
 {
   return _descriptor_sets.get<2>()[i];

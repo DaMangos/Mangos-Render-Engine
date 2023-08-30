@@ -30,8 +30,6 @@ struct descriptor_sets final
 
     VkDescriptorSet at(std::uint32_t i) const;
 
-    VkDescriptorSet get(std::uint32_t i) const noexcept;
-
     VkDescriptorSet operator[](std::uint32_t i) const noexcept;
 
   private:

@@ -57,11 +57,6 @@ VkCommandBuffer command_buffers::at(std::uint32_t i) const
   return _command_buffers.get<2>().at(i);
 }
 
-VkCommandBuffer command_buffers::get(std::uint32_t i) const noexcept
-{
-  return _command_buffers.get<2>()[i];
-}
-
 VkCommandBuffer command_buffers::operator[](std::uint32_t i) const noexcept
 {
   return _command_buffers.get<2>()[i];

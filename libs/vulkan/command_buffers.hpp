@@ -30,8 +30,6 @@ struct command_buffers
 
     VkCommandBuffer at(std::uint32_t i) const;
 
-    VkCommandBuffer get(std::uint32_t i) const noexcept;
-
     VkCommandBuffer operator[](std::uint32_t i) const noexcept;
 
   private:
