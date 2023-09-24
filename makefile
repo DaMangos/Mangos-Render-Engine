@@ -19,6 +19,7 @@ target debug: CPPFLAGS += -D DEBUG=1
 
 .PHONY: debug
 debug: $(EXEDIR)/$(PROGRAM)
+	clang-tidy $(SRCS) --checks=*
 
 .PHONY: release
 release: $(EXEDIR)/$(PROGRAM)

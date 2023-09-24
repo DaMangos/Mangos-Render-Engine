@@ -24,32 +24,32 @@ struct jumping_iterator
 
     constexpr reference operator*() const noexcept
     {
-      return *_base;
+      return *base();
     }
 
     constexpr pointer operator->() const noexcept
     {
-      return std::to_address(_base);
+      return base();
     }
 
     constexpr reference operator[](difference_type difference) const noexcept
     {
-      return *(*this + difference);
+      return *std::next(*this, difference);
     }
 
     constexpr jumping_iterator &operator+=(difference_type difference) noexcept
     {
-      return *this = *this + difference;
+      return *this = *std::next(*this, difference);
     }
 
     constexpr jumping_iterator &operator-=(difference_type difference) noexcept
     {
-      return *this = *this - difference;
+      return *this = *std::prev(*this, difference);
     }
 
     constexpr jumping_iterator &operator++() noexcept
     {
-      return (*this) += 1;
+      return *this += 1;
     }
 
     constexpr jumping_iterator operator++(int) noexcept
@@ -61,7 +61,7 @@ struct jumping_iterator
 
     constexpr jumping_iterator &operator--() noexcept
     {
-      return (*this) -= 1;
+      return *this -= 1;
     }
 
     constexpr jumping_iterator operator--(int) noexcept
@@ -73,17 +73,23 @@ struct jumping_iterator
 
     constexpr jumping_iterator operator+(difference_type difference) const noexcept
     {
-      return jumping_iterator(_base + difference * jump_size);
+      return jumping_iterator(std::next(base(), difference * jump_size));
     }
 
     constexpr jumping_iterator operator-(difference_type difference) const noexcept
     {
-      return jumping_iterator(_base - difference * jump_size);
+      return jumping_iterator(std::prev(base(), difference * jump_size));
     }
 
     constexpr difference_type operator-(jumping_iterator const &other) const noexcept
     {
-      return reinterpret_cast<difference_type>((*this - reinterpret_cast<difference_type>(other._base))._base);
+      return std::distance(*this, other);
+    }
+
+    [[nodiscard]]
+    constexpr pointer base() const noexcept
+    {
+      return _base;
     }
 
     constexpr auto operator<=>(jumping_iterator const &other) const noexcept = default;
@@ -97,6 +103,6 @@ constexpr jumping_iterator<underling_pointer, jump_size>
 operator+(typename jumping_iterator<underling_pointer, jump_size>::difference_type difference,
           jumping_iterator<underling_pointer, jump_size> const                    &iterator) noexcept
 {
-  return iterator + difference;
+  return jumping_iterator<underling_pointer, jump_size>(std::next(iterator.base(), difference));
 }
 }

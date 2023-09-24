@@ -5,7 +5,7 @@
 namespace vulkan
 {
 instance::instance(VkInstanceCreateInfo create_info)
-: _instance(
+: instance_(
     [&]()
     {
       VkInstance ptr;
@@ -34,7 +34,7 @@ instance::instance(VkInstanceCreateInfo create_info)
 
 VkInstance instance::get() const noexcept
 {
-  return _instance.get<0>();
+  return instance_.get<0>();
 }
 
 std::vector<physical_device> instance::enumerate_physical_device() const

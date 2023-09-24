@@ -16,42 +16,61 @@ struct window
 
     void focus() noexcept;
 
+    [[nodiscard]]
     GLFWwindow *get() const noexcept;
 
+    [[nodiscard]]
     attribute get_attrib(attribute attribute) const noexcept;
 
+    [[nodiscard]]
     scale get_content_scale() const noexcept;
 
+    [[nodiscard]]
     dimensions get_framebuffer_size() const noexcept;
 
+    [[nodiscard]]
     distance get_frame_size() const noexcept;
 
+    [[nodiscard]]
     monitor get_monitor() const;
 
+    [[nodiscard]]
     float get_opacity() const noexcept;
 
+    [[nodiscard]]
     coordinates get_position() const noexcept;
 
+    [[nodiscard]]
     dimensions get_size() const noexcept;
 
+    [[nodiscard]]
     bool has_content_scale_changed() noexcept;
 
+    [[nodiscard]]
     bool has_framebuffer_resized() noexcept;
 
+    [[nodiscard]]
     bool has_gained_focus() noexcept;
 
+    [[nodiscard]]
     bool has_iconified() noexcept;
 
+    [[nodiscard]]
     bool has_lost_focus() noexcept;
 
+    [[nodiscard]]
     bool has_maximized() noexcept;
 
+    [[nodiscard]]
     bool has_moved() noexcept;
 
+    [[nodiscard]]
     bool has_resized() noexcept;
 
+    [[nodiscard]]
     bool has_restored_from_iconify() noexcept;
 
+    [[nodiscard]]
     bool has_restored_from_maximizes() noexcept;
 
     void hide() noexcept;
@@ -84,6 +103,7 @@ struct window
 
     bool should_close() noexcept;
 
+    [[nodiscard]]
     bool should_refresh() noexcept;
 
     void show() noexcept;

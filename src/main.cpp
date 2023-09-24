@@ -1,8 +1,7 @@
-#include <iostream>
-#include <memory>
-#include <tuple>
-#include <type_traits>
+#include <array>
+#include <string>
 
 int main()
 {
+  std::string t;
 }

@@ -7,7 +7,7 @@ namespace vulkan
 {
 VkDevice device::get() const noexcept
 {
-  return _device.get<0>();
+  return device_.get<0>();
 }
 
 buffer device::create_buffer(VkBufferCreateInfo create_info) const
@@ -454,7 +454,7 @@ khr::swapchain device::create_swapchain(VkSwapchainCreateInfoKHR create_info) co
 }
 
 device::device(VkDevice &&device) noexcept
-: _device(std::move(device))
+: device_(std::move(device))
 {
 }
 }
