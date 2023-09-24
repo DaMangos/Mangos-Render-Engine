@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <concepts>
 #include <tuple>
 
 namespace mgo
@@ -23,12 +23,14 @@ struct apply_in_destructor
     }
 
     template <std::size_t i>
+    [[nodiscard]]
     constexpr arg_type<i> &get() noexcept
     {
       return std::get<i>(_args);
     }
 
     template <std::size_t i>
+    [[nodiscard]]
     constexpr arg_type<i> const &get() const noexcept
     {
       return std::get<i>(_args);
@@ -48,14 +50,4 @@ struct apply_in_destructor
   private:
     [[no_unique_address]] std::tuple<arg_types...> _args;
 };
-}
-
-namespace std
-{
-template <auto func_pointer, class... arg_types>
-constexpr void swap(mgo::apply_in_destructor<func_pointer, arg_types...> &lhs,
-                    mgo::apply_in_destructor<func_pointer, arg_types...> &rhs) noexcept
-{
-  lhs.swap(rhs);
-}
 }

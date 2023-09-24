@@ -1,18 +1,20 @@
 #pragma once
 
+#include <mgo/memory.hpp>
+
 #define ENABLE_BETA_EXTENSIONS
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include <mgo/memory.hpp>
 
 namespace vulkan
 {
 template <auto func_pointer, class dispatcher_pointer, class pointer>
 struct non_dispatchable
 {
+    [[nodiscard]]
     constexpr pointer get() const noexcept
     {
-      return _handle.template get<1>();
+      return handle_.template get<1>();
     }
 
   private:
@@ -20,14 +22,14 @@ struct non_dispatchable
     friend struct instance;
 
     constexpr non_dispatchable(dispatcher_pointer dispatcher, pointer &&ptr) noexcept
-    : _handle(dispatcher, std::move(ptr))
+    : handle_(dispatcher, std::move(ptr))
     {
     }
 
     mgo::apply_in_destructor<[](dispatcher_pointer dispatcher, pointer ptr) { func_pointer(dispatcher, ptr, nullptr); },
                              dispatcher_pointer,
                              pointer>
-      _handle;
+      handle_;
 };
 
 using buffer                = non_dispatchable<vkDestroyBuffer, VkDevice, VkBuffer>;

@@ -7,7 +7,7 @@ namespace vulkan
 {
 VkPhysicalDevice physical_device::get() const noexcept
 {
-  return _physical_device;
+  return physical_device_;
 }
 
 device physical_device::create_device(VkDeviceCreateInfo create_info) const
@@ -180,7 +180,7 @@ std::vector<VkExtensionProperties> physical_device::get_extension_properties(std
 }
 
 physical_device::physical_device(VkPhysicalDevice &&physical_device) noexcept
-: _physical_device(std::move(physical_device))
+: physical_device_(std::move(physical_device))
 {
 }
 }

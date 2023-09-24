@@ -6,6 +6,7 @@ namespace vulkan
 {
 struct queue final
 {
+    [[nodiscard]]
     VkQueue get() const noexcept;
 
   private:
