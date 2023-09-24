@@ -5,7 +5,7 @@
 #include "non_dispatchable.hpp"
 #include "queue.hpp"
 
-#include <forward_list>
+#include <list>
 #include <vector>
 
 namespace vulkan
@@ -55,12 +55,12 @@ struct device final
     image_view create_image_view(VkImageViewCreateInfo create_info) const;
 
     [[nodiscard]]
-    std::forward_list<pipeline> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
-                                                        std::vector<VkComputePipelineCreateInfo> create_infos) const;
+    std::list<pipeline> create_compute_pipeline(VkPipelineCache                          pipeline_cache,
+                                                std::vector<VkComputePipelineCreateInfo> create_infos) const;
 
     [[nodiscard]]
-    std::forward_list<pipeline> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
-                                                         std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
+    std::list<pipeline> create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
+                                                 std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
 
     [[nodiscard]]
     pipeline_cache create_pipeline_cache(VkPipelineCacheCreateInfo create_info) const;

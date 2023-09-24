@@ -238,8 +238,8 @@ image_view device::create_image_view(VkImageViewCreateInfo create_info) const
   }
 }
 
-std::forward_list<pipeline> device::create_compute_pipeline(VkPipelineCache                          pipeline_cache,
-                                                            std::vector<VkComputePipelineCreateInfo> create_infos) const
+std::list<pipeline> device::create_compute_pipeline(VkPipelineCache                          pipeline_cache,
+                                                    std::vector<VkComputePipelineCreateInfo> create_infos) const
 {
   if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
     throw std::runtime_error("failed to create VkPipeline: too many VkComputePipelineCreateInfo");
@@ -253,10 +253,10 @@ std::forward_list<pipeline> device::create_compute_pipeline(VkPipelineCache     
   {
     case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
     {
-      std::forward_list<pipeline> pipelines;
+      std::list<pipeline> pipelines;
       std::transform(std::make_move_iterator(ptrs.begin()),
                      std::make_move_iterator(ptrs.end()),
-                     std::front_inserter(pipelines),
+                     std::back_inserter(pipelines),
                      [this](VkPipeline ptr) { return pipeline(get(), std::move(ptr)); });
       return pipelines;
     }
@@ -271,8 +271,8 @@ std::forward_list<pipeline> device::create_compute_pipeline(VkPipelineCache     
   }
 }
 
-std::forward_list<pipeline> device::create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
-                                                             std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
+std::list<pipeline> device::create_graphics_pipeline(VkPipelineCache                           pipeline_cache,
+                                                     std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
 {
   if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
     throw std::runtime_error("failed to create VkPipeline: too many VkGraphicsPipelineCreateInfo");
@@ -286,10 +286,10 @@ std::forward_list<pipeline> device::create_graphics_pipeline(VkPipelineCache    
   {
     case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
     {
-      std::forward_list<pipeline> pipelines;
+      std::list<pipeline> pipelines;
       std::transform(std::make_move_iterator(ptrs.begin()),
                      std::make_move_iterator(ptrs.end()),
-                     std::front_inserter(pipelines),
+                     std::back_inserter(pipelines),
                      [this](VkPipeline ptr) { return pipeline(get(), std::move(ptr)); });
       return pipelines;
     }

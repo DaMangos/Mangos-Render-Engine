@@ -697,9 +697,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     constexpr void mod(matrix<value_type, M, N> const &other) noexcept
     {
-      if constexpr(std::floating_point<arithmetic_type>)
         std::transform(begin(), end(), other.begin(), begin(), std::fmod);
-      std::transform(begin(), end(), other.begin(), begin(), std::modulus{});
     }
 
     constexpr void row_echelon() noexcept
