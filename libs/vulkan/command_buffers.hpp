@@ -8,29 +8,42 @@ namespace vulkan
 {
 struct command_buffers
 {
+    [[nodiscard]]
     std::uint32_t size() const noexcept;
 
+    [[nodiscard]]
     VkCommandBuffer const *data() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_iterator begin() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_iterator end() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_iterator cbegin() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_iterator cend() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_reverse_iterator rbegin() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_reverse_iterator rend() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_reverse_iterator crbegin() const noexcept;
 
+    [[nodiscard]]
     std::vector<VkCommandBuffer>::const_reverse_iterator crend() const noexcept;
 
+    [[nodiscard]]
     VkCommandBuffer at(std::uint32_t i) const;
 
-    VkCommandBuffer operator[](std::uint32_t i) const noexcept;
+    [[nodiscard]]
+    VkCommandBuffer
+    operator[](std::uint32_t i) const noexcept;
 
   private:
     friend struct device;
