@@ -1,9 +1,10 @@
 #pragma once
 
+#include <mgo/memory.hpp>
+
 #define ENABLE_BETA_EXTENSIONS
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-#include <mgo/memory.hpp>
 
 namespace vulkan
 {
