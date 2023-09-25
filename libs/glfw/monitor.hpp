@@ -10,6 +10,6 @@ struct monitor
     friend struct window;
     monitor(GLFWmonitor *&&monitor) noexcept;
 
-    GLFWmonitor *_monitor;
+    GLFWmonitor *monitor_;
 };
 }
