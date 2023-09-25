@@ -643,7 +643,6 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     }
 
     [[nodiscard]]
-
     constexpr reverse_transpose_iterator transpose_rbegin() noexcept
     {
       return std::make_reverse_iterator(transpose_end());
@@ -697,7 +696,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     constexpr void mod(matrix<value_type, M, N> const &other) noexcept
     {
-        std::transform(begin(), end(), other.begin(), begin(), std::fmod);
+      std::transform(begin(), end(), other.begin(), begin(), std::fmod);
     }
 
     constexpr void row_echelon() noexcept
