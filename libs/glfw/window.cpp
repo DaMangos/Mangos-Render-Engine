@@ -7,18 +7,18 @@
 
 namespace glfw
 {
-constexpr const std::size_t should_closed_index              = 0;
-constexpr const std::size_t should_refresh_index             = 1;
-constexpr const std::size_t has_moved_index                  = 2;
-constexpr const std::size_t has_resized_index                = 3;
-constexpr const std::size_t has_framebuffer_resized_index    = 4;
-constexpr const std::size_t has_content_scale_changed_index  = 5;
-constexpr const std::size_t has_iconified_index              = 6;
-constexpr const std::size_t has_restored_from_iconify_index  = 7;
-constexpr const std::size_t has_maximized_index              = 8;
-constexpr const std::size_t has_restored_from_maximize_index = 9;
-constexpr const std::size_t has_gained_focus_index           = 10;
-constexpr const std::size_t has_lost_focus_index             = 11;
+constexpr std::size_t const should_closed_index              = 0;
+constexpr std::size_t const should_refresh_index             = 1;
+constexpr std::size_t const has_moved_index                  = 2;
+constexpr std::size_t const has_resized_index                = 3;
+constexpr std::size_t const has_framebuffer_resized_index    = 4;
+constexpr std::size_t const has_content_scale_changed_index  = 5;
+constexpr std::size_t const has_iconified_index              = 6;
+constexpr std::size_t const has_restored_from_iconify_index  = 7;
+constexpr std::size_t const has_maximized_index              = 8;
+constexpr std::size_t const has_restored_from_maximize_index = 9;
+constexpr std::size_t const has_gained_focus_index           = 10;
+constexpr std::size_t const has_lost_focus_index             = 11;
 
 void window::close() noexcept
 {
@@ -92,52 +92,52 @@ dimensions window::get_size() const noexcept
 
 bool window::has_content_scale_changed() noexcept
 {
-  return _flags[has_content_scale_changed_index] ? (_flags.set(has_content_scale_changed_index, false), true) : false;
+  return flags_[has_content_scale_changed_index] ? (flags_.set(has_content_scale_changed_index, false), true) : false;
 }
 
 bool window::has_framebuffer_resized() noexcept
 {
-  return _flags[has_framebuffer_resized_index] ? (_flags.set(has_framebuffer_resized_index, false), true) : false;
+  return flags_[has_framebuffer_resized_index] ? (flags_.set(has_framebuffer_resized_index, false), true) : false;
 }
 
 bool window::has_gained_focus() noexcept
 {
-  return _flags[has_gained_focus_index] ? (_flags.set(has_gained_focus_index, false), true) : false;
+  return flags_[has_gained_focus_index] ? (flags_.set(has_gained_focus_index, false), true) : false;
 }
 
 bool window::has_iconified() noexcept
 {
-  return _flags[has_iconified_index] ? (_flags.set(has_iconified_index, false), true) : false;
+  return flags_[has_iconified_index] ? (flags_.set(has_iconified_index, false), true) : false;
 }
 
 bool window::has_lost_focus() noexcept
 {
-  return _flags[has_lost_focus_index] ? (_flags.set(has_lost_focus_index, false), true) : false;
+  return flags_[has_lost_focus_index] ? (flags_.set(has_lost_focus_index, false), true) : false;
 }
 
 bool window::has_maximized() noexcept
 {
-  return _flags[has_maximized_index] ? (_flags.set(has_maximized_index, false), true) : false;
+  return flags_[has_maximized_index] ? (flags_.set(has_maximized_index, false), true) : false;
 }
 
 bool window::has_moved() noexcept
 {
-  return _flags[has_moved_index] ? (_flags.set(has_moved_index, false), true) : false;
+  return flags_[has_moved_index] ? (flags_.set(has_moved_index, false), true) : false;
 }
 
 bool window::has_resized() noexcept
 {
-  return _flags[has_resized_index] ? (_flags.set(has_resized_index, false), true) : false;
+  return flags_[has_resized_index] ? (flags_.set(has_resized_index, false), true) : false;
 }
 
 bool window::has_restored_from_iconify() noexcept
 {
-  return _flags[has_restored_from_iconify_index] ? (_flags.set(has_restored_from_iconify_index, false), true) : false;
+  return flags_[has_restored_from_iconify_index] ? (flags_.set(has_restored_from_iconify_index, false), true) : false;
 }
 
 bool window::has_restored_from_maximizes() noexcept
 {
-  return _flags[has_restored_from_maximize_index] ? (_flags.set(has_restored_from_maximize_index, false), true) : false;
+  return flags_[has_restored_from_maximize_index] ? (flags_.set(has_restored_from_maximize_index, false), true) : false;
 }
 
 void window::hide() noexcept
@@ -224,12 +224,12 @@ void window::set_title(std::string const &title) noexcept
 
 bool window::should_close() noexcept
 {
-  return _flags[should_closed_index] ? (_flags.set(should_closed_index, false), true) : false;
+  return flags_[should_closed_index] ? (flags_.set(should_closed_index, false), true) : false;
 }
 
 bool window::should_refresh() noexcept
 {
-  return _flags[should_refresh_index] ? (_flags.set(should_refresh_index, false), true) : false;
+  return flags_[should_refresh_index] ? (flags_.set(should_refresh_index, false), true) : false;
 }
 
 void window::show() noexcept
@@ -237,46 +237,46 @@ void window::show() noexcept
 }
 
 window::window(GLFWwindow *&&window) noexcept
-: _window(std::move(window))
+: window_(std::move(window))
 {
   glfwSetWindowUserPointer(get(), this);
 
   glfwSetWindowCloseCallback(
     get(),
     [](GLFWwindow *window)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_closed_index, true); });
+    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->flags_.set(should_closed_index, true); });
 
   glfwSetWindowRefreshCallback(
     get(),
     [](GLFWwindow *window)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_refresh_index, true); });
+    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->flags_.set(should_refresh_index, true); });
 
   glfwSetWindowPosCallback(
     get(),
     [](GLFWwindow *window, int, int)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_moved_index, true); });
+    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->flags_.set(has_moved_index, true); });
 
   glfwSetWindowSizeCallback(
     get(),
     [](GLFWwindow *window, int, int)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_resized_index, true); });
+    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->flags_.set(has_resized_index, true); });
 
   glfwSetFramebufferSizeCallback(
     get(),
     [](GLFWwindow *window, int, int)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_framebuffer_resized_index, true); });
+    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->flags_.set(has_framebuffer_resized_index, true); });
 
   glfwSetWindowContentScaleCallback(
     get(),
     [](GLFWwindow *window, float, float)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_content_scale_changed_index, true); });
+    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->flags_.set(has_content_scale_changed_index, true); });
 
   glfwSetWindowIconifyCallback(
     get(),
     [](GLFWwindow *window, int has_iconified)
     {
       reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))
-        ->_flags.set(has_iconified == GLFW_TRUE ? has_iconified_index : has_restored_from_iconify_index, true);
+        ->flags_.set(has_iconified == GLFW_TRUE ? has_iconified_index : has_restored_from_iconify_index, true);
     });
 
   glfwSetWindowMaximizeCallback(
@@ -284,14 +284,14 @@ window::window(GLFWwindow *&&window) noexcept
     [](GLFWwindow *window, int has_maximized)
     {
       reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))
-        ->_flags.set(has_maximized == GLFW_TRUE ? has_maximized_index : has_restored_from_maximize_index, true);
+        ->flags_.set(has_maximized == GLFW_TRUE ? has_maximized_index : has_restored_from_maximize_index, true);
     });
 
   glfwSetWindowFocusCallback(get(),
                              [](GLFWwindow *window, int has_gained_focus)
                              {
                                reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))
-                                 ->_flags.set(has_gained_focus == GLFW_TRUE ? has_gained_focus_index : has_lost_focus_index,
+                                 ->flags_.set(has_gained_focus == GLFW_TRUE ? has_gained_focus_index : has_lost_focus_index,
                                               true);
                              });
 }

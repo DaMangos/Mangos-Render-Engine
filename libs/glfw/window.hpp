@@ -111,7 +111,7 @@ struct window
   private:
     window(GLFWwindow *&&window) noexcept;
 
-    std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *window) { glfwDestroyWindow(window); })> _window;
-    std::bitset<12>                                                                              _flags;
+    std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *window) { glfwDestroyWindow(window); })> window_;
+    std::bitset<12>                                                                              flags_;
 };
 }
