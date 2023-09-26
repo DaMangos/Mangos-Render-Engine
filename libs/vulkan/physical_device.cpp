@@ -5,6 +5,11 @@
 
 namespace vulkan
 {
+physical_device::physical_device(VkPhysicalDevice &&physical_device) noexcept
+: physical_device_(std::move(physical_device))
+{
+}
+
 VkPhysicalDevice physical_device::get() const noexcept
 {
   return physical_device_;
@@ -177,10 +182,5 @@ std::vector<VkExtensionProperties> physical_device::get_extension_properties(std
   std::vector<VkExtensionProperties> properties(count);
   vkEnumerateDeviceExtensionProperties(get(), layer_name.c_str(), &count, properties.data());
   return properties;
-}
-
-physical_device::physical_device(VkPhysicalDevice &&physical_device) noexcept
-: physical_device_(std::move(physical_device))
-{
 }
 }

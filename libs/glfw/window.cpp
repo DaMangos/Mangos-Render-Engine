@@ -22,7 +22,7 @@ constexpr std::size_t const has_lost_focus_index             = 11;
 
 void window::close() noexcept
 {
-  _window.reset();
+  window_.reset();
 }
 
 void window::focus() noexcept
@@ -32,7 +32,7 @@ void window::focus() noexcept
 
 GLFWwindow *window::get() const noexcept
 {
-  return _window.get();
+  return window_.get();
 }
 
 attribute window::get_attrib(attribute attribute) const noexcept

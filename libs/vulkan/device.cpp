@@ -5,6 +5,11 @@
 
 namespace vulkan
 {
+device::device(VkDevice &&device) noexcept
+: device_(std::move(device))
+{
+}
+
 VkDevice device::get() const noexcept
 {
   return device_.get<0>();
@@ -254,10 +259,8 @@ std::list<pipeline> device::create_compute_pipeline(VkPipelineCache             
     case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
     {
       std::list<pipeline> pipelines;
-      std::transform(std::make_move_iterator(ptrs.begin()),
-                     std::make_move_iterator(ptrs.end()),
-                     std::back_inserter(pipelines),
-                     [this](VkPipeline ptr) { return pipeline(get(), std::move(ptr)); });
+      for(auto ptr : ptrs)
+        pipelines.emplace_back(get(), std::move(ptr));
       return pipelines;
     }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
@@ -287,10 +290,8 @@ std::list<pipeline> device::create_graphics_pipeline(VkPipelineCache            
     case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
     {
       std::list<pipeline> pipelines;
-      std::transform(std::make_move_iterator(ptrs.begin()),
-                     std::make_move_iterator(ptrs.end()),
-                     std::back_inserter(pipelines),
-                     [this](VkPipeline ptr) { return pipeline(get(), std::move(ptr)); });
+      for(auto ptr : ptrs)
+        pipelines.emplace_back(get(), std::move(ptr));
       return pipelines;
     }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
@@ -451,10 +452,5 @@ khr::swapchain device::create_swapchain(VkSwapchainCreateInfoKHR create_info) co
     default :
       throw std::runtime_error("failed to create VkSwapchainKHR: unknown error");
   }
-}
-
-device::device(VkDevice &&device) noexcept
-: device_(std::move(device))
-{
 }
 }

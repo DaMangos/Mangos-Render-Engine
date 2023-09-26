@@ -55,13 +55,7 @@ std::vector<physical_device> instance::enumerate_physical_device() const
   }
   std::vector<VkPhysicalDevice> ptrs(count);
   vkEnumeratePhysicalDevices(get(), &count, ptrs.data());
-  std::vector<physical_device> physical_devices;
-  physical_devices.reserve(count);
-  std::transform(std::make_move_iterator(ptrs.begin()),
-                 std::make_move_iterator(ptrs.end()),
-                 std::back_inserter(physical_devices),
-                 [](VkPhysicalDevice ptr) { return physical_device(std::move(ptr)); });
-  return physical_devices;
+  return std::vector<physical_device>(std::make_move_iterator(ptrs.begin()), std::make_move_iterator(ptrs.end()));
 }
 
 ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create_info) const
