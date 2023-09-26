@@ -2,6 +2,13 @@
 
 namespace vulkan
 {
+command_buffers::command_buffers(VkDevice                       device,
+                                 VkCommandPool                  command_pool,
+                                 std::vector<VkCommandBuffer> &&command_buffers) noexcept
+: _command_buffers(device, command_pool, std::move(command_buffers))
+{
+}
+
 std::uint32_t command_buffers::size() const noexcept
 {
   return static_cast<std::uint32_t>(_command_buffers.get<2>().size());
@@ -60,12 +67,5 @@ VkCommandBuffer command_buffers::at(std::uint32_t i) const
 VkCommandBuffer command_buffers::operator[](std::uint32_t i) const noexcept
 {
   return _command_buffers.get<2>()[i];
-}
-
-command_buffers::command_buffers(VkDevice                       device,
-                                 VkCommandPool                  command_pool,
-                                 std::vector<VkCommandBuffer> &&command_buffers) noexcept
-: _command_buffers(device, command_pool, std::move(command_buffers))
-{
 }
 }

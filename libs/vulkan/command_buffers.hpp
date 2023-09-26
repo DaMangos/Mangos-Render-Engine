@@ -8,6 +8,8 @@ namespace vulkan
 {
 struct command_buffers
 {
+    command_buffers(VkDevice device, VkCommandPool command_pool, std::vector<VkCommandBuffer> &&command_buffers) noexcept;
+
     [[nodiscard]]
     std::uint32_t size() const noexcept;
 
@@ -46,11 +48,7 @@ struct command_buffers
     operator[](std::uint32_t i) const noexcept;
 
   private:
-    friend struct device;
-
-    command_buffers(VkDevice device, VkCommandPool command_pool, std::vector<VkCommandBuffer> &&command_buffers) noexcept;
-
-    mgo::apply_in_destructor<[](VkDevice device, VkCommandPool command_pool, std::vector<VkCommandBuffer> &&command_buffers) {
+    mgo::apply_in_destructor<[](VkDevice device, VkCommandPool command_pool, std::vector<VkCommandBuffer> command_buffers) {
       vkFreeCommandBuffers(device, command_pool, static_cast<std::uint32_t>(command_buffers.size()), command_buffers.data());
     },
                              VkDevice,

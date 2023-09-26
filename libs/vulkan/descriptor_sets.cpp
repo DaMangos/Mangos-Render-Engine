@@ -2,6 +2,13 @@
 
 namespace vulkan
 {
+descriptor_sets::descriptor_sets(VkDevice                       device,
+                                 VkDescriptorPool               descriptor_pool,
+                                 std::vector<VkDescriptorSet> &&descriptor_sets) noexcept
+: _descriptor_sets(device, descriptor_pool, std::move(descriptor_sets))
+{
+}
+
 std::uint32_t descriptor_sets::size() const noexcept
 {
   return static_cast<std::uint32_t>(_descriptor_sets.get<2>().size());
@@ -60,12 +67,5 @@ VkDescriptorSet descriptor_sets::at(std::uint32_t i) const
 VkDescriptorSet descriptor_sets::operator[](std::uint32_t i) const noexcept
 {
   return _descriptor_sets.get<2>()[i];
-}
-
-descriptor_sets::descriptor_sets(VkDevice                       device,
-                                 VkDescriptorPool               descriptor_pool,
-                                 std::vector<VkDescriptorSet> &&descriptor_sets) noexcept
-: _descriptor_sets(device, descriptor_pool, std::move(descriptor_sets))
-{
 }
 }

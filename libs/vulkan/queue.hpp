@@ -6,14 +6,12 @@ namespace vulkan
 {
 struct queue final
 {
+    queue(VkQueue &&queue) noexcept;
+
     [[nodiscard]]
     VkQueue get() const noexcept;
 
   private:
-    friend struct device;
-
-    queue(VkQueue &&queue) noexcept;
-
     VkQueue _queue;
 };
 }

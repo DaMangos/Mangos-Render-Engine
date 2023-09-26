@@ -9,6 +9,8 @@ namespace vulkan
 {
 struct physical_device final
 {
+    physical_device(VkPhysicalDevice &&physical_device) noexcept;
+
     [[nodiscard]]
     VkPhysicalDevice get() const noexcept;
 
@@ -43,10 +45,6 @@ struct physical_device final
     std::vector<VkExtensionProperties> get_extension_properties(std::string const &layer_name) const;
 
   private:
-    friend struct instance;
-
-    physical_device(VkPhysicalDevice &&physical_device) noexcept;
-
     VkPhysicalDevice physical_device_;
 };
 }

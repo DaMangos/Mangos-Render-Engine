@@ -6,7 +6,7 @@
 namespace mgo
 {
 template <auto func_pointer, class... arg_types>
-requires std::invocable<decltype(func_pointer), std::add_rvalue_reference_t<arg_types>...>
+requires std::invocable<decltype(func_pointer), arg_types...>
 struct apply_in_destructor
 {
     template <std::size_t i>

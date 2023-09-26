@@ -8,6 +8,8 @@ namespace vulkan
 {
 struct descriptor_sets final
 {
+    descriptor_sets(VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) noexcept;
+
     [[nodiscard]]
     std::uint32_t size() const noexcept;
 
@@ -46,10 +48,6 @@ struct descriptor_sets final
     operator[](std::uint32_t i) const noexcept;
 
   private:
-    friend struct device;
-
-    descriptor_sets(VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) noexcept;
-
     mgo::apply_in_destructor<
       [](VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) {
         vkFreeDescriptorSets(device,

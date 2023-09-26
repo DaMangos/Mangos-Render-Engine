@@ -10,8 +10,12 @@
 
 namespace vulkan
 {
+struct physical_device;
+
 struct device final
 {
+    device(VkDevice &&device) noexcept;
+
     [[nodiscard]]
     VkDevice get() const noexcept;
 
@@ -90,10 +94,6 @@ struct device final
     khr::swapchain create_swapchain(VkSwapchainCreateInfoKHR create_info) const;
 
   private:
-    friend struct physical_device;
-
-    device(VkDevice &&device) noexcept;
-
     mgo::apply_in_destructor<[](VkDevice device) { vkDestroyDevice(device, nullptr); }, VkDevice> device_;
 };
 }

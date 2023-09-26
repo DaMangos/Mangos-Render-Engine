@@ -11,6 +11,11 @@ namespace vulkan
 template <auto func_pointer, class dispatcher_pointer, class pointer>
 struct non_dispatchable
 {
+    constexpr non_dispatchable(dispatcher_pointer dispatcher, pointer &&ptr) noexcept
+    : handle_(dispatcher, std::move(ptr))
+    {
+    }
+
     [[nodiscard]]
     constexpr pointer get() const noexcept
     {
@@ -18,14 +23,6 @@ struct non_dispatchable
     }
 
   private:
-    friend struct device;
-    friend struct instance;
-
-    constexpr non_dispatchable(dispatcher_pointer dispatcher, pointer &&ptr) noexcept
-    : handle_(dispatcher, std::move(ptr))
-    {
-    }
-
     mgo::apply_in_destructor<[](dispatcher_pointer dispatcher, pointer ptr) { func_pointer(dispatcher, ptr, nullptr); },
                              dispatcher_pointer,
                              pointer>
