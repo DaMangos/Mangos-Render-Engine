@@ -2,70 +2,53 @@
 
 namespace vulkan
 {
-command_buffers::command_buffers(VkDevice                       device,
-                                 VkCommandPool                  command_pool,
-                                 std::vector<VkCommandBuffer> &&command_buffers) noexcept
-: _command_buffers(device, command_pool, std::move(command_buffers))
-{
-}
-
 std::uint32_t command_buffers::size() const noexcept
 {
-  return static_cast<std::uint32_t>(_command_buffers.get<2>().size());
+  return _count;
 }
 
 VkCommandBuffer const *command_buffers::data() const noexcept
 {
-  return _command_buffers.get<2>().data();
+  return _ptrs.get();
 }
 
-std::vector<VkCommandBuffer>::const_iterator command_buffers::begin() const noexcept
+VkCommandBuffer const *command_buffers::begin() const noexcept
 {
-  return _command_buffers.get<2>().begin();
+  return data();
 }
 
-std::vector<VkCommandBuffer>::const_iterator command_buffers::end() const noexcept
+VkCommandBuffer const *command_buffers::end() const noexcept
 {
-  return _command_buffers.get<2>().end();
-}
-
-std::vector<VkCommandBuffer>::const_iterator command_buffers::cbegin() const noexcept
-{
-  return _command_buffers.get<2>().cbegin();
-}
-
-std::vector<VkCommandBuffer>::const_iterator command_buffers::cend() const noexcept
-{
-  return _command_buffers.get<2>().cend();
-}
-
-std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::rbegin() const noexcept
-{
-  return _command_buffers.get<2>().rbegin();
-}
-
-std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::rend() const noexcept
-{
-  return _command_buffers.get<2>().rend();
-}
-
-std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::crbegin() const noexcept
-{
-  return _command_buffers.get<2>().crbegin();
-}
-
-std::vector<VkCommandBuffer>::const_reverse_iterator command_buffers::crend() const noexcept
-{
-  return _command_buffers.get<2>().crend();
+  return data() + size();
 }
 
 VkCommandBuffer command_buffers::at(std::uint32_t i) const
 {
-  return _command_buffers.get<2>().at(i);
+  if(i >= size())
+    throw std::out_of_range("vulkan::command_buffers::at");
+  return _ptrs[i];
 }
 
 VkCommandBuffer command_buffers::operator[](std::uint32_t i) const noexcept
 {
-  return _command_buffers.get<2>()[i];
+  return _ptrs[i];
 }
+
+command_buffers::~command_buffers()
+{
+  vkFreeCommandBuffers(std::get_deleter<command_pool::deleter>(_dispatcher_handle)->_dispatcher_handle.get(),
+                       _dispatcher_handle.get(),
+                       size(),
+                       data());
+}
+
+command_buffers::command_buffers(std::shared_ptr<std::pointer_traits<VkCommandPool>::element_type> const &dispatcher_handle,
+                                 std::uint32_t                                                            count,
+                                 std::unique_ptr<VkCommandBuffer[]>                                       ptrs) noexcept
+: _dispatcher_handle(dispatcher_handle),
+  _count(count),
+  _ptrs(std::move(ptrs))
+{
+}
+
 }

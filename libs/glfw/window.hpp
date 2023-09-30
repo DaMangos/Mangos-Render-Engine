@@ -8,13 +8,9 @@
 
 namespace glfw
 {
-struct monitor;
-
 struct window
 {
-    void close() noexcept;
-
-    void focus() noexcept;
+    window(dimensions size, std::string const &title);
 
     [[nodiscard]]
     GLFWwindow *get() const noexcept;
@@ -32,9 +28,6 @@ struct window
     distance get_frame_size() const noexcept;
 
     [[nodiscard]]
-    monitor get_monitor() const;
-
-    [[nodiscard]]
     float get_opacity() const noexcept;
 
     [[nodiscard]]
@@ -44,34 +37,44 @@ struct window
     dimensions get_size() const noexcept;
 
     [[nodiscard]]
-    bool has_content_scale_changed() noexcept;
+    bool has_content_scale_changed() const noexcept;
 
     [[nodiscard]]
-    bool has_framebuffer_resized() noexcept;
+    bool has_framebuffer_resized() const noexcept;
 
     [[nodiscard]]
-    bool has_gained_focus() noexcept;
+    bool has_gained_focus() const noexcept;
 
     [[nodiscard]]
-    bool has_iconified() noexcept;
+    bool has_iconified() const noexcept;
 
     [[nodiscard]]
-    bool has_lost_focus() noexcept;
+    bool has_lost_focus() const noexcept;
 
     [[nodiscard]]
-    bool has_maximized() noexcept;
+    bool has_maximized() const noexcept;
 
     [[nodiscard]]
-    bool has_moved() noexcept;
+    bool has_moved() const noexcept;
 
     [[nodiscard]]
-    bool has_resized() noexcept;
+    bool has_resized() const noexcept;
 
     [[nodiscard]]
-    bool has_restored_from_iconify() noexcept;
+    bool has_restored_from_iconify() const noexcept;
 
     [[nodiscard]]
-    bool has_restored_from_maximizes() noexcept;
+    bool has_restored_from_maximize() const noexcept;
+
+    [[nodiscard]]
+    bool should_close() const noexcept;
+
+    [[nodiscard]]
+    bool should_refresh() const noexcept;
+
+    void close() noexcept;
+
+    void focus() noexcept;
 
     void hide() noexcept;
 
@@ -83,13 +86,13 @@ struct window
 
     void restore() noexcept;
 
+    void show() noexcept;
+
     void set_aspect_ratio(dimensions ratio) noexcept;
 
     void set_attrib(attribute attribute, value value) noexcept;
 
     void set_icon(std::vector<GLFWimage> images);
-
-    void set_monitor(GLFWmonitor *monitor, coordinates position, dimensions size, int refreshRate) noexcept;
 
     void set_opacity(float opacity) noexcept;
 
@@ -101,17 +104,8 @@ struct window
 
     void set_title(std::string const &title) noexcept;
 
-    bool should_close() noexcept;
-
-    [[nodiscard]]
-    bool should_refresh() noexcept;
-
-    void show() noexcept;
-
   private:
-    window(GLFWwindow *&&window) noexcept;
-
-    std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *window) { glfwDestroyWindow(window); })> window_;
-    std::bitset<12>                                                                              flags_;
+    std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *ptr) { glfwDestroyWindow(ptr); })> _handle;
+    std::bitset<12> mutable _flags;
 };
 }

@@ -1,16 +1,15 @@
 #pragma once
 
-#include "device.hpp"
 #include "non_dispatchable.hpp"
 
 #include <string>
 
 namespace vulkan
 {
+struct device;
+
 struct physical_device final
 {
-    physical_device(VkPhysicalDevice &&physical_device) noexcept;
-
     [[nodiscard]]
     VkPhysicalDevice get() const noexcept;
 
@@ -24,10 +23,10 @@ struct physical_device final
     VkSurfaceCapabilitiesKHR get_surface_capabilities(VkSurfaceKHR surface) const;
 
     [[nodiscard]]
-    std::vector<VkSurfaceFormatKHR> get_surface_formats(VkSurfaceKHR surface) const;
+    std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> get_surface_formats(VkSurfaceKHR surface) const;
 
     [[nodiscard]]
-    std::vector<VkPresentModeKHR> get_present_modes(VkSurfaceKHR surface) const;
+    std::pair<std::vector<VkPresentModeKHR>, VkResult> get_present_modes(VkSurfaceKHR surface) const;
 
     [[nodiscard]]
     VkPhysicalDeviceFeatures get_features() const noexcept;
@@ -39,12 +38,24 @@ struct physical_device final
     std::vector<VkQueueFamilyProperties> get_queue_family_properties() const;
 
     [[nodiscard]]
-    std::vector<VkExtensionProperties> get_extension_properties() const;
+    std::pair<std::vector<VkExtensionProperties>, VkResult> get_extension_properties() const;
 
     [[nodiscard]]
-    std::vector<VkExtensionProperties> get_extension_properties(std::string const &layer_name) const;
+    std::pair<std::vector<VkExtensionProperties>, VkResult> get_extension_properties(std::string const &layer_name) const;
+
+    physical_device(physical_device &&)                 = default;
+    physical_device(physical_device const &)            = delete;
+    physical_device &operator=(physical_device &&)      = default;
+    physical_device &operator=(physical_device const &) = delete;
+    ~physical_device()                                  = default;
 
   private:
-    VkPhysicalDevice physical_device_;
+    friend struct instance;
+
+    physical_device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &dispatcher,
+                    VkPhysicalDevice                                                      ptr) noexcept;
+
+    std::shared_ptr<std::pointer_traits<VkInstance>::element_type> _dispatcher;
+    VkPhysicalDevice                                               _ptr;
 };
 }

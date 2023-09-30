@@ -8,7 +8,9 @@
 
 namespace glfw
 {
-using pixels = std::uint32_t;
+using value     = int;
+using attribute = int;
+using pixels    = std::uint32_t;
 
 struct dimensions
 {
@@ -34,8 +36,4 @@ struct size
 {
     pixels x, y;
 };
-
-using hint      = int;
-using value     = int;
-using attribute = int;
 }

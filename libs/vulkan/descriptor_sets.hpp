@@ -8,8 +8,6 @@ namespace vulkan
 {
 struct descriptor_sets final
 {
-    descriptor_sets(VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) noexcept;
-
     [[nodiscard]]
     std::uint32_t size() const noexcept;
 
@@ -17,47 +15,32 @@ struct descriptor_sets final
     VkDescriptorSet const *data() const noexcept;
 
     [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_iterator begin() const noexcept;
+    VkDescriptorSet const *begin() const noexcept;
 
     [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_iterator end() const noexcept;
-
-    [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_iterator cbegin() const noexcept;
-
-    [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_iterator cend() const noexcept;
-
-    [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_reverse_iterator rbegin() const noexcept;
-
-    [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_reverse_iterator rend() const noexcept;
-
-    [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_reverse_iterator crbegin() const noexcept;
-
-    [[nodiscard]]
-    std::vector<VkDescriptorSet>::const_reverse_iterator crend() const noexcept;
+    VkDescriptorSet const *end() const noexcept;
 
     [[nodiscard]]
     VkDescriptorSet at(std::uint32_t i) const;
 
-    [[nodiscard]]
-    VkDescriptorSet
-    operator[](std::uint32_t i) const noexcept;
+    VkDescriptorSet operator[](std::uint32_t i) const noexcept;
+
+    ~descriptor_sets();
+
+    descriptor_sets(descriptor_sets &&)                 = default;
+    descriptor_sets(descriptor_sets const &)            = delete;
+    descriptor_sets &operator=(descriptor_sets &&)      = default;
+    descriptor_sets &operator=(descriptor_sets const &) = delete;
 
   private:
-    mgo::apply_in_destructor<
-      [](VkDevice device, VkDescriptorPool descriptor_pool, std::vector<VkDescriptorSet> &&descriptor_sets) {
-        vkFreeDescriptorSets(device,
-                             descriptor_pool,
-                             static_cast<std::uint32_t>(descriptor_sets.size()),
-                             descriptor_sets.data());
-      },
-      VkDevice,
-      VkDescriptorPool,
-      std::vector<VkDescriptorSet>>
-      _descriptor_sets;
+    friend struct device;
+
+    descriptor_sets(std::shared_ptr<std::pointer_traits<VkDescriptorPool>::element_type> const &dispatcher_handle,
+                    std::uint32_t                                                               count,
+                    std::unique_ptr<VkDescriptorSet[]>                                          ptrs) noexcept;
+
+    std::shared_ptr<std::pointer_traits<VkDescriptorPool>::element_type> _dispatcher_handle;
+    std::uint32_t                                                        _count;
+    std::unique_ptr<VkDescriptorSet[]>                                   _ptrs;
 };
 }
