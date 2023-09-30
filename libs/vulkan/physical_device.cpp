@@ -3,16 +3,13 @@
 #include "device.hpp"
 #include "instance.hpp"
 
+#include <utility>
+
 namespace vulkan
 {
-physical_device::physical_device(VkPhysicalDevice &&physical_device) noexcept
-: physical_device_(std::move(physical_device))
-{
-}
-
 VkPhysicalDevice physical_device::get() const noexcept
 {
-  return physical_device_;
+  return _ptr;
 }
 
 device physical_device::create_device(VkDeviceCreateInfo create_info) const
@@ -21,7 +18,7 @@ device physical_device::create_device(VkDeviceCreateInfo create_info) const
   switch(vkCreateDevice(get(), &create_info, nullptr, &ptr))
   {
     case VK_SUCCESS :
-      return device(std::move(ptr));
+      return device(_dispatcher, ptr);
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to create VkDevice: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -77,13 +74,17 @@ VkSurfaceCapabilitiesKHR physical_device::get_surface_capabilities(VkSurfaceKHR 
   }
 }
 
-std::vector<VkSurfaceFormatKHR> physical_device::get_surface_formats(VkSurfaceKHR surface) const
+std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> physical_device::get_surface_formats(VkSurfaceKHR surface) const
 {
   std::uint32_t count = 0;
-  switch(vkGetPhysicalDeviceSurfaceFormatsKHR(get(), surface, &count, nullptr))
+  switch(VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR(get(), surface, &count, nullptr))
   {
     case VK_SUCCESS | VK_INCOMPLETE :
-      break;
+    {
+      std::vector<VkSurfaceFormatKHR> surface_formats(count);
+      vkGetPhysicalDeviceSurfaceFormatsKHR(get(), surface, &count, surface_formats.data());
+      return std::make_pair(std::move(surface_formats), result);
+    }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to get VkSurfaceFormatKHR: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -93,18 +94,19 @@ std::vector<VkSurfaceFormatKHR> physical_device::get_surface_formats(VkSurfaceKH
     default :
       throw std::runtime_error("failed to get VkSurfaceFormatKHR: unknown error");
   }
-  std::vector<VkSurfaceFormatKHR> surface_formats(count);
-  vkGetPhysicalDeviceSurfaceFormatsKHR(get(), surface, &count, surface_formats.data());
-  return surface_formats;
 }
 
-std::vector<VkPresentModeKHR> physical_device::get_present_modes(VkSurfaceKHR surface) const
+std::pair<std::vector<VkPresentModeKHR>, VkResult> physical_device::get_present_modes(VkSurfaceKHR surface) const
 {
   std::uint32_t count = 0;
-  switch(vkGetPhysicalDeviceSurfacePresentModesKHR(get(), surface, &count, nullptr))
+  switch(VkResult result = vkGetPhysicalDeviceSurfacePresentModesKHR(get(), surface, &count, nullptr))
   {
     case VK_SUCCESS | VK_INCOMPLETE :
-      break;
+    {
+      std::vector<VkPresentModeKHR> present_modes(count);
+      vkGetPhysicalDeviceSurfacePresentModesKHR(get(), surface, &count, present_modes.data());
+      return std::make_pair(std::move(present_modes), result);
+    }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to get VkPresentModeKHR: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -114,9 +116,6 @@ std::vector<VkPresentModeKHR> physical_device::get_present_modes(VkSurfaceKHR su
     default :
       throw std::runtime_error("failed to get VkPresentModeKHR: unknown error");
   }
-  std::vector<VkPresentModeKHR> present_modes(count);
-  vkGetPhysicalDeviceSurfacePresentModesKHR(get(), surface, &count, present_modes.data());
-  return present_modes;
 }
 
 VkPhysicalDeviceFeatures physical_device::get_features() const noexcept
@@ -142,13 +141,17 @@ std::vector<VkQueueFamilyProperties> physical_device::get_queue_family_propertie
   return properties;
 }
 
-std::vector<VkExtensionProperties> physical_device::get_extension_properties() const
+std::pair<std::vector<VkExtensionProperties>, VkResult> physical_device::get_extension_properties() const
 {
   std::uint32_t count = 0;
-  switch(vkEnumerateDeviceExtensionProperties(get(), nullptr, &count, nullptr))
+  switch(VkResult result = vkEnumerateDeviceExtensionProperties(get(), nullptr, &count, nullptr))
   {
     case VK_SUCCESS | VK_INCOMPLETE :
-      break;
+    {
+      std::vector<VkExtensionProperties> properties(count);
+      vkEnumerateDeviceExtensionProperties(get(), nullptr, &count, properties.data());
+      return std::make_pair(std::move(properties), result);
+    }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to enumerate VkExtensionProperties: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -158,18 +161,20 @@ std::vector<VkExtensionProperties> physical_device::get_extension_properties() c
     default :
       throw std::runtime_error("failed to enumerate VkExtensionProperties: unknown error");
   }
-  std::vector<VkExtensionProperties> properties(count);
-  vkEnumerateDeviceExtensionProperties(get(), nullptr, &count, properties.data());
-  return properties;
 }
 
-std::vector<VkExtensionProperties> physical_device::get_extension_properties(std::string const &layer_name) const
+std::pair<std::vector<VkExtensionProperties>, VkResult>
+physical_device::get_extension_properties(std::string const &layer_name) const
 {
   std::uint32_t count = 0;
-  switch(vkEnumerateDeviceExtensionProperties(get(), layer_name.c_str(), &count, nullptr))
+  switch(VkResult result = vkEnumerateDeviceExtensionProperties(get(), layer_name.c_str(), &count, nullptr))
   {
     case VK_SUCCESS | VK_INCOMPLETE :
-      break;
+    {
+      std::vector<VkExtensionProperties> properties(count);
+      vkEnumerateDeviceExtensionProperties(get(), layer_name.c_str(), &count, properties.data());
+      return std::make_pair(std::move(properties), result);
+    }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to enumerate VkExtensionProperties: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -179,8 +184,12 @@ std::vector<VkExtensionProperties> physical_device::get_extension_properties(std
     default :
       throw std::runtime_error("failed to enumerate VkExtensionProperties: unknown error");
   }
-  std::vector<VkExtensionProperties> properties(count);
-  vkEnumerateDeviceExtensionProperties(get(), layer_name.c_str(), &count, properties.data());
-  return properties;
+}
+
+physical_device::physical_device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &instance,
+                                 VkPhysicalDevice                                                      ptr) noexcept
+: _dispatcher(instance),
+  _ptr(ptr)
+{
 }
 }

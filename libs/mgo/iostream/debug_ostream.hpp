@@ -10,7 +10,7 @@ namespace mgo::debug
 
 struct info_ostream
 {
-#ifdef DEBUG
+#ifndef NDEBUG
     std::ostream &operator<<(auto const &input) const
     {
       return std::cout << font::reset << input;
@@ -25,7 +25,7 @@ struct info_ostream
 
 struct warning_ostream
 {
-#ifdef DEBUG
+#ifdef NDEBUG
     std::ostream &operator<<(auto const &input) const
     {
       return std::cerr << font::bold << font::magenta << "warning: " << font::reset << input;
@@ -40,7 +40,7 @@ struct warning_ostream
 
 struct error_ostream
 {
-#ifdef DEBUG
+#ifdef NDEBUG
     std::ostream &operator<<(auto const &input) const
     {
       return std::cerr << font::bold << font::red << "error: " << font::reset << input;

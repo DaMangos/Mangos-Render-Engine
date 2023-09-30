@@ -1,6 +1,7 @@
 #pragma once
 
-#include <mgo/memory.hpp>
+#include <memory>
+#include <type_traits>
 
 #define ENABLE_BETA_EXTENSIONS
 #define GLFW_INCLUDE_VULKAN
@@ -9,76 +10,166 @@
 namespace vulkan
 {
 template <auto func_pointer, class dispatcher_pointer, class pointer>
-struct non_dispatchable
+requires std::invocable<decltype(func_pointer), dispatcher_pointer, pointer, std::nullptr_t> and
+         std::is_pointer_v<dispatcher_pointer> and std::is_pointer_v<pointer>
+struct non_dispatchable_handle final
 {
-    constexpr non_dispatchable(dispatcher_pointer dispatcher, pointer &&ptr) noexcept
-    : handle_(dispatcher, std::move(ptr))
-    {
-    }
-
     [[nodiscard]]
     constexpr pointer get() const noexcept
     {
-      return handle_.template get<1>();
+      return _handle.get();
     }
 
   private:
-    mgo::apply_in_destructor<[](dispatcher_pointer dispatcher, pointer ptr) { func_pointer(dispatcher, ptr, nullptr); },
-                             dispatcher_pointer,
-                             pointer>
-      handle_;
+    friend struct device;
+    friend struct instance;
+
+    constexpr non_dispatchable_handle(
+      std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> const &dispatcher_handle,
+      pointer                                                                                ptr) noexcept
+    : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
+    {
+    }
+
+    struct deleter final
+    {
+        constexpr void operator()(pointer ptr) const noexcept
+        {
+          func_pointer(_dispatcher_handle.get(), ptr, nullptr);
+        }
+
+        std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> _dispatcher_handle;
+    };
+
+    std::unique_ptr<typename std::pointer_traits<pointer>::element_type, deleter> _handle;
 };
 
-using buffer                = non_dispatchable<vkDestroyBuffer, VkDevice, VkBuffer>;
-using buffer_view           = non_dispatchable<vkDestroyBufferView, VkDevice, VkBufferView>;
-using command_pool          = non_dispatchable<vkDestroyCommandPool, VkDevice, VkCommandPool>;
-using descriptor_pool       = non_dispatchable<vkDestroyDescriptorPool, VkDevice, VkDescriptorPool>;
-using descriptor_set_layout = non_dispatchable<vkDestroyDescriptorSetLayout, VkDevice, VkDescriptorSetLayout>;
-using device_memory         = non_dispatchable<vkFreeMemory, VkDevice, VkDeviceMemory>;
-using event                 = non_dispatchable<vkDestroyEvent, VkDevice, VkEvent>;
-using fence                 = non_dispatchable<vkDestroyFence, VkDevice, VkFence>;
-using framebuffer           = non_dispatchable<vkDestroyFramebuffer, VkDevice, VkFramebuffer>;
-using image                 = non_dispatchable<vkDestroyImage, VkDevice, VkImage>;
-using image_view            = non_dispatchable<vkDestroyImageView, VkDevice, VkImageView>;
-using pipeline_cache        = non_dispatchable<vkDestroyPipelineCache, VkDevice, VkPipelineCache>;
-using pipeline              = non_dispatchable<vkDestroyPipeline, VkDevice, VkPipeline>;
-using pipeline_layout       = non_dispatchable<vkDestroyPipelineLayout, VkDevice, VkPipelineLayout>;
-using query_pool            = non_dispatchable<vkDestroyQueryPool, VkDevice, VkQueryPool>;
-using render_pass           = non_dispatchable<vkDestroyRenderPass, VkDevice, VkRenderPass>;
-using sampler               = non_dispatchable<vkDestroySampler, VkDevice, VkSampler>;
-using semaphore             = non_dispatchable<vkDestroySemaphore, VkDevice, VkSemaphore>;
-using shader_module         = non_dispatchable<vkDestroyShaderModule, VkDevice, VkShaderModule>;
+template <>
+struct non_dispatchable_handle<vkDestroyCommandPool, VkDevice, VkCommandPool>
+{
+    [[nodiscard]]
+    constexpr VkCommandPool get() const noexcept
+    {
+      return _handle.get();
+    }
+
+    non_dispatchable_handle(non_dispatchable_handle &&)                 = default;
+    non_dispatchable_handle(non_dispatchable_handle const &)            = delete;
+    non_dispatchable_handle &operator=(non_dispatchable_handle &&)      = default;
+    non_dispatchable_handle &operator=(non_dispatchable_handle const &) = delete;
+    ~non_dispatchable_handle()                                          = default;
+
+  private:
+    friend struct device;
+    friend struct command_buffers;
+
+    non_dispatchable_handle(std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> const &dispatcher_handle,
+                            VkCommandPool                                                                ptr) noexcept
+    : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
+    {
+    }
+
+    struct deleter final
+    {
+        constexpr void operator()(VkCommandPool ptr) const noexcept
+        {
+          vkDestroyCommandPool(_dispatcher_handle.get(), ptr, nullptr);
+        }
+
+        std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> _dispatcher_handle;
+    };
+
+    std::shared_ptr<typename std::pointer_traits<VkCommandPool>::element_type> _handle;
+};
+
+template <>
+struct non_dispatchable_handle<vkDestroyDescriptorPool, VkDevice, VkDescriptorPool>
+{
+    [[nodiscard]]
+    constexpr VkDescriptorPool get() const noexcept
+    {
+      return _handle.get();
+    }
+
+    non_dispatchable_handle(non_dispatchable_handle &&)                 = default;
+    non_dispatchable_handle(non_dispatchable_handle const &)            = delete;
+    non_dispatchable_handle &operator=(non_dispatchable_handle &&)      = default;
+    non_dispatchable_handle &operator=(non_dispatchable_handle const &) = delete;
+    ~non_dispatchable_handle()                                          = default;
+
+  private:
+    friend struct device;
+    friend struct descriptor_sets;
+
+    non_dispatchable_handle(std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> const &dispatcher_handle,
+                            VkDescriptorPool                                                             ptr) noexcept
+    : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
+    {
+    }
+
+    struct deleter final
+    {
+        constexpr void operator()(VkDescriptorPool ptr) const noexcept
+        {
+          vkDestroyDescriptorPool(_dispatcher_handle.get(), ptr, nullptr);
+        }
+
+        std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> _dispatcher_handle;
+    };
+
+    std::shared_ptr<typename std::pointer_traits<VkDescriptorPool>::element_type> _handle;
+};
+
+using buffer                = non_dispatchable_handle<vkDestroyBuffer, VkDevice, VkBuffer>;
+using buffer_view           = non_dispatchable_handle<vkDestroyBufferView, VkDevice, VkBufferView>;
+using command_pool          = non_dispatchable_handle<vkDestroyCommandPool, VkDevice, VkCommandPool>;
+using descriptor_pool       = non_dispatchable_handle<vkDestroyDescriptorPool, VkDevice, VkDescriptorPool>;
+using descriptor_set_layout = non_dispatchable_handle<vkDestroyDescriptorSetLayout, VkDevice, VkDescriptorSetLayout>;
+using device_memory         = non_dispatchable_handle<vkFreeMemory, VkDevice, VkDeviceMemory>;
+using event                 = non_dispatchable_handle<vkDestroyEvent, VkDevice, VkEvent>;
+using fence                 = non_dispatchable_handle<vkDestroyFence, VkDevice, VkFence>;
+using framebuffer           = non_dispatchable_handle<vkDestroyFramebuffer, VkDevice, VkFramebuffer>;
+using image                 = non_dispatchable_handle<vkDestroyImage, VkDevice, VkImage>;
+using image_view            = non_dispatchable_handle<vkDestroyImageView, VkDevice, VkImageView>;
+using pipeline_cache        = non_dispatchable_handle<vkDestroyPipelineCache, VkDevice, VkPipelineCache>;
+using pipeline              = non_dispatchable_handle<vkDestroyPipeline, VkDevice, VkPipeline>;
+using pipeline_layout       = non_dispatchable_handle<vkDestroyPipelineLayout, VkDevice, VkPipelineLayout>;
+using query_pool            = non_dispatchable_handle<vkDestroyQueryPool, VkDevice, VkQueryPool>;
+using render_pass           = non_dispatchable_handle<vkDestroyRenderPass, VkDevice, VkRenderPass>;
+using sampler               = non_dispatchable_handle<vkDestroySampler, VkDevice, VkSampler>;
+using semaphore             = non_dispatchable_handle<vkDestroySemaphore, VkDevice, VkSemaphore>;
+using shader_module         = non_dispatchable_handle<vkDestroyShaderModule, VkDevice, VkShaderModule>;
 
 namespace ext
 {
-using debug_report_callback = non_dispatchable<
-  [](VkInstance instance, VkDebugReportCallbackEXT debug_report_callback, VkAllocationCallbacks const *allocation_callbacks)
-  {
-    std::invoke(
-      reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT")),
-      instance,
-      debug_report_callback,
-      allocation_callbacks);
-  },
-  VkInstance,
-  VkDebugReportCallbackEXT>;
+using debug_report_callback =
+  non_dispatchable_handle<[](VkInstance dispatcher_ptr, VkDebugReportCallbackEXT ptr, std::nullptr_t)
+                          {
+                            std::invoke(reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(
+                                          vkGetInstanceProcAddr(dispatcher_ptr, "vkDestroyDebugReportCallbackEXT")),
+                                        dispatcher_ptr,
+                                        ptr,
+                                        nullptr);
+                          },
+                          VkInstance,
+                          VkDebugReportCallbackEXT>;
 
-using debug_utils_messenger = non_dispatchable<
-  [](VkInstance instance, VkDebugUtilsMessengerEXT debug_utils_messenger, VkAllocationCallbacks const *allocation_callbacks)
-  {
-    std::invoke(
-      reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT")),
-      instance,
-      debug_utils_messenger,
-      allocation_callbacks);
-  },
-  VkInstance,
-  VkDebugUtilsMessengerEXT>;
+using debug_utils_messenger =
+  non_dispatchable_handle<[](VkInstance dispatcher_ptr, VkDebugUtilsMessengerEXT ptr, std::nullptr_t)
+                          {
+                            std::invoke(reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
+                                          vkGetInstanceProcAddr(dispatcher_ptr, "vkDestroyDebugUtilsMessengerEXT")),
+                                        dispatcher_ptr,
+                                        ptr,
+                                        nullptr);
+                          },
+                          VkInstance,
+                          VkDebugUtilsMessengerEXT>;
 }
 
 namespace khr
 {
-using surface   = non_dispatchable<vkDestroySurfaceKHR, VkInstance, VkSurfaceKHR>;
-using swapchain = non_dispatchable<vkDestroySwapchainKHR, VkDevice, VkSwapchainKHR>;
+using surface   = non_dispatchable_handle<vkDestroySurfaceKHR, VkInstance, VkSurfaceKHR>;
+using swapchain = non_dispatchable_handle<vkDestroySwapchainKHR, VkDevice, VkSwapchainKHR>;
 }
 }

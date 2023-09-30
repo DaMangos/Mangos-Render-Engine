@@ -2,13 +2,14 @@
 
 namespace vulkan
 {
-queue::queue(VkQueue &&queue) noexcept
-: _queue(std::move(queue))
+queue::queue(std::shared_ptr<std::pointer_traits<VkDevice>::element_type> const &dispatcher, VkQueue ptr) noexcept
+: _dispatcher(dispatcher),
+  _ptr(ptr)
 {
 }
 
 VkQueue queue::get() const noexcept
 {
-  return _queue;
+  return _ptr;
 }
 }
