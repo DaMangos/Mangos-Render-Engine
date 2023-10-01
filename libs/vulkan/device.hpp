@@ -62,11 +62,11 @@ struct device final
 
     [[nodiscard]]
     std::pair<std::vector<pipeline>, VkResult>
-    create_compute_pipeline(VkPipelineCache pipeline_cache, std::vector<VkComputePipelineCreateInfo> create_infos) const;
+    create_compute_pipelines(VkPipelineCache pipeline_cache, std::vector<VkComputePipelineCreateInfo> create_infos) const;
 
     [[nodiscard]]
     std::pair<std::vector<pipeline>, VkResult>
-    create_graphics_pipeline(VkPipelineCache pipeline_cache, std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
+    create_graphics_pipelines(VkPipelineCache pipeline_cache, std::vector<VkGraphicsPipelineCreateInfo> create_infos) const;
 
     [[nodiscard]]
     pipeline_cache create_pipeline_cache(VkPipelineCacheCreateInfo create_info) const;

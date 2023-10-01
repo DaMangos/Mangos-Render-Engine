@@ -16,7 +16,7 @@ struct instance final
     VkInstance get() const noexcept;
 
     [[nodiscard]]
-    std::pair<std::vector<physical_device>, VkResult> enumerate_physical_device() const;
+    std::pair<std::vector<physical_device>, VkResult> enumerate_physical_devices() const;
 
     [[nodiscard]]
     ext::debug_utils_messenger create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create_info) const;

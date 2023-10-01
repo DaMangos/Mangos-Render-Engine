@@ -260,7 +260,7 @@ image_view device::create_image_view(VkImageViewCreateInfo create_info) const
 }
 
 std::pair<std::vector<pipeline>, VkResult>
-device::create_compute_pipeline(VkPipelineCache pipeline_cache, std::vector<VkComputePipelineCreateInfo> create_infos) const
+device::create_compute_pipelines(VkPipelineCache pipeline_cache, std::vector<VkComputePipelineCreateInfo> create_infos) const
 {
   if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
     throw std::runtime_error("failed to create VkPipeline: too many VkComputePipelineCreateInfo");
@@ -291,7 +291,7 @@ device::create_compute_pipeline(VkPipelineCache pipeline_cache, std::vector<VkCo
 }
 
 std::pair<std::vector<pipeline>, VkResult>
-device::create_graphics_pipeline(VkPipelineCache pipeline_cache, std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
+device::create_graphics_pipelines(VkPipelineCache pipeline_cache, std::vector<VkGraphicsPipelineCreateInfo> create_infos) const
 {
   if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
     throw std::runtime_error("failed to create VkPipeline: too many VkGraphicsPipelineCreateInfo");
