@@ -390,7 +390,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
           for(size_type i = k + 1; i < column_size(); ++i)
             if((*this)[i][k] != 0)
             {
-              swap_row(k, i);
+              swap_rows(k, i);
               break;
             }
         if((*this)[k][k] != 0)
