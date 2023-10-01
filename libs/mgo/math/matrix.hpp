@@ -207,54 +207,6 @@ struct matrix : matrix_data<arithmetic_type, M, N>
       return false;
     }
 
-    constexpr matrix() = default;
-
-    constexpr matrix(value_type value) noexcept requires(size() == 1)
-    {
-      front() = value;
-    }
-
-    constexpr matrix(std::initializer_list<value_type> values) noexcept
-    {
-      std::copy_n(values.begin(), std::min(values.size(), size()), begin());
-    }
-
-    constexpr matrix(std::initializer_list<column_type> values) noexcept
-    {
-      std::copy_n(transpose_view::iterator(values.begin()), std::min(values.size() * column_size(), size()), begin());
-    }
-
-    constexpr matrix(std::initializer_list<row_type> values) noexcept
-    {
-      std::copy_n(iterator(values.begin()), std::min(values.size() * row_size(), size()), begin());
-    }
-
-    constexpr matrix &operator=(value_type value) noexcept requires(size() == 1)
-    {
-      front() = value;
-      return *this;
-    }
-
-    constexpr matrix &operator=(std::initializer_list<value_type> values) noexcept
-    {
-      std::copy_n(values.begin(), std::min(values.size(), size()), begin());
-      return *this;
-    }
-
-    constexpr matrix &operator=(std::initializer_list<column_type> values) noexcept
-    {
-      std::copy_n(transpose_view::iterator(values.begin(), values.begin(), std::prev(values.end())),
-                  std::min(values.size() * column_size(), size()),
-                  begin());
-      return *this;
-    }
-
-    constexpr matrix &operator=(std::initializer_list<row_type> values) noexcept
-    {
-      std::copy_n(iterator(values.begin()), std::min(values.size() * row_size(), size()), begin());
-      return *this;
-    }
-
     [[nodiscard]]
     constexpr row_view view_row(size_type i) noexcept
     {
@@ -307,12 +259,12 @@ struct matrix : matrix_data<arithmetic_type, M, N>
       return begin()[i * row_size() + j];
     }
 
-    constexpr row_view operator[](size_type i) noexcept
+    constexpr pointer operator[](difference_type i) noexcept
     {
       return std::next(begin(), i * row_size());
     }
 
-    constexpr const_row_view operator[](size_type i) const noexcept
+    constexpr const_pointer operator[](difference_type i) const noexcept
     {
       return std::next(begin(), i * row_size());
     }
@@ -413,13 +365,13 @@ struct matrix : matrix_data<arithmetic_type, M, N>
       return *std::prev(end());
     }
 
-    constexpr void swap_row(size_type x, size_type y) requires(column_size() > 1)
+    constexpr void swap_rows(size_type x, size_type y) requires(column_size() > 1)
     {
       if(x != y)
         std::ranges::swap_ranges(view_row(x).begin(), view_row(x).end(), view_row(y).begin());
     }
 
-    constexpr void swap_column(size_type x, size_type y) requires(column_size() > 1)
+    constexpr void swap_columns(size_type x, size_type y) requires(column_size() > 1)
     {
       if(x != y)
         std::ranges::swap_ranges(view_column(x).begin(), view_column(x).end(), view_column(y).begin());
@@ -432,32 +384,27 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     constexpr void row_echelon() noexcept
     {
-      // TODO: implement
       for(size_type k = 0; k < column_size() and k < row_size(); ++k)
       {
-        if((*this)[k][k] == value_type{})
+        if((*this)[k][k] == 0)
           for(size_type i = k + 1; i < column_size(); ++i)
-          {
-            if((*this)[i][k] == value_type{})
+            if((*this)[i][k] != 0)
             {
-              for(size_type j = k; j < row_size(); ++j)
-                std::swap((*this)[i][j], (*this)[k][j]);
+              swap_row(k, i);
               break;
             }
+        if((*this)[k][k] != 0)
+          for(size_type i = k; i < column_size(); ++i)
+          {
+            (*this)[i][k] = 0;
+            for(size_type j = k + 1; j < row_size(); ++j)
+              (*this)[i][j] = (*this)[i][j] * (*this)[k][k] - (*this)[k][j] * (*this)[i][k];
           }
-        for(size_type i = k + 1; i < column_size(); ++i)
-        {
-          value_type x = (*this)[k][k], y = (*this)[i][k];
-          (*this)[i][k] = value_type{};
-          for(size_type j = k + 1; j < row_size(); ++j)
-            ((*this)[i][j] *= x) -= (*this)[k][j] * y;
-        }
       }
     }
 
     constexpr void reduced_row_echelon() noexcept requires std::floating_point<arithmetic_type>
     {
-      // TODO: implement
     }
 
     constexpr void inverse() noexcept requires std::floating_point<arithmetic_type> and (column_size() == row_size())
@@ -483,7 +430,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     [[nodiscard]]
     constexpr value_type dot(matrix const &other) const noexcept requires(row_size() == 1)
     {
-      return std::inner_product(begin(), end(), other.begin(), value_type{});
+      return std::inner_product(begin(), end(), other.begin(), 0);
     }
 
     [[nodiscard]]
