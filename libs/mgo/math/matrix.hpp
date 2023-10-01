@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstddef>
 #include <iterator>
 #include <mgo/iterator.hpp>
 #include <numeric>
@@ -107,7 +108,7 @@ template <class arithmetic_type, std::size_t M, std::size_t N>
 struct matrix : matrix_data<arithmetic_type, M, N>
 {
   private:
-    template <class underlying_iterator, class convertible_type>
+    template <class underlying_iterator, class convertible_type, std::size_t count>
     struct view final
     {
         using iterator = underlying_iterator;
@@ -121,12 +122,18 @@ struct matrix : matrix_data<arithmetic_type, M, N>
         [[nodiscard]]
         constexpr iterator end() const noexcept
         {
-          return std::next(_first, column_size());
+          return std::next(_first, size);
         }
 
-        constexpr decltype(auto) operator[](std::size_t i) const noexcept
+        [[nodiscard]]
+        static constexpr std::size_t size() noexcept
         {
-          return begin()[i];
+          return count;
+        }
+
+        constexpr decltype(auto) operator[](std::size_t j) const noexcept
+        {
+          return begin()[j];
         }
 
         constexpr explicit operator convertible_type() const & noexcept
@@ -159,16 +166,16 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     using const_reverse_iterator = std::reverse_iterator<const_pointer>;
 
     using column_type       = matrix<value_type, M, 1>;
-    using column_view       = view<jumping_iterator<pointer, N>, column_type>;
-    using const_column_view = view<jumping_iterator<const_pointer, N>, column_type>;
+    using column_view       = view<jumping_iterator<pointer, N>, column_type, M>;
+    using const_column_view = view<jumping_iterator<const_pointer, N>, column_type, M>;
 
     using row_type       = matrix<value_type, 1, N>;
-    using row_view       = view<pointer, row_type>;
-    using const_row_view = view<const_pointer, row_type>;
+    using row_view       = view<pointer, row_type, N>;
+    using const_row_view = view<const_pointer, row_type, N>;
 
     using transpose_type       = matrix<value_type, N, M>;
-    using transpose_view       = view<bounded_iterator<pointer, N>, transpose_type>;
-    using const_transpose_view = view<bounded_iterator<const_pointer, N>, transpose_type>;
+    using transpose_view       = view<bounded_iterator<pointer, N>, transpose_type, M * N>;
+    using const_transpose_view = view<bounded_iterator<const_pointer, N>, transpose_type, M * N>;
 
     [[nodiscard]]
     static constexpr size_type column_size() noexcept
@@ -204,78 +211,48 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     constexpr matrix(value_type value) noexcept requires(size() == 1)
     {
-      assign(value);
+      front() = value;
     }
 
     constexpr matrix(std::initializer_list<value_type> values) noexcept
     {
-      assign(values);
+      std::copy_n(values.begin(), std::min(values.size(), size()), begin());
     }
 
     constexpr matrix(std::initializer_list<column_type> values) noexcept
     {
-      assign(values);
+      std::copy_n(transpose_view::iterator(values.begin()), std::min(values.size() * column_size(), size()), begin());
     }
 
     constexpr matrix(std::initializer_list<row_type> values) noexcept
     {
-      assign(values);
-    }
-
-    constexpr matrix(std::input_iterator auto const &first, std::input_iterator auto const &last) noexcept
-    {
-      assign(first, last);
+      std::copy_n(iterator(values.begin()), std::min(values.size() * row_size(), size()), begin());
     }
 
     constexpr matrix &operator=(value_type value) noexcept requires(size() == 1)
     {
-      assign(value);
+      front() = value;
       return *this;
     }
 
     constexpr matrix &operator=(std::initializer_list<value_type> values) noexcept
     {
-      assign(values);
+      std::copy_n(values.begin(), std::min(values.size(), size()), begin());
       return *this;
     }
 
     constexpr matrix &operator=(std::initializer_list<column_type> values) noexcept
     {
-      assign(values);
+      std::copy_n(transpose_view::iterator(values.begin(), values.begin(), std::prev(values.end())),
+                  std::min(values.size() * column_size(), size()),
+                  begin());
       return *this;
     }
 
     constexpr matrix &operator=(std::initializer_list<row_type> values) noexcept
     {
-      assign(values);
+      std::copy_n(iterator(values.begin()), std::min(values.size() * row_size(), size()), begin());
       return *this;
-    }
-
-    constexpr void assign(value_type value) noexcept requires(size() == 1)
-    {
-      front() = value;
-    }
-
-    constexpr void assign(std::initializer_list<value_type> values) noexcept
-    {
-      assign(values.begin(), values.end());
-    }
-
-    constexpr void assign(std::initializer_list<column_type> values) noexcept
-    {
-      assign(transpose_iterator(values.begin(), begin(), std::prev(end())),
-             transpose_iterator(values.end(), begin(), std::prev(end())));
-    }
-
-    constexpr void assign(std::initializer_list<row_type> values) noexcept
-    {
-      assign(iterator(values.begin()), iterator(values.end()));
-    }
-
-    constexpr void assign(std::forward_iterator auto const &first, std::forward_iterator auto const &last) noexcept
-      requires std::same_as<decltype(*first), const_reference> and std::same_as<decltype(*last), const_reference>
-    {
-      std::copy_n(first, std::min(static_cast<size_type>(std::distance(first, last)), size()), begin());
     }
 
     [[nodiscard]]
@@ -455,6 +432,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     constexpr void row_echelon() noexcept
     {
+      // TODO: implement
       for(size_type k = 0; k < column_size() and k < row_size(); ++k)
       {
         if((*this)[k][k] == value_type{})
@@ -479,15 +457,17 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     constexpr void reduced_row_echelon() noexcept requires std::floating_point<arithmetic_type>
     {
+      // TODO: implement
     }
 
     constexpr void inverse() noexcept requires std::floating_point<arithmetic_type> and (column_size() == row_size())
     {
+      // TODO: implement
     }
 
     constexpr void transpose() noexcept
     {
-      std::ranges::swap_ranges(begin(), end(), transpose_begin());
+      // TODO: implement
     }
 
     constexpr void fill(value_type value) noexcept
@@ -509,12 +489,13 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     [[nodiscard]]
     constexpr matrix cross(matrix other) const noexcept requires(row_size() == 1)
     {
-      // needed implementation
+      // TODO: implement
     }
 
     [[nodiscard]]
     constexpr value_type det() const noexcept requires(column_size() == row_size())
     {
+      // TODO: implement
     }
 
     [[nodiscard]]
@@ -533,12 +514,14 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     constexpr value_type theta() const noexcept
       requires std::floating_point<arithmetic_type> and (row_size() == 1) and (column_size() >= 2)
     {
+      // TODO: implement
     }
 
     [[nodiscard]]
     constexpr value_type phi() const noexcept
       requires std::floating_point<arithmetic_type> and (row_size() == 1) and (column_size() >= 3)
     {
+      // TODO: implement
     }
 
     constexpr auto operator<=>(matrix const &) const noexcept = default;
