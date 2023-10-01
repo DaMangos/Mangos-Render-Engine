@@ -1,7 +1,5 @@
 #include "window.hpp"
 
-#include <stdexcept>
-
 namespace
 {
 constexpr std::size_t const should_closed_index              = 0;

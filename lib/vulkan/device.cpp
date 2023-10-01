@@ -4,8 +4,6 @@
 #include "descriptor_sets.hpp"
 #include "queue.hpp"
 
-#include <memory>
-
 namespace vulkan
 {
 VkDevice device::get() const noexcept

@@ -1,14 +1,10 @@
 #pragma once
 
-#include "device.hpp"
 #include "non_dispatchable.hpp"
-
-#include <iterator>
-#include <memory>
 
 namespace vulkan
 {
-struct command_buffers
+struct command_buffers final
 {
     [[nodiscard]]
     std::uint32_t size() const noexcept;

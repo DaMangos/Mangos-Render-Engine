@@ -3,8 +3,6 @@
 #include "device.hpp"
 #include "instance.hpp"
 
-#include <utility>
-
 namespace vulkan
 {
 VkPhysicalDevice physical_device::get() const noexcept

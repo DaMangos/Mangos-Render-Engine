@@ -2,8 +2,6 @@
 
 #include "non_dispatchable.hpp"
 
-#include <vector>
-
 namespace vulkan
 {
 struct descriptor_sets final
