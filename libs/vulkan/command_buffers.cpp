@@ -19,7 +19,7 @@ VkCommandBuffer const *command_buffers::begin() const noexcept
 
 VkCommandBuffer const *command_buffers::end() const noexcept
 {
-  return data() + size();
+  return std::next(data(), size());
 }
 
 VkCommandBuffer command_buffers::at(std::uint32_t i) const

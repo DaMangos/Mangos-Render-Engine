@@ -19,7 +19,7 @@ VkDescriptorSet const *descriptor_sets::begin() const noexcept
 
 VkDescriptorSet const *descriptor_sets::end() const noexcept
 {
-  return data() + size();
+  return std::next(data(), size());
 }
 
 VkDescriptorSet descriptor_sets::at(std::uint32_t i) const
