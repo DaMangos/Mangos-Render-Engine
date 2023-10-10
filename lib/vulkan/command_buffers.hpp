@@ -2,6 +2,8 @@
 
 #include "non_dispatchable.hpp"
 
+#include <vector>
+
 namespace vulkan
 {
 struct command_buffers final
@@ -19,9 +21,9 @@ struct command_buffers final
     VkCommandBuffer const *end() const noexcept;
 
     [[nodiscard]]
-    VkCommandBuffer at(std::uint32_t i) const;
+    VkCommandBuffer at(std::uint32_t const i) const;
 
-    VkCommandBuffer operator[](std::uint32_t i) const noexcept;
+    VkCommandBuffer operator[](std::uint32_t const i) const noexcept;
 
     ~command_buffers();
 
@@ -34,11 +36,9 @@ struct command_buffers final
     friend struct device;
 
     command_buffers(std::shared_ptr<std::pointer_traits<VkCommandPool>::element_type> const &dispatcher_handle,
-                    std::uint32_t                                                            count,
-                    std::unique_ptr<VkCommandBuffer[]>                                       ptrs) noexcept;
+                    std::vector<VkCommandBuffer>                                           &&ptrs) noexcept;
 
     std::shared_ptr<std::pointer_traits<VkCommandPool>::element_type> _dispatcher_handle;
-    std::uint32_t                                                     _count;
-    std::unique_ptr<VkCommandBuffer[]>                                _ptrs;
+    std::vector<VkCommandBuffer>                                      _ptrs;
 };
 }

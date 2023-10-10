@@ -1,38 +1,39 @@
 PROGRAM = MangosRenderEngine
 
-BINDIR    = .bin
-OBJDIR    = $(BINDIR)/obj
-DEPDIR    = $(BINDIR)/dep
-EXEDIR    = $(BINDIR)
+BINDIR = .bin
+OBJDIR = $(BINDIR)/obj
+DEPDIR = $(BINDIR)/dep
+EXEDIR = $(BINDIR)
 
 INCLUDES := $(shell find -L $(CURDIR) -name "include")
+HEADERS  := $(shell find -L $(CURDIR) -name "*.hpp")
 SRCS     := $(shell find -L $(CURDIR) -name "*.cpp")
 OBJS      = $(patsubst $(CURDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 DEPS      = $(patsubst $(CURDIR)/%.cpp, $(DEPDIR)/%.d, $(SRCS))
 
-CXX       = clang++
-CXXFLAGS  = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
-CPPFLAGS  = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(INCLUDES))
-LDLIBS    = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
+CXX      = clang++
+CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
+CPPFLAGS = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(INCLUDES))
+LDLIBS   = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 
-target debug: CPPFLAGS += -D DEBUG=1
+CLANGTIDY      = clang-tidy
+CLANGTIDYFLAGS = -checks=-*,performance*,portability*,concurrency*,clang-analyzer*,cppcoreguidelines*
 
-.PHONY: debug
-debug: $(EXEDIR)/$(PROGRAM)
-	clang-tidy $(SRCS) --checks=*
-
-.PHONY: release
-release: $(EXEDIR)/$(PROGRAM)
+.PHONY: all
+all: $(EXEDIR)/$(PROGRAM)
+	@echo "Build succsess!"
 
 .PHONY: run
-run: $(EXEDIR)/$(PROGRAM)
+run: all
 	@$<
 
 .PHONY: clean
 clean:
 	@rm -rf $(BINDIR)
+	@echo "Clean succsess!"
 
 $(EXEDIR)/$(PROGRAM): $(OBJS)
+	@$(CLANGTIDY) $(HEADERS) $(SRCS) $(CLANGTIDYFLAGS)
 	@mkdir -p $(@D)
 	@$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 

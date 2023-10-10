@@ -4,12 +4,12 @@ namespace vulkan
 {
 std::uint32_t descriptor_sets::size() const noexcept
 {
-  return _count;
+  return static_cast<std::uint32_t>(_ptrs.size());
 }
 
 VkDescriptorSet const *descriptor_sets::data() const noexcept
 {
-  return _ptrs.get();
+  return _ptrs.data();
 }
 
 VkDescriptorSet const *descriptor_sets::begin() const noexcept
@@ -22,14 +22,12 @@ VkDescriptorSet const *descriptor_sets::end() const noexcept
   return std::next(data(), size());
 }
 
-VkDescriptorSet descriptor_sets::at(std::uint32_t i) const
+VkDescriptorSet descriptor_sets::at(std::uint32_t const i) const
 {
-  if(i >= size())
-    throw std::out_of_range("vulkan::descriptor_sets::at");
-  return _ptrs[i];
+  return _ptrs.at(i);
 }
 
-VkDescriptorSet descriptor_sets::operator[](std::uint32_t i) const noexcept
+VkDescriptorSet descriptor_sets::operator[](std::uint32_t const i) const noexcept
 {
   return _ptrs[i];
 }
@@ -43,10 +41,8 @@ descriptor_sets::~descriptor_sets()
 }
 
 descriptor_sets::descriptor_sets(std::shared_ptr<std::pointer_traits<VkDescriptorPool>::element_type> const &dispatcher_handle,
-                                 std::uint32_t                                                               count,
-                                 std::unique_ptr<VkDescriptorSet[]>                                          ptrs) noexcept
+                                 std::vector<VkDescriptorSet>                                              &&ptrs) noexcept
 : _dispatcher_handle(dispatcher_handle),
-  _count(count),
   _ptrs(std::move(ptrs))
 {
 }

@@ -18,7 +18,7 @@ struct queue final
   private:
     friend struct device;
 
-    queue(std::shared_ptr<std::pointer_traits<VkDevice>::element_type> const &dispatcher, VkQueue ptr) noexcept;
+    queue(std::shared_ptr<std::pointer_traits<VkDevice>::element_type> const &dispatcher, VkQueue const ptr) noexcept;
 
     std::shared_ptr<std::pointer_traits<VkDevice>::element_type> _dispatcher;
     VkQueue                                                      _ptr;

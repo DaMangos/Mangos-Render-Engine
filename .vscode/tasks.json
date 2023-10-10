@@ -2,10 +2,10 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "[MGE] debug",
+            "label": "[MRE] build",
             "type": "shell",
             "command": [
-                "make debug"
+                "make all"
             ],
             "problemMatcher": [],
             "group": {
@@ -14,39 +14,24 @@
             }
         },
         {
-            "label": "[MGE] release",
-            "type": "shell",
-            "command": [
-                "make release"
-            ]
-        },
-        {
-            "label": "[MGE] clean",
+            "label": "[MRE] clean",
             "type": "shell",
             "command": [
                 "make clean"
             ]
         },
         {
-            "label": "[MGE] run ",
+            "label": "[MRE] run ",
             "type": "shell",
             "command": [
                 "make run"
             ]
         },
         {
-            "label": "[MGE] clean complier commands",
+            "label": "[MRE] generate complier commands",
             "type": "shell",
             "command": [
-                "rm -rf .cache compile_commands.json"
-            ]
-        },
-        {
-            "label": "[MGE] generate complier commands",
-            "dependsOn": "[MGE] clean complier commands",
-            "type": "shell",
-            "command": [
-                "bear -- make clean debug"
+                "rm -rf .cache compile_commands.json; bear -- make clean all"
             ]
         }
     ]

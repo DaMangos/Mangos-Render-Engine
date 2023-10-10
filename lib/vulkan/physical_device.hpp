@@ -11,22 +11,25 @@ struct device;
 struct physical_device final
 {
     [[nodiscard]]
-    VkPhysicalDevice get() const noexcept;
+    constexpr VkPhysicalDevice get() const noexcept
+    {
+      return _ptr;
+    }
 
     [[nodiscard]]
-    device create_device(VkDeviceCreateInfo create_info) const;
+    device create_device(VkDeviceCreateInfo const &create_info) const;
 
     [[nodiscard]]
-    bool check_surface_support(VkSurfaceKHR surface, std::uint32_t queue_family) const;
+    bool check_surface_support(VkSurfaceKHR const surface, std::uint32_t const queue_family) const;
 
     [[nodiscard]]
-    VkSurfaceCapabilitiesKHR get_surface_capabilities(VkSurfaceKHR surface) const;
+    VkSurfaceCapabilitiesKHR get_surface_capabilities(VkSurfaceKHR const surface) const;
 
     [[nodiscard]]
-    std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> get_surface_formats(VkSurfaceKHR surface) const;
+    std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> get_surface_formats(VkSurfaceKHR const surface) const;
 
     [[nodiscard]]
-    std::pair<std::vector<VkPresentModeKHR>, VkResult> get_present_modes(VkSurfaceKHR surface) const;
+    std::pair<std::vector<VkPresentModeKHR>, VkResult> get_present_modes(VkSurfaceKHR const surface) const;
 
     [[nodiscard]]
     VkPhysicalDeviceFeatures get_features() const noexcept;

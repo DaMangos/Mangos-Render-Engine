@@ -4,15 +4,15 @@
 
 namespace vulkan
 {
-instance::instance(VkInstanceCreateInfo create_info)
+instance::instance(VkInstanceCreateInfo const &create_info)
 : _handle(
     [&create_info]()
     {
-      VkInstance ptr;
+      VkInstance ptr = VK_NULL_HANDLE;
       switch(vkCreateInstance(&create_info, nullptr, &ptr))
       {
         case VK_SUCCESS :
-          return ptr;
+          return ptr = VK_NULL_HANDLE;
         case VK_ERROR_OUT_OF_HOST_MEMORY :
           throw std::runtime_error("failed to create VkInstance: out of host memory");
         case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -33,17 +33,12 @@ instance::instance(VkInstanceCreateInfo create_info)
 {
 }
 
-VkInstance instance::get() const noexcept
-{
-  return _handle.get();
-}
-
 std::pair<std::vector<physical_device>, VkResult> instance::enumerate_physical_devices() const
 {
-  std::uint32_t count;
-  switch(vkEnumeratePhysicalDevices(get(), &count, nullptr))
+  std::uint32_t count = 0;
+  switch(VkResult result = vkEnumeratePhysicalDevices(get(), &count, nullptr))
   {
-    case VK_SUCCESS :
+    case VK_SUCCESS | VK_INCOMPLETE :
     {
       std::vector<VkPhysicalDevice> ptrs(count);
       vkEnumeratePhysicalDevices(get(), &count, ptrs.data());
@@ -51,17 +46,7 @@ std::pair<std::vector<physical_device>, VkResult> instance::enumerate_physical_d
       physical_devices.reserve(count);
       for(VkPhysicalDevice ptr : ptrs)
         physical_devices.emplace_back(physical_device(_handle, ptr));
-      return std::make_pair(std::move(physical_devices), VK_SUCCESS);
-    }
-    case VK_INCOMPLETE :
-    {
-      std::vector<VkPhysicalDevice> ptrs(count);
-      vkEnumeratePhysicalDevices(get(), &count, ptrs.data());
-      std::vector<physical_device> physical_devices;
-      physical_devices.reserve(count);
-      for(VkPhysicalDevice ptr : ptrs)
-        physical_devices.emplace_back(physical_device(_handle, ptr));
-      return std::make_pair(std::move(physical_devices), VK_INCOMPLETE);
+      return std::make_pair(std::move(physical_devices), result);
     }
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to enumerate VkPhysicalDevice: out of host memory");
@@ -74,9 +59,9 @@ std::pair<std::vector<physical_device>, VkResult> instance::enumerate_physical_d
   }
 }
 
-ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT create_info) const
+ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT const &create_info) const
 {
-  VkDebugUtilsMessengerEXT ptr;
+  VkDebugUtilsMessengerEXT ptr = VK_NULL_HANDLE;
   switch(std::invoke(get_proc_addr<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT"),
                      get(),
                      &create_info,
@@ -92,9 +77,9 @@ ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMe
   }
 }
 
-ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT create_info) const
+ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT const &create_info) const
 {
-  VkDebugReportCallbackEXT ptr;
+  VkDebugReportCallbackEXT ptr = VK_NULL_HANDLE;
   switch(std::invoke(get_proc_addr<PFN_vkCreateDebugReportCallbackEXT>("vkCreateDebugReportCallbackEXT"),
                      get(),
                      &create_info,
@@ -110,9 +95,9 @@ ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportC
   }
 }
 
-khr::surface instance::create_surface(GLFWwindow *window_ptr) const
+khr::surface instance::create_surface(GLFWwindow *const window_ptr) const
 {
-  VkSurfaceKHR ptr;
+  VkSurfaceKHR ptr = VK_NULL_HANDLE;
   switch(glfwCreateWindowSurface(get(), window_ptr, nullptr, &ptr))
   {
     case VK_SUCCESS :

@@ -1,9 +1,11 @@
 #pragma once
 
+#include "bounded_iterator.hpp"
+#include "jumping_iterator.hpp"
+
 #include <algorithm>
 #include <cstddef>
 #include <iterator>
-#include <mgo/iterator.hpp>
 #include <numeric>
 #include <ranges>
 
@@ -25,7 +27,7 @@ struct matrix_data
       return element;
     }
 
-    arithmetic_type element[M * N] = {};
+    std::array<arithmetic_type, M * N> element = {};
 };
 
 template <class arithmetic_type>
@@ -403,19 +405,15 @@ struct matrix : matrix_data<arithmetic_type, M, N>
       }
     }
 
-    constexpr void reduced_row_echelon() noexcept requires std::floating_point<arithmetic_type>
-    {
-    }
+    constexpr void reduced_row_echelon() noexcept requires std::floating_point<arithmetic_type>;
+    // TODO: implement
 
-    constexpr void inverse() noexcept requires std::floating_point<arithmetic_type> and (column_size() == row_size())
-    {
-      // TODO: implement
-    }
+    constexpr void inverse() noexcept requires std::floating_point<arithmetic_type> and (column_size() == row_size());
+    // TODO: implement
 
-    constexpr void transpose() noexcept
-    {
-      // TODO: implement
-    }
+    constexpr void transpose() noexcept;
+
+    // TODO: implement
 
     constexpr void fill(value_type value) noexcept
     {
@@ -434,16 +432,13 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     }
 
     [[nodiscard]]
-    constexpr matrix cross(matrix other) const noexcept requires(row_size() == 1)
-    {
-      // TODO: implement
-    }
+    constexpr matrix cross(matrix other) const noexcept requires(row_size() == 1);
+    // TODO: implement
 
     [[nodiscard]]
-    constexpr value_type det() const noexcept requires(column_size() == row_size())
-    {
-      // TODO: implement
-    }
+    constexpr value_type det() const noexcept requires(column_size() == row_size());
+
+    // TODO: implement
 
     [[nodiscard]]
     constexpr value_type length_squared() const noexcept requires(row_size() == 1)
@@ -459,17 +454,13 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     [[nodiscard]]
     constexpr value_type theta() const noexcept
-      requires std::floating_point<arithmetic_type> and (row_size() == 1) and (column_size() >= 2)
-    {
-      // TODO: implement
-    }
+      requires std::floating_point<arithmetic_type> and (row_size() == 1) and (column_size() >= 2);
+    // TODO: implement
 
     [[nodiscard]]
     constexpr value_type phi() const noexcept
-      requires std::floating_point<arithmetic_type> and (row_size() == 1) and (column_size() >= 3)
-    {
-      // TODO: implement
-    }
+      requires std::floating_point<arithmetic_type> and (row_size() == 1) and (column_size() >= 3);
+    // TODO: implement
 
     constexpr auto operator<=>(matrix const &) const noexcept = default;
 };

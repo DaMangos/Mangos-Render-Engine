@@ -2,7 +2,7 @@
 
 namespace vulkan
 {
-queue::queue(std::shared_ptr<std::pointer_traits<VkDevice>::element_type> const &dispatcher, VkQueue ptr) noexcept
+queue::queue(std::shared_ptr<std::pointer_traits<VkDevice>::element_type> const &dispatcher, VkQueue const ptr) noexcept
 : _dispatcher(dispatcher),
   _ptr(ptr)
 {

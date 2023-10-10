@@ -2,6 +2,8 @@
 
 #include "non_dispatchable.hpp"
 
+#include <vector>
+
 namespace vulkan
 {
 struct descriptor_sets final
@@ -19,9 +21,9 @@ struct descriptor_sets final
     VkDescriptorSet const *end() const noexcept;
 
     [[nodiscard]]
-    VkDescriptorSet at(std::uint32_t i) const;
+    VkDescriptorSet at(std::uint32_t const i) const;
 
-    VkDescriptorSet operator[](std::uint32_t i) const noexcept;
+    VkDescriptorSet operator[](std::uint32_t const i) const noexcept;
 
     ~descriptor_sets();
 
@@ -34,11 +36,9 @@ struct descriptor_sets final
     friend struct device;
 
     descriptor_sets(std::shared_ptr<std::pointer_traits<VkDescriptorPool>::element_type> const &dispatcher_handle,
-                    std::uint32_t                                                               count,
-                    std::unique_ptr<VkDescriptorSet[]>                                          ptrs) noexcept;
+                    std::vector<VkDescriptorSet>                                              &&ptrs) noexcept;
 
     std::shared_ptr<std::pointer_traits<VkDescriptorPool>::element_type> _dispatcher_handle;
-    std::uint32_t                                                        _count;
-    std::unique_ptr<VkDescriptorSet[]>                                   _ptrs;
+    std::vector<VkDescriptorSet>                                         _ptrs;
 };
 }

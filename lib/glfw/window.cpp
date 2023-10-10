@@ -18,7 +18,7 @@ constexpr std::size_t const has_lost_focus_index             = 11;
 
 namespace glfw
 {
-window::window(dimensions size, std::string const &title)
+window::window(dimensions const &size, std::string const &title)
 : _handle(
     [&size, &title]()
     {
@@ -28,8 +28,8 @@ window::window(dimensions size, std::string const &title)
       throw std::runtime_error("failed to create GLFWwindow");
     }())
 {
+  // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
   glfwSetWindowUserPointer(get(), this);
-
   glfwSetWindowCloseCallback(
     get(),
     [](GLFWwindow *window)
@@ -83,11 +83,7 @@ window::window(dimensions size, std::string const &title)
                                  ->_flags.set(has_gained_focus == GLFW_TRUE ? has_gained_focus_index : has_lost_focus_index,
                                               true);
                              });
-}
-
-GLFWwindow *window::get() const noexcept
-{
-  return _handle.get();
+  // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
 }
 
 attribute window::get_attrib(attribute attribute) const noexcept
@@ -97,21 +93,21 @@ attribute window::get_attrib(attribute attribute) const noexcept
 
 scale window::get_content_scale() const noexcept
 {
-  float x, y;
+  float x = 0, y = 0;
   glfwGetWindowContentScale(get(), &x, &y);
   return scale{x, y};
 }
 
 dimensions window::get_framebuffer_size() const noexcept
 {
-  int x, y;
+  int x = 0, y = 0;
   glfwGetFramebufferSize(get(), &x, &y);
   return dimensions{static_cast<std::uint16_t>(y), static_cast<std::uint32_t>(y)};
 }
 
 distance window::get_frame_size() const noexcept
 {
-  int left, top, right, bottom;
+  int left = 0, top = 0, right = 0, bottom = 0;
   glfwGetWindowFrameSize(get(), &left, &top, &right, &bottom);
   return distance{static_cast<std::uint32_t>(left),
                   static_cast<std::uint32_t>(top),
@@ -126,14 +122,14 @@ float window::get_opacity() const noexcept
 
 coordinates window::get_position() const noexcept
 {
-  int x, y;
+  int x = 0, y = 0;
   glfwGetWindowPos(get(), &x, &y);
   return coordinates{static_cast<std::int32_t>(y), static_cast<std::int32_t>(y)};
 }
 
 dimensions window::get_size() const noexcept
 {
-  int x, y;
+  int x = 0, y = 0;
   glfwGetWindowSize(get(), &x, &y);
   return dimensions{static_cast<std::uint32_t>(y), static_cast<std::uint32_t>(y)};
 }
@@ -238,39 +234,39 @@ void window::show() noexcept
   glfwShowWindow(get());
 }
 
-void window::set_aspect_ratio(dimensions ratio) noexcept
+void window::set_aspect_ratio(dimensions const &ratio) noexcept
 {
   glfwSetWindowAspectRatio(get(), static_cast<int>(ratio.width), static_cast<int>(ratio.height));
 }
 
-void window::set_attrib(attribute attribute, value value) noexcept
+void window::set_attrib(attribute const attribute, value const value) noexcept
 {
   glfwSetWindowAttrib(get(), attribute, value);
 }
 
-void window::set_icon(std::vector<GLFWimage> images)
+void window::set_icon(std::vector<GLFWimage> const &images)
 {
   if(images.size() > std::numeric_limits<int>::max())
     throw std::out_of_range("failed to set icon: too many GLFWimage");
   glfwSetWindowIcon(get(), static_cast<int>(images.size()), images.data());
 }
 
-void window::set_opacity(float opacity) noexcept
+void window::set_opacity(float const opacity) noexcept
 {
   glfwSetWindowOpacity(get(), opacity);
 }
 
-void window::set_position(coordinates position) noexcept
+void window::set_position(coordinates const &position) noexcept
 {
   glfwSetWindowPos(get(), static_cast<int>(position.x), static_cast<int>(position.y));
 }
 
-void window::set_size(dimensions size) noexcept
+void window::set_size(dimensions const &size) noexcept
 {
   glfwSetWindowSize(get(), static_cast<int>(size.width), static_cast<int>(size.height));
 }
 
-void window::set_size_limits(dimensions min_size, dimensions max_size) noexcept
+void window::set_size_limits(dimensions const &min_size, dimensions const &max_size) noexcept
 {
   glfwSetWindowSizeLimits(get(),
                           static_cast<int>(min_size.width),

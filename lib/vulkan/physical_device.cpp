@@ -5,18 +5,13 @@
 
 namespace vulkan
 {
-VkPhysicalDevice physical_device::get() const noexcept
+device physical_device::create_device(VkDeviceCreateInfo const &create_info) const
 {
-  return _ptr;
-}
-
-device physical_device::create_device(VkDeviceCreateInfo create_info) const
-{
-  VkDevice ptr;
+  VkDevice ptr = VK_NULL_HANDLE;
   switch(vkCreateDevice(get(), &create_info, nullptr, &ptr))
   {
     case VK_SUCCESS :
-      return device(_dispatcher, ptr);
+      return {_dispatcher, ptr};
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw std::runtime_error("failed to create VkDevice: out of host memory");
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
@@ -36,7 +31,7 @@ device physical_device::create_device(VkDeviceCreateInfo create_info) const
   }
 }
 
-bool physical_device::check_surface_support(VkSurfaceKHR surface, std::uint32_t queue_family) const
+bool physical_device::check_surface_support(VkSurfaceKHR const surface, std::uint32_t const queue_family) const
 {
   VkBool32 supported = VK_FALSE;
   switch(vkGetPhysicalDeviceSurfaceSupportKHR(get(), queue_family, surface, &supported))
@@ -54,7 +49,7 @@ bool physical_device::check_surface_support(VkSurfaceKHR surface, std::uint32_t 
   }
 }
 
-VkSurfaceCapabilitiesKHR physical_device::get_surface_capabilities(VkSurfaceKHR surface) const
+VkSurfaceCapabilitiesKHR physical_device::get_surface_capabilities(VkSurfaceKHR const surface) const
 {
   VkSurfaceCapabilitiesKHR surface_capabilities;
   switch(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(get(), surface, &surface_capabilities))
@@ -72,7 +67,7 @@ VkSurfaceCapabilitiesKHR physical_device::get_surface_capabilities(VkSurfaceKHR 
   }
 }
 
-std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> physical_device::get_surface_formats(VkSurfaceKHR surface) const
+std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> physical_device::get_surface_formats(VkSurfaceKHR const surface) const
 {
   std::uint32_t count = 0;
   switch(VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR(get(), surface, &count, nullptr))
@@ -94,7 +89,7 @@ std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> physical_device::get_surfac
   }
 }
 
-std::pair<std::vector<VkPresentModeKHR>, VkResult> physical_device::get_present_modes(VkSurfaceKHR surface) const
+std::pair<std::vector<VkPresentModeKHR>, VkResult> physical_device::get_present_modes(VkSurfaceKHR const surface) const
 {
   std::uint32_t count = 0;
   switch(VkResult result = vkGetPhysicalDeviceSurfacePresentModesKHR(get(), surface, &count, nullptr))

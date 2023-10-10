@@ -13,13 +13,16 @@ namespace glfw
 {
 struct window
 {
-    window(dimensions size, std::string const &title);
+    window(dimensions const &size, std::string const &title);
 
     [[nodiscard]]
-    GLFWwindow *get() const noexcept;
+    constexpr GLFWwindow *get() const noexcept
+    {
+      return _handle.get();
+    }
 
     [[nodiscard]]
-    attribute get_attrib(attribute attribute) const noexcept;
+    attribute get_attrib(attribute const attribute) const noexcept;
 
     [[nodiscard]]
     scale get_content_scale() const noexcept;
@@ -91,24 +94,26 @@ struct window
 
     void show() noexcept;
 
-    void set_aspect_ratio(dimensions ratio) noexcept;
+    void set_aspect_ratio(dimensions const &ratio) noexcept;
 
-    void set_attrib(attribute attribute, value value) noexcept;
+    void set_attrib(attribute const attribute, value const value) noexcept;
 
-    void set_icon(std::vector<GLFWimage> images);
+    void set_icon(std::vector<GLFWimage> const &images);
 
-    void set_opacity(float opacity) noexcept;
+    void set_opacity(float const opacity) noexcept;
 
-    void set_position(coordinates position) noexcept;
+    void set_position(coordinates const &position) noexcept;
 
-    void set_size(dimensions size) noexcept;
+    void set_size(dimensions const &size) noexcept;
 
-    void set_size_limits(dimensions min_size, dimensions max_size) noexcept;
+    void set_size_limits(dimensions const &min_size, dimensions const &max_size) noexcept;
 
     void set_title(std::string const &title) noexcept;
 
   private:
+    static constexpr std::size_t const WINDOW_FLAGS_COUNT = 12;
+
     std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *ptr) { glfwDestroyWindow(ptr); })> _handle;
-    std::bitset<12> mutable _flags;
+    std::bitset<WINDOW_FLAGS_COUNT> mutable _flags;
 };
 }
