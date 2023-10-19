@@ -28,43 +28,42 @@ window::window(dimensions const &size, std::string const &title)
       throw std::runtime_error("failed to create GLFWwindow");
     }())
 {
-  // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
   glfwSetWindowUserPointer(get(), this);
   glfwSetWindowCloseCallback(
     get(),
     [](GLFWwindow *window)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_closed_index, true); });
+    { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_closed_index, true); });
 
   glfwSetWindowRefreshCallback(
     get(),
     [](GLFWwindow *window)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_refresh_index, true); });
+    { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_refresh_index, true); });
 
-  glfwSetWindowPosCallback(
-    get(),
-    [](GLFWwindow *window, int, int)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_moved_index, true); });
+  glfwSetWindowPosCallback(get(),
+                           [](GLFWwindow *window, int, int) {
+                             static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_moved_index, true);
+                           });
 
   glfwSetWindowSizeCallback(
     get(),
     [](GLFWwindow *window, int, int)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_resized_index, true); });
+    { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_resized_index, true); });
 
   glfwSetFramebufferSizeCallback(
     get(),
     [](GLFWwindow *window, int, int)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_framebuffer_resized_index, true); });
+    { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_framebuffer_resized_index, true); });
 
   glfwSetWindowContentScaleCallback(
     get(),
     [](GLFWwindow *window, float, float)
-    { reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_content_scale_changed_index, true); });
+    { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_content_scale_changed_index, true); });
 
   glfwSetWindowIconifyCallback(
     get(),
     [](GLFWwindow *window, int has_iconified)
     {
-      reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))
+      static_cast<decltype(this)>(glfwGetWindowUserPointer(window))
         ->_flags.set(has_iconified == GLFW_TRUE ? has_iconified_index : has_restored_from_iconify_index, true);
     });
 
@@ -72,18 +71,17 @@ window::window(dimensions const &size, std::string const &title)
     get(),
     [](GLFWwindow *window, int has_maximized)
     {
-      reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))
+      static_cast<decltype(this)>(glfwGetWindowUserPointer(window))
         ->_flags.set(has_maximized == GLFW_TRUE ? has_maximized_index : has_restored_from_maximize_index, true);
     });
 
   glfwSetWindowFocusCallback(get(),
                              [](GLFWwindow *window, int has_gained_focus)
                              {
-                               reinterpret_cast<decltype(this)>(glfwGetWindowUserPointer(window))
+                               static_cast<decltype(this)>(glfwGetWindowUserPointer(window))
                                  ->_flags.set(has_gained_focus == GLFW_TRUE ? has_gained_focus_index : has_lost_focus_index,
                                               true);
                              });
-  // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
 }
 
 attribute window::get_attrib(attribute attribute) const noexcept

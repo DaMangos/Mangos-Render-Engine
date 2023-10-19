@@ -35,11 +35,9 @@ struct instance final
     auto get_proc_addr(std::string const &function_name) const
       requires std::is_function_v<std::remove_pointer_t<function_pointer>>
     {
-      // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
       if(PFN_vkVoidFunction function = vkGetInstanceProcAddr(get(), function_name.c_str()))
-        return reinterpret_cast<function_pointer>(function);
+        return static_cast<function_pointer>(function);
       throw std::runtime_error("failed get protocol address: " + function_name);
-      // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
     }
 
     instance(instance &&)                 = default;
