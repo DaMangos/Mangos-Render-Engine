@@ -111,9 +111,7 @@ struct window
     void set_title(std::string const &title) noexcept;
 
   private:
-    static constexpr std::size_t const WINDOW_FLAGS_COUNT = 12;
-
     std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *ptr) { glfwDestroyWindow(ptr); })> _handle;
-    std::bitset<WINDOW_FLAGS_COUNT> mutable _flags;
+    std::bitset<12> mutable _flags;
 };
 }

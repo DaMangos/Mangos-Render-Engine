@@ -36,7 +36,7 @@ struct instance final
       requires std::is_function_v<std::remove_pointer_t<function_pointer>>
     {
       if(PFN_vkVoidFunction function = vkGetInstanceProcAddr(get(), function_name.c_str()))
-        return static_cast<function_pointer>(function);
+        return reinterpret_cast<function_pointer>(function);
       throw std::runtime_error("failed get protocol address: " + function_name);
     }
 

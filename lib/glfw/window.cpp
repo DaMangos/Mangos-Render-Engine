@@ -91,7 +91,7 @@ attribute window::get_attrib(attribute attribute) const noexcept
 
 scale window::get_content_scale() const noexcept
 {
-  float x = 0, y = 0;
+  float x = 0.f, y = 0.f;
   glfwGetWindowContentScale(get(), &x, &y);
   return scale{x, y};
 }

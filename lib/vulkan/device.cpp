@@ -259,6 +259,8 @@ device::create_compute_pipelines(VkPipelineCache const                          
   if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
     throw std::runtime_error("failed to create VkPipeline: too many VkComputePipelineCreateInfo");
   std::vector<VkPipeline> ptrs(create_infos.size());
+  std::vector<pipeline>   pipelines;
+  pipelines.reserve(create_infos.size());
   switch(VkResult result = vkCreateComputePipelines(get(),
                                                     pipeline_cache,
                                                     static_cast<std::uint32_t>(create_infos.size()),
@@ -268,8 +270,6 @@ device::create_compute_pipelines(VkPipelineCache const                          
   {
     case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
     {
-      std::vector<pipeline> pipelines;
-      pipelines.reserve(create_infos.size());
       std::transform(ptrs.begin(),
                      ptrs.end(),
                      std::back_inserter(pipelines),
@@ -294,6 +294,8 @@ device::create_graphics_pipelines(VkPipelineCache const                         
   if(create_infos.size() > std::numeric_limits<std::uint32_t>::max())
     throw std::runtime_error("failed to create VkPipeline: too many VkGraphicsPipelineCreateInfo");
   std::vector<VkPipeline> ptrs(create_infos.size());
+  std::vector<pipeline>   pipelines;
+  pipelines.reserve(ptrs.size());
   switch(VkResult result = vkCreateGraphicsPipelines(get(),
                                                      pipeline_cache,
                                                      static_cast<std::uint32_t>(create_infos.size()),
@@ -303,8 +305,6 @@ device::create_graphics_pipelines(VkPipelineCache const                         
   {
     case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
     {
-      std::vector<pipeline> pipelines;
-      pipelines.reserve(ptrs.size());
       std::transform(ptrs.begin(),
                      ptrs.end(),
                      std::back_inserter(pipelines),
