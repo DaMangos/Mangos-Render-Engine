@@ -260,7 +260,7 @@ device::create_compute_pipelines(VkPipelineCache const                          
     throw std::runtime_error("failed to create VkPipeline: too many VkComputePipelineCreateInfo");
   std::vector<VkPipeline> ptrs(create_infos.size());
   std::vector<pipeline>   pipelines;
-  pipelines.reserve(ptrs.size());
+  pipelines.reserve(create_infos.size());
   switch(VkResult result = vkCreateComputePipelines(get(),
                                                     pipeline_cache,
                                                     static_cast<std::uint32_t>(create_infos.size()),
@@ -295,7 +295,7 @@ device::create_graphics_pipelines(VkPipelineCache const                         
     throw std::runtime_error("failed to create VkPipeline: too many VkGraphicsPipelineCreateInfo");
   std::vector<VkPipeline> ptrs(create_infos.size());
   std::vector<pipeline>   pipelines;
-  pipelines.reserve(ptrs.size());
+  pipelines.reserve(create_infos.size());
   switch(VkResult result = vkCreateGraphicsPipelines(get(),
                                                      pipeline_cache,
                                                      static_cast<std::uint32_t>(create_infos.size()),
