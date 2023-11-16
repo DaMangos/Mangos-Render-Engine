@@ -98,7 +98,13 @@ struct window
 
     void set_attrib(attribute const attribute, value const value) noexcept;
 
-    void set_icon(std::vector<GLFWimage> const &images);
+    void set_icon(std::ranges::contiguous_range auto const &images)
+      requires std::same_as<std::ranges::range_value_t<decltype(images)>, GLFWimage>
+    {
+      if(std::ranges::size(images) > std::numeric_limits<int>::max())
+        throw std::out_of_range("failed to set icon: too many GLFWimage");
+      glfwSetWindowIcon(get(), static_cast<int>(std::ranges::size(images)), std::ranges::data(images));
+    }
 
     void set_opacity(float const opacity) noexcept;
 
@@ -111,7 +117,8 @@ struct window
     void set_title(std::string const &title) noexcept;
 
   private:
+    static constexpr std::size_t const                                                     flag_size = 12;
     std::unique_ptr<GLFWwindow, decltype([](GLFWwindow *ptr) { glfwDestroyWindow(ptr); })> _handle;
-    std::bitset<12> mutable _flags;
+    std::bitset<flag_size> mutable _flags;
 };
 }

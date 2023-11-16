@@ -16,16 +16,22 @@ CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
 CPPFLAGS = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(INCLUDES))
 LDLIBS   = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 
-CLANGTIDY      = clang-tidy
-CLANGTIDYFLAGS = -checks=-*,performance*,portability*,concurrency*,clang-analyzer*,cppcoreguidelines*
+CLANGFORMATFLAGS = -i -style=file
+CLANGTIDYFLAGS   = -checks=-*,performance*,portability*,concurrency*,clang-analyzer*,cppcoreguidelines*
 
 .PHONY: all
 all: $(EXEDIR)/$(PROGRAM)
+	@clang-format $(HEADERS) $(SRCS) $(CLANGFORMATFLAGS)
+	@clang-tidy $(HEADERS) $(SRCS) $(CLANGTIDYFLAGS)
 	@echo "Build succsess!"
 
-.PHONY: run
-run: all
-	@$<
+.PHONY: format
+run:
+	@clang-format $(HEADERS) $(SRCS) $(CLANGFORMATFLAGS)
+
+.PHONY: tidy
+run:
+	@clang-tidy $(HEADERS) $(SRCS) $(CLANGTIDYFLAGS)
 
 .PHONY: clean
 clean:
@@ -33,7 +39,6 @@ clean:
 	@echo "Clean succsess!"
 
 $(EXEDIR)/$(PROGRAM): $(OBJS)
-	@$(CLANGTIDY) $(HEADERS) $(SRCS) $(CLANGTIDYFLAGS)
 	@mkdir -p $(@D)
 	@$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 

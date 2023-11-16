@@ -2,6 +2,7 @@
 
 #include "non_dispatchable.hpp"
 
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -65,13 +66,21 @@ struct device final
 
     [[nodiscard]]
     std::pair<std::vector<pipeline>, VkResult>
-    create_compute_pipelines(VkPipelineCache const                          &pipeline_cache,
-                             std::vector<VkComputePipelineCreateInfo> const &create_infos) const;
+    create_compute_pipelines(VkPipelineCache const                    &pipeline_cache,
+                             std::ranges::contiguous_range auto const &create_infos) const
+      requires std::same_as<std::ranges::range_value_t<decltype(create_infos)>, VkComputePipelineCreateInfo>
+    {
+      return create_pipeline<vkCreateComputePipelines, "VkComputePipelineCreateInfo">(pipeline_cache, create_infos);
+    }
 
     [[nodiscard]]
     std::pair<std::vector<pipeline>, VkResult>
-    create_graphics_pipelines(VkPipelineCache const                           &pipeline_cache,
-                              std::vector<VkGraphicsPipelineCreateInfo> const &create_infos) const;
+    create_graphics_pipelines(VkPipelineCache const                    &pipeline_cache,
+                              std::ranges::contiguous_range auto const &create_infos) const
+      requires std::same_as<std::ranges::range_value_t<decltype(create_infos)>, VkGraphicsPipelineCreateInfo>
+    {
+      return create_pipeline<vkCreateGraphicsPipelines, "VkGraphicsPipelineCreateInfo">(pipeline_cache, create_infos);
+    }
 
     [[nodiscard]]
     pipeline_cache create_pipeline_cache(VkPipelineCacheCreateInfo const &create_info) const;
@@ -107,6 +116,41 @@ struct device final
     ~device()                         = default;
 
   private:
+    template <auto create_function, char const *create_info_name>
+    [[nodiscard]]
+    std::pair<std::vector<pipeline>, VkResult> create_pipelines(VkPipelineCache const                    &pipeline_cache,
+                                                                std::ranges::contiguous_range auto const &create_infos) const
+    {
+      if(std::ranges::size(create_infos) > std::numeric_limits<std::uint32_t>::max())
+        throw std::runtime_error(std::string("failed to create VkPipeline: too many ") + create_info_name);
+      std::vector<VkPipeline> ptrs(std::ranges::size(create_infos));
+      std::vector<pipeline>   pipelines;
+      pipelines.reserve(std::ranges::size(create_infos));
+      switch(VkResult result = create_function(get(),
+                                               pipeline_cache,
+                                               static_cast<std::uint32_t>(std::ranges::size(create_infos)),
+                                               std::ranges::data(create_infos),
+                                               nullptr,
+                                               ptrs.data()))
+      {
+        case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
+        {
+          std::ranges::transform(ptrs,
+                                 std::back_inserter(pipelines),
+                                 [this](auto const &ptr) { return pipeline(_handle, ptr); });
+          return std::make_pair(std::move(pipelines), result);
+        }
+        case VK_ERROR_OUT_OF_HOST_MEMORY :
+          throw std::runtime_error("failed to create VkPipeline: out of host memory");
+        case VK_ERROR_OUT_OF_DEVICE_MEMORY :
+          throw std::runtime_error("failed to create VkPipeline: out of device memory");
+        case VK_ERROR_INVALID_SHADER_NV :
+          throw std::runtime_error("failed to create VkPipeline: invalid shader");
+        default :
+          throw std::runtime_error("failed to create VkPipeline: unknown error");
+      }
+    }
+
     friend struct physical_device;
 
     device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &dispatcher, VkDevice const ptr);

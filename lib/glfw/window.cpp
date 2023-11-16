@@ -242,13 +242,6 @@ void window::set_attrib(attribute const attribute, value const value) noexcept
   glfwSetWindowAttrib(get(), attribute, value);
 }
 
-void window::set_icon(std::vector<GLFWimage> const &images)
-{
-  if(images.size() > std::numeric_limits<int>::max())
-    throw std::out_of_range("failed to set icon: too many GLFWimage");
-  glfwSetWindowIcon(get(), static_cast<int>(images.size()), images.data());
-}
-
 void window::set_opacity(float const opacity) noexcept
 {
   glfwSetWindowOpacity(get(), opacity);

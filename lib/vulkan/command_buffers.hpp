@@ -8,6 +8,8 @@ namespace vulkan
 {
 struct command_buffers final
 {
+    using value_type = VkCommandBuffer;
+
     [[nodiscard]]
     std::uint32_t size() const noexcept;
 

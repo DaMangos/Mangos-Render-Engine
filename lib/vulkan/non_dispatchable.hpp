@@ -142,33 +142,29 @@ using shader_module         = non_dispatchable_handle<vkDestroyShaderModule, VkD
 
 namespace ext
 {
-using debug_report_callback =
-  non_dispatchable_handle<[](VkInstance dispatcher_ptr, VkDebugReportCallbackEXT ptr, std::nullptr_t)
-                          {
-                            // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
-                            std::invoke(reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(
-                                          vkGetInstanceProcAddr(dispatcher_ptr, "vkDestroyDebugReportCallbackEXT")),
-                                        dispatcher_ptr,
-                                        ptr,
-                                        nullptr);
-                            // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
-                          },
-                          VkInstance,
-                          VkDebugReportCallbackEXT>;
+using debug_report_callback = non_dispatchable_handle<
+  [](VkInstance dispatcher_ptr, VkDebugReportCallbackEXT ptr, std::nullptr_t)
+  {
+    std::invoke(reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+                  vkGetInstanceProcAddr(dispatcher_ptr, "vkDestroyDebugReportCallbackEXT")),
+                dispatcher_ptr,
+                ptr,
+                nullptr);
+  },
+  VkInstance,
+  VkDebugReportCallbackEXT>;
 
-using debug_utils_messenger =
-  non_dispatchable_handle<[](VkInstance dispatcher_ptr, VkDebugUtilsMessengerEXT ptr, std::nullptr_t)
-                          {
-                            // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
-                            std::invoke(reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
-                                          vkGetInstanceProcAddr(dispatcher_ptr, "vkDestroyDebugUtilsMessengerEXT")),
-                                        dispatcher_ptr,
-                                        ptr,
-                                        nullptr);
-                            // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
-                          },
-                          VkInstance,
-                          VkDebugUtilsMessengerEXT>;
+using debug_utils_messenger = non_dispatchable_handle<
+  [](VkInstance dispatcher_ptr, VkDebugUtilsMessengerEXT ptr, std::nullptr_t)
+  {
+    std::invoke(reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+                  vkGetInstanceProcAddr(dispatcher_ptr, "vkDestroyDebugUtilsMessengerEXT")),
+                dispatcher_ptr,
+                ptr,
+                nullptr);
+  },
+  VkInstance,
+  VkDebugUtilsMessengerEXT>;
 }
 
 namespace khr

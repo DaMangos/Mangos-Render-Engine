@@ -8,6 +8,8 @@ namespace vulkan
 {
 struct descriptor_sets final
 {
+    using value_type = VkDescriptorSet;
+
     [[nodiscard]]
     std::uint32_t size() const noexcept;
 
