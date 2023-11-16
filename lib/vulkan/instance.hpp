@@ -2,6 +2,8 @@
 
 #include "non_dispatchable.hpp"
 
+#include <cstddef>
+#include <optional>
 #include <string>
 
 namespace vulkan
@@ -13,10 +15,7 @@ struct instance final
     instance(VkInstanceCreateInfo const &create_info);
 
     [[nodiscard]]
-    VkInstance get() const noexcept
-    {
-      return _handle.get();
-    }
+    VkInstance get() const noexcept;
 
     [[nodiscard]]
     std::pair<std::vector<physical_device>, VkResult> enumerate_physical_devices() const;
@@ -35,10 +34,20 @@ struct instance final
     auto get_proc_addr(std::string const &function_name) const
       requires std::is_function_v<std::remove_pointer_t<function_pointer>>
     {
-      if(auto function = vkGetInstanceProcAddr(get(), function_name.c_str()))
-        return reinterpret_cast<function_pointer>(function);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-      throw std::runtime_error("failed get protocol address: " + function_name);
+      return get_proc_addr<function_pointer>(function_name.c_str());
     }
+
+    template <class function_pointer>
+    [[nodiscard]]
+    auto get_proc_addr(char const *const function_name) const
+    {
+      if(auto function = vkGetInstanceProcAddr(get(), function_name))
+        return reinterpret_cast<function_pointer>(function);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+      throw std::runtime_error(std::string("failed get protocol address: ") + function_name);
+    }
+
+    template <class>
+    auto get_proc_addr(std::nullptr_t) const = delete;
 
     instance(instance &&)                 = default;
     instance(instance const &)            = delete;

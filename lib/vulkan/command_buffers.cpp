@@ -2,6 +2,12 @@
 
 namespace vulkan
 {
+[[nodiscard]]
+bool command_buffers::empty() const noexcept
+{
+  return _ptrs.empty();
+}
+
 std::uint32_t command_buffers::size() const noexcept
 {
   return static_cast<std::uint32_t>(_ptrs.size());

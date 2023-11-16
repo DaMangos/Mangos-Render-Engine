@@ -2,6 +2,11 @@
 
 namespace vulkan
 {
+bool descriptor_sets::empty() const noexcept
+{
+  return _ptrs.empty();
+}
+
 std::uint32_t descriptor_sets::size() const noexcept
 {
   return static_cast<std::uint32_t>(_ptrs.size());

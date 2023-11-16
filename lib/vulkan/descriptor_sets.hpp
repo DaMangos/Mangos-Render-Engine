@@ -11,6 +11,9 @@ struct descriptor_sets final
     using value_type = VkDescriptorSet;
 
     [[nodiscard]]
+    bool empty() const noexcept;
+
+    [[nodiscard]]
     std::uint32_t size() const noexcept;
 
     [[nodiscard]]

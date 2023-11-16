@@ -31,6 +31,11 @@ device physical_device::create_device(VkDeviceCreateInfo const &create_info) con
   }
 }
 
+constexpr VkPhysicalDevice physical_device::get() const noexcept
+{
+  return _ptr;
+}
+
 bool physical_device::check_surface_support(VkSurfaceKHR const surface, std::uint32_t const queue_family) const
 {
   VkBool32 supported = VK_FALSE;

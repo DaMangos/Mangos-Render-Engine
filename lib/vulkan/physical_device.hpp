@@ -11,10 +11,7 @@ struct device;
 struct physical_device final
 {
     [[nodiscard]]
-    constexpr VkPhysicalDevice get() const noexcept
-    {
-      return _ptr;
-    }
+    constexpr VkPhysicalDevice get() const noexcept;
 
     [[nodiscard]]
     device create_device(VkDeviceCreateInfo const &create_info) const;

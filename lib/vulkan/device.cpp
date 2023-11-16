@@ -6,6 +6,11 @@
 
 namespace vulkan
 {
+VkDevice device::get() const noexcept
+{
+  return _handle.get();
+}
+
 buffer device::create_buffer(VkBufferCreateInfo const &create_info) const
 {
   VkBuffer ptr = VK_NULL_HANDLE;

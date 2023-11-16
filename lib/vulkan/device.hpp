@@ -17,10 +17,7 @@ struct queue;
 struct device final
 {
     [[nodiscard]]
-    constexpr VkDevice get() const noexcept
-    {
-      return _handle.get();
-    }
+    VkDevice get() const noexcept;
 
     [[nodiscard]]
     VkInstance get_instance() const noexcept;

@@ -15,7 +15,7 @@ requires std::invocable<decltype(func_pointer), dispatcher_pointer, pointer, std
 struct non_dispatchable_handle final
 {
     [[nodiscard]]
-    constexpr pointer get() const noexcept
+    pointer get() const noexcept
     {
       return _handle.get();
     }
@@ -24,7 +24,7 @@ struct non_dispatchable_handle final
     friend struct device;
     friend struct instance;
 
-    constexpr non_dispatchable_handle(
+    non_dispatchable_handle(
       std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> const &dispatcher_handle,
       pointer                                                                                ptr) noexcept
     : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
@@ -33,7 +33,7 @@ struct non_dispatchable_handle final
 
     struct deleter final
     {
-        constexpr void operator()(pointer ptr) const noexcept
+        void operator()(pointer ptr) const noexcept
         {
           func_pointer(_dispatcher_handle.get(), ptr, nullptr);
         }
@@ -48,7 +48,7 @@ template <>
 struct non_dispatchable_handle<vkDestroyCommandPool, VkDevice, VkCommandPool>
 {
     [[nodiscard]]
-    constexpr VkCommandPool get() const noexcept
+    VkCommandPool get() const noexcept
     {
       return _handle.get();
     }
@@ -65,18 +65,18 @@ struct non_dispatchable_handle<vkDestroyCommandPool, VkDevice, VkCommandPool>
 
     non_dispatchable_handle(std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> const &dispatcher_handle,
                             VkCommandPool                                                                ptr) noexcept
-    : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
+    : _handle(ptr, deleter{dispatcher_handle})
     {
     }
 
     struct deleter final
     {
-        constexpr void operator()(VkCommandPool ptr) const noexcept
+        void operator()(VkCommandPool ptr) const noexcept
         {
-          vkDestroyCommandPool(_dispatcher_handle.get(), ptr, nullptr);
+          vkDestroyCommandPool(dispatcher_handle.get(), ptr, nullptr);
         }
 
-        std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> _dispatcher_handle;
+        std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> dispatcher_handle;
     };
 
     std::shared_ptr<typename std::pointer_traits<VkCommandPool>::element_type> _handle;
@@ -103,7 +103,7 @@ struct non_dispatchable_handle<vkDestroyDescriptorPool, VkDevice, VkDescriptorPo
 
     non_dispatchable_handle(std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> const &dispatcher_handle,
                             VkDescriptorPool                                                             ptr) noexcept
-    : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
+    : _handle(ptr, deleter{dispatcher_handle})
     {
     }
 
@@ -111,10 +111,10 @@ struct non_dispatchable_handle<vkDestroyDescriptorPool, VkDevice, VkDescriptorPo
     {
         constexpr void operator()(VkDescriptorPool ptr) const noexcept
         {
-          vkDestroyDescriptorPool(_dispatcher_handle.get(), ptr, nullptr);
+          vkDestroyDescriptorPool(dispatcher_handle.get(), ptr, nullptr);
         }
 
-        std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> _dispatcher_handle;
+        std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> dispatcher_handle;
     };
 
     std::shared_ptr<typename std::pointer_traits<VkDescriptorPool>::element_type> _handle;

@@ -15,6 +15,10 @@ struct window
 {
     window(dimensions const &size, std::string const &title);
 
+    window(dimensions const &size, char const *const title);
+
+    window(dimensions const &size, std::nullptr_t) = delete;
+
     [[nodiscard]]
     constexpr GLFWwindow *get() const noexcept
     {
@@ -115,6 +119,10 @@ struct window
     void set_size_limits(dimensions const &min_size, dimensions const &max_size) noexcept;
 
     void set_title(std::string const &title) noexcept;
+
+    void set_title(char const *const title) noexcept;
+
+    void set_title(std::nullptr_t) = delete;
 
   private:
     static constexpr std::size_t const                                                     flag_size = 12;

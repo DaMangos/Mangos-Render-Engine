@@ -11,6 +11,9 @@ struct command_buffers final
     using value_type = VkCommandBuffer;
 
     [[nodiscard]]
+    bool empty() const noexcept;
+
+    [[nodiscard]]
     std::uint32_t size() const noexcept;
 
     [[nodiscard]]
