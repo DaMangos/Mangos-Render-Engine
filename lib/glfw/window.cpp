@@ -18,12 +18,12 @@ constexpr std::size_t const has_lost_focus_index             = 11;
 
 namespace glfw
 {
-window::window(dimensions const &size, char const *const title)
+window::window(dimensions const &size, std::string const &title)
 : _handle(
     [&size, &title]()
     {
       if(GLFWwindow *ptr =
-           glfwCreateWindow(static_cast<int>(size.width), static_cast<int>(size.height), title, nullptr, nullptr))
+           glfwCreateWindow(static_cast<int>(size.width), static_cast<int>(size.height), title.c_str(), nullptr, nullptr))
         return ptr;
       throw std::runtime_error("failed to create GLFWwindow");
     }())
@@ -82,11 +82,6 @@ window::window(dimensions const &size, char const *const title)
                                  ->_flags.set(has_gained_focus == GLFW_TRUE ? has_gained_focus_index : has_lost_focus_index,
                                               true);
                              });
-}
-
-window::window(dimensions const &size, std::string const &title)
-: window(size, title.c_str())
-{
 }
 
 attribute window::get_attrib(attribute attribute) const noexcept
@@ -273,11 +268,6 @@ void window::set_size_limits(dimensions const &min_size, dimensions const &max_s
 
 void window::set_title(std::string const &title) noexcept
 {
-  set_title(title.c_str());
-}
-
-void window::set_title(char const *const title) noexcept
-{
-  glfwSetWindowTitle(get(), title);
+  glfwSetWindowTitle(get(), title.c_str());
 }
 }

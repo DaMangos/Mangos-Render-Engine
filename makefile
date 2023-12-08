@@ -1,9 +1,8 @@
 PROGRAM = MangosRenderEngine
 
-BINDIR = .bin
-OBJDIR = $(BINDIR)/obj
-DEPDIR = $(BINDIR)/dep
-EXEDIR = $(BINDIR)
+OBJDIR = $(CURDIR)/obj
+DEPDIR = $(CURDIR)/dep
+EXEDIR = $(CURDIR)/bin
 
 INCLUDES := $(shell find -L $(CURDIR) -name "include")
 HEADERS  := $(shell find -L $(CURDIR) -name "*.hpp")
@@ -17,26 +16,31 @@ CPPFLAGS = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %
 LDLIBS   = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 
 CLANGFORMATFLAGS = -i -style=file
-CLANGTIDYFLAGS   = -checks=-*,performance*,portability*,concurrency*,clang-analyzer*,cppcoreguidelines*
 
 .PHONY: all
-all: $(EXEDIR)/$(PROGRAM)
-	@clang-format $(HEADERS) $(SRCS) $(CLANGFORMATFLAGS)
-	@clang-tidy $(HEADERS) $(SRCS) $(CLANGTIDYFLAGS)
-	@echo "Build succsess!"
+all: build format
+
+.PHONY: build
+build: $(EXEDIR)/$(PROGRAM)
+	@echo "build success!"
 
 .PHONY: format
-run:
+format:
 	@clang-format $(HEADERS) $(SRCS) $(CLANGFORMATFLAGS)
+	@echo "format success!"
 
-.PHONY: tidy
-run:
-	@clang-tidy $(HEADERS) $(SRCS) $(CLANGTIDYFLAGS)
+.PHONY: compile_commands
+compile_commands:
+	@bear -- make clean build
+	@echo "compile commands success!"
 
 .PHONY: clean
 clean:
-	@rm -rf $(BINDIR)
-	@echo "Clean succsess!"
+	@rm -rf $(OBJDIR)
+	@rm -rf $(DEPDIR)
+	@rm -rf $(EXEDIR)
+	@rm -rf .cache compile_commands.json
+	@echo "clean success!"
 
 $(EXEDIR)/$(PROGRAM): $(OBJS)
 	@mkdir -p $(@D)

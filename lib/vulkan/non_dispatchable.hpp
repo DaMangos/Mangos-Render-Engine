@@ -27,7 +27,7 @@ struct non_dispatchable_handle final
     non_dispatchable_handle(
       std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> const &dispatcher_handle,
       pointer                                                                                ptr) noexcept
-    : _handle(ptr, deleter{._dispatcher_handle = dispatcher_handle})
+    : _handle(ptr, deleter{.dispatcher_handle = dispatcher_handle})
     {
     }
 
@@ -35,10 +35,10 @@ struct non_dispatchable_handle final
     {
         void operator()(pointer ptr) const noexcept
         {
-          func_pointer(_dispatcher_handle.get(), ptr, nullptr);
+          func_pointer(dispatcher_handle.get(), ptr, nullptr);
         }
 
-        std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> _dispatcher_handle;
+        std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> dispatcher_handle;
     };
 
     std::unique_ptr<typename std::pointer_traits<pointer>::element_type, deleter> _handle;

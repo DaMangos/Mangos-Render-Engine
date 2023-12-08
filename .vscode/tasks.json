@@ -5,7 +5,7 @@
             "label": "[MRE] build",
             "type": "shell",
             "command": [
-                "make all"
+                "make build"
             ],
             "problemMatcher": [],
             "group": {
@@ -21,17 +21,17 @@
             ]
         },
         {
-            "label": "[MRE] run ",
+            "label": "[MRE] format ",
             "type": "shell",
             "command": [
-                "make run"
+                "make format"
             ]
         },
         {
-            "label": "[MRE] generate complier commands",
+            "label": "[MRE] complier commands",
             "type": "shell",
             "command": [
-                "rm -rf .cache compile_commands.json; bear -- make clean all"
+                "make compile_commands"
             ]
         }
     ]

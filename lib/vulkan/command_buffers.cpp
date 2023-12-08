@@ -40,7 +40,7 @@ VkCommandBuffer command_buffers::operator[](std::uint32_t const i) const noexcep
 
 command_buffers::~command_buffers()
 {
-  vkFreeCommandBuffers(std::get_deleter<command_pool::deleter>(_dispatcher_handle)->_dispatcher_handle.get(),
+  vkFreeCommandBuffers(std::get_deleter<command_pool::deleter>(_dispatcher_handle)->dispatcher_handle.get(),
                        _dispatcher_handle.get(),
                        size(),
                        data());

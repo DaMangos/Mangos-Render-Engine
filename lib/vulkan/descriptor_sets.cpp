@@ -39,7 +39,7 @@ VkDescriptorSet descriptor_sets::operator[](std::uint32_t const i) const noexcep
 
 descriptor_sets::~descriptor_sets()
 {
-  vkFreeDescriptorSets(std::get_deleter<descriptor_pool::deleter>(_dispatcher_handle)->_dispatcher_handle.get(),
+  vkFreeDescriptorSets(std::get_deleter<descriptor_pool::deleter>(_dispatcher_handle)->dispatcher_handle.get(),
                        _dispatcher_handle.get(),
                        size(),
                        data());
