@@ -29,7 +29,7 @@ instance::instance(VkInstanceCreateInfo const &create_info)
           throw std::runtime_error("failed to create VkInstance: unknown error");
       }
     }(),
-    [](VkInstance ptr) { vkDestroyInstance(ptr, nullptr); })
+    [](VkInstance const ptr) { vkDestroyInstance(ptr, nullptr); })
 {
 }
 
@@ -45,9 +45,9 @@ std::pair<std::vector<physical_device>, VkResult> instance::enumerate_physical_d
   {
     case VK_SUCCESS | VK_INCOMPLETE :
     {
-      std::vector<VkPhysicalDevice> ptrs(count);
+      auto ptrs = std::vector<VkPhysicalDevice>(count);
       vkEnumeratePhysicalDevices(get(), &count, ptrs.data());
-      std::vector<physical_device> physical_devices;
+      auto physical_devices = std::vector<physical_device>();
       physical_devices.reserve(count);
       for(VkPhysicalDevice ptr : ptrs)
         physical_devices.emplace_back(physical_device(_handle, ptr));

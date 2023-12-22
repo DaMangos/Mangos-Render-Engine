@@ -407,7 +407,7 @@ khr::swapchain device::create_swapchain(VkSwapchainCreateInfoKHR const &create_i
 }
 
 device::device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &dispatcher, VkDevice const ptr)
-: _handle(ptr, [dispatcher](VkDevice ptr) { vkDestroyDevice(ptr, nullptr); })
+: _handle(ptr, [dispatcher](VkDevice const ptr) { vkDestroyDevice(ptr, nullptr); })
 {
 }
 }

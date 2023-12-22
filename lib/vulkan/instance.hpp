@@ -32,22 +32,11 @@ struct instance final
     template <class function_pointer>
     [[nodiscard]]
     auto get_proc_addr(std::string const &function_name) const
-      requires std::is_function_v<std::remove_pointer_t<function_pointer>>
     {
-      return get_proc_addr<function_pointer>(function_name.c_str());
+      if(auto function = vkGetInstanceProcAddr(get(), function_name.c_str()))
+        return function_pointer(function);
+      throw std::runtime_error("failed get protocol address: " + function_name);
     }
-
-    template <class function_pointer>
-    [[nodiscard]]
-    auto get_proc_addr(char const *const function_name) const
-    {
-      if(auto function = vkGetInstanceProcAddr(get(), function_name))
-        return reinterpret_cast<function_pointer>(function);  // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-      throw std::runtime_error(std::string("failed get protocol address: ") + function_name);
-    }
-
-    template <class>
-    auto get_proc_addr(std::nullptr_t) const = delete;
 
     instance(instance &&)                 = default;
     instance(instance const &)            = delete;

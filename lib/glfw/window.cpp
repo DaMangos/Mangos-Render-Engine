@@ -22,7 +22,7 @@ window::window(dimensions const &size, std::string const &title)
 : _handle(
     [&size, &title]()
     {
-      if(GLFWwindow *ptr =
+      if(auto *const ptr =
            glfwCreateWindow(static_cast<int>(size.width), static_cast<int>(size.height), title.c_str(), nullptr, nullptr))
         return ptr;
       throw std::runtime_error("failed to create GLFWwindow");
@@ -40,23 +40,23 @@ window::window(dimensions const &size, std::string const &title)
     { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(should_refresh_index, true); });
 
   glfwSetWindowPosCallback(get(),
-                           [](GLFWwindow *window, int, int) {
+                           [](GLFWwindow *const window, int const, int const) {
                              static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_moved_index, true);
                            });
 
   glfwSetWindowSizeCallback(
     get(),
-    [](GLFWwindow *window, int, int)
+    [](GLFWwindow *const window, int const, int const)
     { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_resized_index, true); });
 
   glfwSetFramebufferSizeCallback(
     get(),
-    [](GLFWwindow *window, int, int)
+    [](GLFWwindow *const window, int const, int const)
     { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_framebuffer_resized_index, true); });
 
   glfwSetWindowContentScaleCallback(
     get(),
-    [](GLFWwindow *window, float, float)
+    [](GLFWwindow *const window, float const, float const)
     { static_cast<decltype(this)>(glfwGetWindowUserPointer(window))->_flags.set(has_content_scale_changed_index, true); });
 
   glfwSetWindowIconifyCallback(
@@ -69,14 +69,14 @@ window::window(dimensions const &size, std::string const &title)
 
   glfwSetWindowMaximizeCallback(
     get(),
-    [](GLFWwindow *window, int has_maximized)
+    [](GLFWwindow *const window, int const has_maximized)
     {
       static_cast<decltype(this)>(glfwGetWindowUserPointer(window))
         ->_flags.set(has_maximized == GLFW_TRUE ? has_maximized_index : has_restored_from_maximize_index, true);
     });
 
   glfwSetWindowFocusCallback(get(),
-                             [](GLFWwindow *window, int has_gained_focus)
+                             [](GLFWwindow *const window, int const has_gained_focus)
                              {
                                static_cast<decltype(this)>(glfwGetWindowUserPointer(window))
                                  ->_flags.set(has_gained_focus == GLFW_TRUE ? has_gained_focus_index : has_lost_focus_index,

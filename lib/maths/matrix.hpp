@@ -133,7 +133,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
           return count;
         }
 
-        constexpr decltype(auto) operator[](std::size_t j) const noexcept
+        constexpr decltype(auto) operator[](std::size_t const j) const noexcept
         {
           return begin()[j];
         }
@@ -210,25 +210,25 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     }
 
     [[nodiscard]]
-    constexpr row_view view_row(size_type i) noexcept
+    constexpr row_view view_row(size_type const i) noexcept
     {
       return row_view(std::next(begin(), i * row_size()));
     }
 
     [[nodiscard]]
-    constexpr const_row_view view_row(size_type i) const noexcept
+    constexpr const_row_view view_row(size_type const i) const noexcept
     {
       return const_row_view(std::next(begin(), i * row_size()));
     }
 
     [[nodiscard]]
-    constexpr column_view view_column(size_type j) noexcept
+    constexpr column_view view_column(size_type const j) noexcept
     {
       return column_view(std::next(begin(), j));
     }
 
     [[nodiscard]]
-    constexpr const_column_view view_column(size_type j) const noexcept
+    constexpr const_column_view view_column(size_type const j) const noexcept
     {
       return const_column_view(std::next(begin(), j));
     }
@@ -246,7 +246,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     }
 
     [[nodiscard]]
-    constexpr reference at(size_type i, size_type j)
+    constexpr reference at(size_type const i, size_type const j)
     {
       if(i >= column_size() or j >= row_size())
         throw std::out_of_range("mgo::matrix::at");
@@ -254,19 +254,19 @@ struct matrix : matrix_data<arithmetic_type, M, N>
     }
 
     [[nodiscard]]
-    constexpr const_reference at(size_type i, size_type j) const
+    constexpr const_reference at(size_type const i, size_type const j) const
     {
       if(i >= column_size() or j >= row_size())
         throw std::out_of_range("mgo::matrix::at");
       return begin()[i * row_size() + j];
     }
 
-    constexpr pointer operator[](difference_type i) noexcept
+    constexpr pointer operator[](difference_type const i) noexcept
     {
       return std::next(begin(), i * row_size());
     }
 
-    constexpr const_pointer operator[](difference_type i) const noexcept
+    constexpr const_pointer operator[](difference_type const i) const noexcept
     {
       return std::next(begin(), i * row_size());
     }
@@ -367,13 +367,13 @@ struct matrix : matrix_data<arithmetic_type, M, N>
       return *std::prev(end());
     }
 
-    constexpr void swap_rows(size_type x, size_type y) requires(column_size() > 1)
+    constexpr void swap_rows(size_type const x, size_type const y) requires(column_size() > 1)
     {
       if(x != y)
         std::ranges::swap_ranges(view_row(x).begin(), view_row(x).end(), view_row(y).begin());
     }
 
-    constexpr void swap_columns(size_type x, size_type y) requires(column_size() > 1)
+    constexpr void swap_columns(size_type const x, size_type const y) requires(column_size() > 1)
     {
       if(x != y)
         std::ranges::swap_ranges(view_column(x).begin(), view_column(x).end(), view_column(y).begin());
@@ -415,7 +415,7 @@ struct matrix : matrix_data<arithmetic_type, M, N>
 
     // TODO: implement
 
-    constexpr void fill(value_type value) noexcept
+    constexpr void fill(value_type const value) noexcept
     {
       std::fill(begin(), end(), value);
     }
@@ -469,15 +469,15 @@ template <class arithmetic_type, std::size_t M, std::size_t N>
 constexpr matrix<arithmetic_type, M, N> operator+(matrix<arithmetic_type, M, N> const &lhs,
                                                   matrix<arithmetic_type, M, N>        rhs) noexcept
 {
-  std::transform(lhs.begin(), lhs.end(), rhs.begin(), std::plus{});
+  std::ranges::transform(lhs, rhs.begin(), std::plus{});
   return rhs;
 }
 
 template <class arithmetic_type, std::size_t M, std::size_t N>
 constexpr matrix<arithmetic_type, M, N> operator-(matrix<arithmetic_type, M, N> const &lhs,
-                                                  matrix<arithmetic_type, M, N> const &rhs) noexcept
+                                                  matrix<arithmetic_type, M, N>        rhs) noexcept
 {
-  std::transform(lhs.begin(), lhs.end(), rhs.begin(), std::minus{});
+  std::ranges::transform(lhs, rhs.begin(), std::minus{});
   return rhs;
 }
 
@@ -494,23 +494,23 @@ constexpr matrix<arithmetic_type, M, P> operator*(matrix<arithmetic_type, M, N> 
 }
 
 template <class arithmetic_type, std::size_t M, std::size_t N>
-constexpr matrix<arithmetic_type, M, N> operator*(arithmetic_type lhs, matrix<arithmetic_type, M, N> const &rhs) noexcept
+constexpr matrix<arithmetic_type, M, N> operator*(arithmetic_type const lhs, matrix<arithmetic_type, M, N> const &rhs) noexcept
 {
-  std::transform(rhs.begin(), rhs.end(), rhs.begin(), [lhs](arithmetic_type value) { return lhs * value; });
+  std::ranges::transform(rhs, rhs.begin(), [lhs](arithmetic_type value) { return lhs * value; });
   return rhs;
 }
 
 template <class arithmetic_type, std::size_t M, std::size_t N>
-constexpr matrix<arithmetic_type, M, N> operator*(matrix<arithmetic_type, M, N> lhs, arithmetic_type rhs) noexcept
+constexpr matrix<arithmetic_type, M, N> operator*(matrix<arithmetic_type, M, N> lhs, arithmetic_type const rhs) noexcept
 {
-  std::transform(lhs.begin(), lhs.end(), lhs.begin(), [rhs](arithmetic_type value) { return value * rhs; });
+  std::ranges::transform(lhs, lhs.begin(), [rhs](arithmetic_type value) { return value * rhs; });
   return lhs;
 }
 
 template <class arithmetic_type, std::size_t M, std::size_t N>
-constexpr matrix<arithmetic_type, M, N> operator/(matrix<arithmetic_type, M, N> lhs, arithmetic_type rhs) noexcept
+constexpr matrix<arithmetic_type, M, N> operator/(matrix<arithmetic_type, M, N> lhs, arithmetic_type const rhs) noexcept
 {
-  std::transform(lhs.begin(), lhs.end(), lhs.begin(), [rhs](arithmetic_type value) { return value / rhs; });
+  std::ranges::transform(lhs, lhs.begin(), [rhs](arithmetic_type value) { return value / rhs; });
   return lhs;
 }
 }

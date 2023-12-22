@@ -53,7 +53,7 @@ struct physical_device final
     friend struct instance;
 
     physical_device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &dispatcher,
-                    VkPhysicalDevice                                                      ptr) noexcept;
+                    VkPhysicalDevice const                                                ptr) noexcept;
 
     std::shared_ptr<std::pointer_traits<VkInstance>::element_type> _dispatcher;
     VkPhysicalDevice                                               _ptr;

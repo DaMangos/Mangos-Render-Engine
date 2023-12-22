@@ -113,15 +113,15 @@ struct device final
     ~device()                         = default;
 
   private:
-    template <auto create_function, char const *create_info_name>
+    template <auto const create_function, char const *const create_info_name>
     [[nodiscard]]
     std::pair<std::vector<pipeline>, VkResult> create_pipelines(VkPipelineCache const                    &pipeline_cache,
                                                                 std::ranges::contiguous_range auto const &create_infos) const
     {
       if(std::ranges::size(create_infos) > std::numeric_limits<std::uint32_t>::max())
         throw std::runtime_error(std::string("failed to create VkPipeline: too many ") + create_info_name);
-      std::vector<VkPipeline> ptrs(std::ranges::size(create_infos));
-      std::vector<pipeline>   pipelines;
+      auto ptrs      = std::vector<VkPipeline>(std::ranges::size(create_infos));
+      auto pipelines = std::vector<pipeline>();
       pipelines.reserve(std::ranges::size(create_infos));
       switch(VkResult result = create_function(get(),
                                                pipeline_cache,

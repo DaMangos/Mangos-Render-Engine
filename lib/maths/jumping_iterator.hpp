@@ -32,17 +32,17 @@ struct jumping_iterator
       return base();
     }
 
-    constexpr reference operator[](difference_type difference) const noexcept
+    constexpr reference operator[](difference_type const difference) const noexcept
     {
       return *std::next(*this, difference);
     }
 
-    constexpr jumping_iterator &operator+=(difference_type difference) noexcept
+    constexpr jumping_iterator &operator+=(difference_type const difference) noexcept
     {
       return *this = *std::next(*this, difference);
     }
 
-    constexpr jumping_iterator &operator-=(difference_type difference) noexcept
+    constexpr jumping_iterator &operator-=(difference_type const difference) noexcept
     {
       return *this = *std::prev(*this, difference);
     }
@@ -71,12 +71,12 @@ struct jumping_iterator
       return tmp;
     }
 
-    constexpr jumping_iterator operator+(difference_type difference) const noexcept
+    constexpr jumping_iterator operator+(difference_type const difference) const noexcept
     {
       return jumping_iterator(std::next(base(), difference * jump_size));
     }
 
-    constexpr jumping_iterator operator-(difference_type difference) const noexcept
+    constexpr jumping_iterator operator-(difference_type const difference) const noexcept
     {
       return jumping_iterator(std::prev(base(), difference * jump_size));
     }
@@ -100,8 +100,8 @@ struct jumping_iterator
 
 template <class underling_pointer, typename std::iterator_traits<underling_pointer>::difference_type jump_size>
 constexpr jumping_iterator<underling_pointer, jump_size>
-operator+(typename jumping_iterator<underling_pointer, jump_size>::difference_type difference,
-          jumping_iterator<underling_pointer, jump_size> const                    &iterator) noexcept
+operator+(typename jumping_iterator<underling_pointer, jump_size>::difference_type const difference,
+          jumping_iterator<underling_pointer, jump_size> const                          &iterator) noexcept
 {
   return jumping_iterator<underling_pointer, jump_size>(std::next(iterator.base(), difference));
 }

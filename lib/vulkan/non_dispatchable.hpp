@@ -26,14 +26,14 @@ struct non_dispatchable_handle final
 
     non_dispatchable_handle(
       std::shared_ptr<typename std::pointer_traits<dispatcher_pointer>::element_type> const &dispatcher_handle,
-      pointer                                                                                ptr) noexcept
+      pointer const                                                                          ptr) noexcept
     : _handle(ptr, deleter{.dispatcher_handle = dispatcher_handle})
     {
     }
 
     struct deleter final
     {
-        void operator()(pointer ptr) const noexcept
+        void operator()(pointer const ptr) const noexcept
         {
           func_pointer(dispatcher_handle.get(), ptr, nullptr);
         }
@@ -64,14 +64,14 @@ struct non_dispatchable_handle<vkDestroyCommandPool, VkDevice, VkCommandPool>
     friend struct command_buffers;
 
     non_dispatchable_handle(std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> const &dispatcher_handle,
-                            VkCommandPool                                                                ptr) noexcept
+                            VkCommandPool const                                                          ptr) noexcept
     : _handle(ptr, deleter{dispatcher_handle})
     {
     }
 
     struct deleter final
     {
-        void operator()(VkCommandPool ptr) const noexcept
+        void operator()(VkCommandPool const ptr) const noexcept
         {
           vkDestroyCommandPool(dispatcher_handle.get(), ptr, nullptr);
         }
@@ -102,14 +102,14 @@ struct non_dispatchable_handle<vkDestroyDescriptorPool, VkDevice, VkDescriptorPo
     friend struct descriptor_sets;
 
     non_dispatchable_handle(std::shared_ptr<typename std::pointer_traits<VkDevice>::element_type> const &dispatcher_handle,
-                            VkDescriptorPool                                                             ptr) noexcept
+                            VkDescriptorPool const                                                       ptr) noexcept
     : _handle(ptr, deleter{dispatcher_handle})
     {
     }
 
     struct deleter final
     {
-        constexpr void operator()(VkDescriptorPool ptr) const noexcept
+        constexpr void operator()(VkDescriptorPool const ptr) const noexcept
         {
           vkDestroyDescriptorPool(dispatcher_handle.get(), ptr, nullptr);
         }

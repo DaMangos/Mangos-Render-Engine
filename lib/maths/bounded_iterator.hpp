@@ -19,7 +19,7 @@ struct bounded_iterator
 
     constexpr bounded_iterator() noexcept = default;
 
-    constexpr bounded_iterator(pointer base, pointer lower, pointer upper)
+    constexpr bounded_iterator(pointer const base, pointer const lower, pointer const upper)
     : base_(base),
       lower_(lower),
       upper_(upper)
@@ -40,17 +40,17 @@ struct bounded_iterator
       return base();
     }
 
-    constexpr reference operator[](difference_type difference) const noexcept
+    constexpr reference operator[](difference_type const difference) const noexcept
     {
       return *std::next(*this, difference);
     }
 
-    constexpr bounded_iterator &operator+=(difference_type difference) noexcept
+    constexpr bounded_iterator &operator+=(difference_type const difference) noexcept
     {
       return *this = std::next(*this, difference);
     }
 
-    constexpr bounded_iterator &operator-=(difference_type difference) noexcept
+    constexpr bounded_iterator &operator-=(difference_type const difference) noexcept
     {
       return *this = std::prev(*this, difference);
     }
@@ -79,7 +79,7 @@ struct bounded_iterator
       return tmp;
     }
 
-    constexpr bounded_iterator operator+(difference_type difference) const noexcept
+    constexpr bounded_iterator operator+(difference_type const difference) const noexcept
     {
       if(not is_bounded(-1, 0))
         return bounded_iterator(std::next(base(), difference), lower_bound(), upper_bound());
@@ -94,7 +94,7 @@ struct bounded_iterator
                               upper_bound());
     }
 
-    constexpr bounded_iterator operator-(difference_type difference) const noexcept
+    constexpr bounded_iterator operator-(difference_type const difference) const noexcept
     {
       if(not is_bounded(0, 1))
         return bounded_iterator(std::prev(base(), difference), lower_bound(), upper_bound());
@@ -135,17 +135,17 @@ struct bounded_iterator
     constexpr auto operator<=>(bounded_iterator const &other) const noexcept = default;
 
   private:
-    constexpr bool is_bounded(difference_type lower_difference, difference_type upper_difference) const noexcept
+    constexpr bool is_bounded(difference_type const lower_difference, difference_type const upper_difference) const noexcept
     {
       return is_lower_bounded(lower_difference) and is_upper_bounded(upper_difference);
     }
 
-    constexpr bool is_upper_bounded(difference_type difference) const noexcept
+    constexpr bool is_upper_bounded(difference_type const difference) const noexcept
     {
       return std::distance(base(), std::next(upper_bound(), difference)) > 0;
     }
 
-    constexpr bool is_lower_bounded(difference_type difference) const noexcept
+    constexpr bool is_lower_bounded(difference_type const difference) const noexcept
     {
       return std::distance(base(), std::next(lower_bound(), difference)) < 0;
     }
@@ -155,8 +155,8 @@ struct bounded_iterator
 
 template <class underling_pointer, typename std::iterator_traits<underling_pointer>::difference_type jump_size>
 constexpr bounded_iterator<underling_pointer, jump_size>
-operator+(typename bounded_iterator<underling_pointer, jump_size>::difference_type difference,
-          bounded_iterator<underling_pointer, jump_size> const                    &iterator) noexcept
+operator+(typename bounded_iterator<underling_pointer, jump_size>::difference_type const difference,
+          bounded_iterator<underling_pointer, jump_size> const                          &iterator) noexcept
 {
   return std::next(iterator, difference);
 }
