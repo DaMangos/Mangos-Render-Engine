@@ -134,7 +134,7 @@ std::vector<VkQueueFamilyProperties> physical_device::get_queue_family_propertie
 {
   std::uint32_t count = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(get(), &count, nullptr);
-  std::vector<VkQueueFamilyProperties> properties(count);
+  auto properties = std::vector<VkQueueFamilyProperties>(count);
   vkGetPhysicalDeviceQueueFamilyProperties(get(), &count, properties.data());
   return properties;
 }
