@@ -24,5 +24,10 @@ int better_main([[maybe_unused]] std::span<std::string_view const> const args) n
     std::cerr << error.what();
     return EXIT_FAILURE;
   }
+  catch(...)
+  {
+    std::cerr << "unknown error";
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }
