@@ -31,7 +31,7 @@ device physical_device::create_device(VkDeviceCreateInfo const &create_info) con
   }
 }
 
-constexpr VkPhysicalDevice physical_device::get() const noexcept
+VkPhysicalDevice physical_device::get() const noexcept
 {
   return _ptr;
 }
@@ -187,6 +187,16 @@ physical_device::get_extension_properties(std::string const &layer_name) const
     default :
       throw std::runtime_error("failed to enumerate VkExtensionProperties: unknown error");
   }
+}
+
+bool physical_device::operator==(physical_device const &other) const noexcept
+{
+  return _ptr == other._ptr;
+}
+
+bool physical_device::operator!=(physical_device const &other) const noexcept
+{
+  return _ptr != other._ptr;
 }
 
 physical_device::physical_device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &instance,

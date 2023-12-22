@@ -11,7 +11,7 @@ struct device;
 struct physical_device final
 {
     [[nodiscard]]
-    constexpr VkPhysicalDevice get() const noexcept;
+    VkPhysicalDevice get() const noexcept;
 
     [[nodiscard]]
     device create_device(VkDeviceCreateInfo const &create_info) const;
@@ -43,6 +43,10 @@ struct physical_device final
     [[nodiscard]]
     std::pair<std::vector<VkExtensionProperties>, VkResult const> get_extension_properties(std::string const &layer_name) const;
 
+    bool operator==(physical_device const &other) const noexcept;
+
+    bool operator!=(physical_device const &other) const noexcept;
+
     physical_device(physical_device &&)                 = default;
     physical_device(physical_device const &)            = delete;
     physical_device &operator=(physical_device &&)      = default;
@@ -59,3 +63,12 @@ struct physical_device final
     VkPhysicalDevice                                               _ptr;
 };
 }
+
+template <>
+struct std::hash<vulkan::physical_device>
+{
+    std::size_t operator()(vulkan::physical_device const &physical_device) const noexcept
+    {
+      return std::hash<VkPhysicalDevice>()(physical_device.get());
+    }
+};

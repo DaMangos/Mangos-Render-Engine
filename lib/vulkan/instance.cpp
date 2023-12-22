@@ -118,4 +118,14 @@ khr::surface instance::create_surface(GLFWwindow *const window_ptr) const
       throw std::runtime_error("failed to create VkSurfaceKHR: unknown error");
   }
 }
+
+bool instance::operator==(instance const &other) const noexcept
+{
+  return _handle == other._handle;
+}
+
+bool instance::operator!=(instance const &other) const noexcept
+{
+  return _handle != other._handle;
+}
 }

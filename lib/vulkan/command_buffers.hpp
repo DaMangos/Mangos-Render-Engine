@@ -30,6 +30,10 @@ struct command_buffers final
 
     VkCommandBuffer operator[](std::uint32_t const i) const noexcept;
 
+    bool operator==(command_buffers const &) noexcept;
+
+    bool operator!=(command_buffers const &) noexcept;
+
     ~command_buffers();
 
     command_buffers(command_buffers &&)                 = default;

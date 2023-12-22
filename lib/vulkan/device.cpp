@@ -406,6 +406,16 @@ khr::swapchain device::create_swapchain(VkSwapchainCreateInfoKHR const &create_i
   }
 }
 
+bool device::operator==(device const &other) const noexcept
+{
+  return _handle == other._handle;
+}
+
+bool device::operator!=(device const &other) const noexcept
+{
+  return _handle != other._handle;
+}
+
 device::device(std::shared_ptr<std::pointer_traits<VkInstance>::element_type> const &dispatcher, VkDevice const ptr)
 : _handle(ptr, [dispatcher](VkDevice const ptr) { vkDestroyDevice(ptr, nullptr); })
 {

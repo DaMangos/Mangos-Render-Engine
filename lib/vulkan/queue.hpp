@@ -9,6 +9,10 @@ struct queue final
     [[nodiscard]]
     VkQueue get() const noexcept;
 
+    bool operator==(queue const &) const noexcept;
+
+    bool operator!=(queue const &) const noexcept;
+
     queue(queue &&)                 = default;
     queue(queue const &)            = delete;
     queue &operator=(queue &&)      = default;
@@ -24,3 +28,12 @@ struct queue final
     VkQueue                                                      _ptr;
 };
 }
+
+template <>
+struct std::hash<vulkan::queue>
+{
+    std::size_t operator()(vulkan::queue const &obj) const noexcept
+    {
+      return std::hash<VkQueue>{}(obj.get());
+    }
+};

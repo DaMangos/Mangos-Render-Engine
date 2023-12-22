@@ -12,4 +12,14 @@ VkQueue queue::get() const noexcept
 {
   return _ptr;
 }
+
+bool queue::operator==(queue const &other) const noexcept
+{
+  return _ptr == other._ptr;
+}
+
+bool queue::operator!=(queue const &other) const noexcept
+{
+  return _ptr != other._ptr;
+}
 }

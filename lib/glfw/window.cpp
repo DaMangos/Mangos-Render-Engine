@@ -271,3 +271,13 @@ void window::set_title(std::string const &title) noexcept
   glfwSetWindowTitle(get(), title.c_str());
 }
 }
+
+bool operator==(glfw::window const &lhs, glfw::window const &rhs) noexcept
+{
+  return lhs.get() == rhs.get();
+}
+
+bool operator!=(glfw::window const &lhs, glfw::window const &rhs) noexcept
+{
+  return !(lhs == rhs);
+}

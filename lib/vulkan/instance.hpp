@@ -38,6 +38,10 @@ struct instance final
       throw std::runtime_error("failed get protocol address: " + function_name);
     }
 
+    bool operator==(instance const &other) const noexcept;
+
+    bool operator!=(instance const &other) const noexcept;
+
     instance(instance &&)                 = default;
     instance(instance const &)            = delete;
     instance &operator=(instance &&)      = default;
@@ -48,3 +52,12 @@ struct instance final
     std::shared_ptr<std::pointer_traits<VkInstance>::element_type> _handle;
 };
 }
+
+template <>
+struct std::hash<vulkan::instance>
+{
+    std::size_t operator()(vulkan::instance const &instance) const noexcept
+    {
+      return std::hash<VkInstance>()(instance.get());
+    }
+};

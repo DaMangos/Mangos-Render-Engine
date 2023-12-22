@@ -173,3 +173,27 @@ using surface   = non_dispatchable_handle<vkDestroySurfaceKHR, VkInstance, VkSur
 using swapchain = non_dispatchable_handle<vkDestroySwapchainKHR, VkDevice, VkSwapchainKHR>;
 }
 }
+
+template <auto func_pointer, class dispatcher_pointer, class pointer>
+struct std::hash<vulkan::non_dispatchable_handle<func_pointer, dispatcher_pointer, pointer>>
+{
+    std::size_t
+    operator()(vulkan::non_dispatchable_handle<func_pointer, dispatcher_pointer, pointer> const &handle) const noexcept
+    {
+      return std::hash<pointer>{}(handle.get());
+    }
+};
+
+template <auto func_pointer, class dispatcher_pointer, class pointer>
+bool operator==(vulkan::non_dispatchable_handle<func_pointer, dispatcher_pointer, pointer> const &lhs,
+                vulkan::non_dispatchable_handle<func_pointer, dispatcher_pointer, pointer> const &rhs) noexcept
+{
+  return lhs.get() == rhs.get();
+}
+
+template <auto func_pointer, class dispatcher_pointer, class pointer>
+bool operator!=(vulkan::non_dispatchable_handle<func_pointer, dispatcher_pointer, pointer> const &lhs,
+                vulkan::non_dispatchable_handle<func_pointer, dispatcher_pointer, pointer> const &rhs) noexcept
+{
+  return not(lhs == rhs);
+}

@@ -121,3 +121,16 @@ struct window
     std::bitset<12> mutable _flags;
 };
 }
+
+template <>
+struct std::hash<glfw::window>
+{
+    std::size_t operator()(glfw::window const &window) const noexcept
+    {
+      return std::hash<GLFWwindow *>()(window.get());
+    }
+};
+
+bool operator==(glfw::window const &lhs, glfw::window const &rhs) noexcept;
+
+bool operator!=(glfw::window const &lhs, glfw::window const &rhs) noexcept;

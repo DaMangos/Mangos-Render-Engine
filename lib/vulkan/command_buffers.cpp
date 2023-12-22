@@ -38,6 +38,16 @@ VkCommandBuffer command_buffers::operator[](std::uint32_t const i) const noexcep
   return _ptrs[i];
 }
 
+bool command_buffers::operator==(command_buffers const &other) noexcept
+{
+  return _ptrs == other._ptrs;
+}
+
+bool command_buffers::operator!=(command_buffers const &other) noexcept
+{
+  return _ptrs != other._ptrs;
+}
+
 command_buffers::~command_buffers()
 {
   vkFreeCommandBuffers(std::get_deleter<command_pool::deleter>(_dispatcher_handle)->dispatcher_handle.get(),

@@ -1,9 +1,7 @@
-#include "render_engine.hpp"
+#include "application.hpp"
 
 #include <exception>
 #include <iostream>
-#include <span>
-#include <string_view>
 #include <vector>
 
 int main(int const argc, char const *const *const argv)
@@ -19,8 +17,8 @@ int better_main([[maybe_unused]] std::span<std::string_view const> const args) n
 {
   try
   {
-    render_engine engine(args);
-    engine.run();
+    auto app = application(args);
+    app.run();
   }
   catch(std::exception &error)
   {

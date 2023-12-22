@@ -106,6 +106,10 @@ struct device final
     [[nodiscard]]
     khr::swapchain create_swapchain(VkSwapchainCreateInfoKHR const &create_info) const;
 
+    bool operator==(device const &other) const noexcept;
+
+    bool operator!=(device const &other) const noexcept;
+
     device(device &&)                 = default;
     device(device const &)            = delete;
     device &operator=(device &&)      = default;
@@ -160,3 +164,12 @@ struct device final
     std::shared_ptr<std::pointer_traits<VkDevice>::element_type> _handle;
 };
 }
+
+template <>
+struct std::hash<vulkan::device>
+{
+    std::size_t operator()(vulkan::device const &device) const noexcept
+    {
+      return std::hash<VkDevice>()(device.get());
+    }
+};

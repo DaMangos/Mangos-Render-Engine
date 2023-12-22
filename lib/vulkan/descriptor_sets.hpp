@@ -30,6 +30,10 @@ struct descriptor_sets final
 
     VkDescriptorSet operator[](std::uint32_t const i) const noexcept;
 
+    bool operator==(descriptor_sets const &other) const noexcept;
+
+    bool operator!=(descriptor_sets const &other) const noexcept;
+
     ~descriptor_sets();
 
     descriptor_sets(descriptor_sets &&)                 = default;
@@ -47,3 +51,7 @@ struct descriptor_sets final
     std::vector<VkDescriptorSet>                                         _ptrs;
 };
 }
+
+bool operator==(vulkan::descriptor_sets const &lhs, vulkan::descriptor_sets const &rhs) noexcept;
+
+bool operator!=(vulkan::descriptor_sets const &lhs, vulkan::descriptor_sets const &rhs) noexcept;

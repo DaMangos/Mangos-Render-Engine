@@ -37,6 +37,16 @@ VkDescriptorSet descriptor_sets::operator[](std::uint32_t const i) const noexcep
   return _ptrs[i];
 }
 
+bool descriptor_sets::operator==(descriptor_sets const &other) const noexcept
+{
+  return _ptrs == other._ptrs;
+}
+
+bool descriptor_sets::operator!=(descriptor_sets const &other) const noexcept
+{
+  return _ptrs != other._ptrs;
+}
+
 descriptor_sets::~descriptor_sets()
 {
   vkFreeDescriptorSets(std::get_deleter<descriptor_pool::deleter>(_dispatcher_handle)->dispatcher_handle.get(),
