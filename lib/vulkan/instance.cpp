@@ -38,10 +38,11 @@ VkInstance instance::get() const noexcept
   return _handle.get();
 }
 
-std::pair<std::vector<physical_device>, VkResult> instance::enumerate_physical_devices() const
+std::pair<std::vector<physical_device>, VkResult const> instance::enumerate_physical_devices() const
 {
-  std::uint32_t count = 0;
-  switch(VkResult result = vkEnumeratePhysicalDevices(get(), &count, nullptr))
+  std::uint32_t count  = 0;
+  auto          result = vkEnumeratePhysicalDevices(get(), &count, nullptr);
+  switch(result)
   {
     case VK_SUCCESS | VK_INCOMPLETE :
     {

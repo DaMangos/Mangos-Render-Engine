@@ -23,10 +23,10 @@ struct physical_device final
     VkSurfaceCapabilitiesKHR get_surface_capabilities(VkSurfaceKHR const surface) const;
 
     [[nodiscard]]
-    std::pair<std::vector<VkSurfaceFormatKHR>, VkResult> get_surface_formats(VkSurfaceKHR const surface) const;
+    std::pair<std::vector<VkSurfaceFormatKHR>, VkResult const> get_surface_formats(VkSurfaceKHR const surface) const;
 
     [[nodiscard]]
-    std::pair<std::vector<VkPresentModeKHR>, VkResult> get_present_modes(VkSurfaceKHR const surface) const;
+    std::pair<std::vector<VkPresentModeKHR>, VkResult const> get_present_modes(VkSurfaceKHR const surface) const;
 
     [[nodiscard]]
     VkPhysicalDeviceFeatures get_features() const noexcept;
@@ -38,10 +38,10 @@ struct physical_device final
     std::vector<VkQueueFamilyProperties> get_queue_family_properties() const;
 
     [[nodiscard]]
-    std::pair<std::vector<VkExtensionProperties>, VkResult> get_extension_properties() const;
+    std::pair<std::vector<VkExtensionProperties>, VkResult const> get_extension_properties() const;
 
     [[nodiscard]]
-    std::pair<std::vector<VkExtensionProperties>, VkResult> get_extension_properties(std::string const &layer_name) const;
+    std::pair<std::vector<VkExtensionProperties>, VkResult const> get_extension_properties(std::string const &layer_name) const;
 
     physical_device(physical_device &&)                 = default;
     physical_device(physical_device const &)            = delete;

@@ -62,7 +62,7 @@ struct device final
     image_view create_image_view(VkImageViewCreateInfo const &create_info) const;
 
     [[nodiscard]]
-    std::pair<std::vector<pipeline>, VkResult>
+    std::pair<std::vector<pipeline>, VkResult const>
     create_compute_pipelines(VkPipelineCache const                    &pipeline_cache,
                              std::ranges::contiguous_range auto const &create_infos) const
       requires std::same_as<std::ranges::range_value_t<decltype(create_infos)>, VkComputePipelineCreateInfo>
@@ -71,7 +71,7 @@ struct device final
     }
 
     [[nodiscard]]
-    std::pair<std::vector<pipeline>, VkResult>
+    std::pair<std::vector<pipeline>, VkResult const>
     create_graphics_pipelines(VkPipelineCache const                    &pipeline_cache,
                               std::ranges::contiguous_range auto const &create_infos) const
       requires std::same_as<std::ranges::range_value_t<decltype(create_infos)>, VkGraphicsPipelineCreateInfo>
@@ -115,23 +115,24 @@ struct device final
   private:
     template <auto const create_function, char const *const create_info_name>
     [[nodiscard]]
-    std::pair<std::vector<pipeline>, VkResult> create_pipelines(VkPipelineCache const                    &pipeline_cache,
-                                                                std::ranges::contiguous_range auto const &create_infos) const
+    std::pair<std::vector<pipeline>, VkResult const>
+    create_pipelines(VkPipelineCache const &pipeline_cache, std::ranges::contiguous_range auto const &create_infos) const
     {
       if(std::cmp_greater(std::ranges::size(create_infos), std::numeric_limits<std::uint32_t>::max()))
         throw std::runtime_error(std::string("failed to create VkPipeline: too many ") + create_info_name);
-      auto ptrs      = std::vector<VkPipeline>(std::ranges::size(create_infos));
-      auto pipelines = std::vector<pipeline>();
-      pipelines.reserve(std::ranges::size(create_infos));
-      switch(VkResult result = create_function(get(),
-                                               pipeline_cache,
-                                               static_cast<std::uint32_t>(std::ranges::size(create_infos)),
-                                               std::ranges::data(create_infos),
-                                               nullptr,
-                                               ptrs.data()))
+      auto ptrs   = std::vector<VkPipeline>(std::ranges::size(create_infos));
+      auto result = create_function(get(),
+                                    pipeline_cache,
+                                    static_cast<std::uint32_t>(std::ranges::size(create_infos)),
+                                    std::ranges::data(create_infos),
+                                    nullptr,
+                                    ptrs.data());
+      switch(result)
       {
         case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
         {
+          auto pipelines = std::vector<pipeline>();
+          pipelines.reserve(std::ranges::size(create_infos));
           std::ranges::transform(ptrs,
                                  std::back_inserter(pipelines),
                                  [this](auto const &ptr) { return pipeline(_handle, ptr); });
