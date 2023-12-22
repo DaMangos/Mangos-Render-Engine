@@ -18,6 +18,7 @@ struct vulkan_engine final
     ~vulkan_engine()                                = default;
 
   private:
-    vulkan::instance                                            _instance;
-    std::unordered_map<vulkan::physical_device, vulkan::device> _devices;
+    vulkan::instance        _instance;
+    vulkan::physical_device _physical_device;
+    vulkan::device          _device;
 };

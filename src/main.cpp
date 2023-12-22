@@ -22,12 +22,12 @@ int better_main([[maybe_unused]] std::span<std::string_view const> const args) n
   }
   catch(std::exception &error)
   {
-    std::cerr << error.what();
+    application::log::error << error.what();
     return EXIT_FAILURE;
   }
   catch(...)
   {
-    std::cerr << "unknown exception";
+    application::log::error << "unknown exception";
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
