@@ -118,7 +118,7 @@ struct device final
     std::pair<std::vector<pipeline>, VkResult> create_pipelines(VkPipelineCache const                    &pipeline_cache,
                                                                 std::ranges::contiguous_range auto const &create_infos) const
     {
-      if(std::ranges::size(create_infos) > std::numeric_limits<std::uint32_t>::max())
+      if(std::cmp_greater(std::ranges::size(create_infos), std::numeric_limits<std::uint32_t>::max()))
         throw std::runtime_error(std::string("failed to create VkPipeline: too many ") + create_info_name);
       auto ptrs      = std::vector<VkPipeline>(std::ranges::size(create_infos));
       auto pipelines = std::vector<pipeline>();
