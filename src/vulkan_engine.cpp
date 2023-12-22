@@ -17,16 +17,7 @@ constexpr std::array const debug_layers = {"VK_LAYER_KHRONOS_validation"};
 
 vulkan::instance make_instances(bool const is_debug)
 {
-  return vulkan::instance({
-    .sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-    .pNext                   = is_debug ? &debug_utils_messenger_create_info : nullptr,
-    .flags                   = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR,
-    .pApplicationInfo        = nullptr,
-    .enabledLayerCount       = is_debug ? 1u : 0u,
-    .ppEnabledLayerNames     = is_debug ? debug_layers.data() : nullptr,
-    .enabledExtensionCount   = is_debug ? 3u : 2u,
-    .ppEnabledExtensionNames = is_debug ? debug_extensions.data() : extensions.data(),
-  });
+  return vulkan::instance({});
 }
 
 vulkan::physical_device make_physical_device(vulkan::instance const &instance)
