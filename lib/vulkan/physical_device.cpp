@@ -142,7 +142,7 @@ std::vector<VkQueueFamilyProperties> physical_device::get_queue_family_propertie
 std::pair<std::vector<VkExtensionProperties>, VkResult> physical_device::get_extension_properties() const
 {
   std::uint32_t count = 0;
-  switch(auto result = vkEnumerateDeviceExtensionProperties(get(), nullptr, &count, nullptr); result)
+  switch(VkResult result = vkEnumerateDeviceExtensionProperties(get(), nullptr, &count, nullptr); result)
   {
     case VK_SUCCESS | VK_INCOMPLETE :
     {
