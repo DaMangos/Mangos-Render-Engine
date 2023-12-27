@@ -1,10 +1,6 @@
 #pragma once
 
-#include "non_dispatchable.hpp"
-
-#include <cstddef>
-#include <optional>
-#include <string>
+#include "non_dispatchable_handles.hpp"
 
 namespace vulkan
 {
@@ -12,35 +8,53 @@ struct physical_device;
 
 struct instance final
 {
-    instance(VkInstanceCreateInfo const &create_info);
+    using pointer      = typename std::pointer_traits<VkInstance>::pointer;
+    using element_type = typename std::pointer_traits<VkInstance>::element_type;
 
-    [[nodiscard]]
-    VkInstance get() const noexcept;
+    instance(VkInstanceCreateInfo const &info);
 
     [[nodiscard]]
     std::pair<std::vector<physical_device>, VkResult const> enumerate_physical_devices() const;
 
     [[nodiscard]]
-    ext::debug_utils_messenger create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT const &create_info) const;
+    ext::debug_utils_messenger create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT const &info) const;
 
     [[nodiscard]]
-    ext::debug_report_callback create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT const &create_info) const;
+    ext::debug_report_callback create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT const &info) const;
 
     [[nodiscard]]
     khr::surface create_surface(GLFWwindow *const window_ptr) const;
 
-    template <class function_pointer>
+    template <class fn>
     [[nodiscard]]
     auto get_proc_addr(std::string const &function_name) const
     {
-      if(auto function = vkGetInstanceProcAddr(get(), function_name.c_str()))
-        return function_pointer(function);
-      throw std::runtime_error("failed get protocol address: " + function_name);
+      if(auto const function = vkGetInstanceProcAddr(get(), function_name.c_str()))
+        return reinterpret_cast<fn>(function);
+      throw std::runtime_error(std::string(std::source_location::current().function_name()) +
+                               ":\033[1;31m error:\033[0m vulkan failed to find " + function_name);
     }
 
-    bool operator==(instance const &other) const noexcept;
+    [[nodiscard]]
+    constexpr VkInstance get() const noexcept
+    {
+      return _smart_ptr.get();
+    }
 
-    bool operator!=(instance const &other) const noexcept;
+    constexpr operator bool() const noexcept
+    {
+      return static_cast<bool>(_smart_ptr);
+    }
+
+    constexpr bool operator==(instance const &other) noexcept
+    {
+      return _smart_ptr == other._smart_ptr;
+    }
+
+    constexpr bool operator!=(instance const &other) noexcept
+    {
+      return _smart_ptr != other._smart_ptr;
+    }
 
     instance(instance &&)                 = default;
     instance(instance const &)            = delete;
@@ -49,7 +63,7 @@ struct instance final
     ~instance()                           = default;
 
   private:
-    std::shared_ptr<std::pointer_traits<VkInstance>::element_type> _handle;
+    std::shared_ptr<std::pointer_traits<VkInstance>::element_type> _smart_ptr;
 };
 }
 

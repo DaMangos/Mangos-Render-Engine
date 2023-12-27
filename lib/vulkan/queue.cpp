@@ -7,19 +7,4 @@ queue::queue(std::shared_ptr<std::pointer_traits<VkDevice>::element_type> const 
   _ptr(ptr)
 {
 }
-
-VkQueue queue::get() const noexcept
-{
-  return _ptr;
-}
-
-bool queue::operator==(queue const &other) const noexcept
-{
-  return _ptr == other._ptr;
-}
-
-bool queue::operator!=(queue const &other) const noexcept
-{
-  return _ptr != other._ptr;
-}
 }

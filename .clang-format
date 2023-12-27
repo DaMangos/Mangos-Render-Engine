@@ -64,6 +64,7 @@ LineEnding: DeriveLF
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 PPIndentWidth: -1
+PenaltyReturnTypeOnItsOwnLine: 1000000
 PackConstructorInitializers: Never
 PointerAlignment: Right
 QualifierAlignment: Custom
@@ -71,7 +72,7 @@ QualifierOrder: [friend, static, inline, constexpr, volatile, restrict, type, co
 ReferenceAlignment: Right
 ReflowComments: true
 RemoveSemicolon: false
-RequiresClausePosition: WithPreceding
+RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Always
 SortIncludes: CaseInsensitive

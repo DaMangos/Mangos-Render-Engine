@@ -1,131 +1,62 @@
 #include "instance.hpp"
 
+#include "non_dispatchable_handles.hpp"
 #include "physical_device.hpp"
+
+#include <algorithm>
+#include <iterator>
 
 namespace vulkan
 {
-instance::instance(VkInstanceCreateInfo const &create_info)
-: _handle(
-    [&create_info]()
+instance::instance(VkInstanceCreateInfo const &info)
+: _smart_ptr(
+    [&info]()
     {
-      VkInstance ptr = VK_NULL_HANDLE;
-      switch(vkCreateInstance(&create_info, nullptr, &ptr))
-      {
-        case VK_SUCCESS :
-          return ptr = VK_NULL_HANDLE;
-        case VK_ERROR_OUT_OF_HOST_MEMORY :
-          throw std::runtime_error("failed to create VkInstance: out of host memory");
-        case VK_ERROR_OUT_OF_DEVICE_MEMORY :
-          throw std::runtime_error("failed to create VkInstance: out of device memory");
-        case VK_ERROR_INITIALIZATION_FAILED :
-          throw std::runtime_error("failed to create VkInstance: initialization failed");
-        case VK_ERROR_LAYER_NOT_PRESENT :
-          throw std::runtime_error("failed to create VkInstance: layer not present");
-        case VK_ERROR_EXTENSION_NOT_PRESENT :
-          throw std::runtime_error("failed to create VkInstance: extension not present");
-        case VK_ERROR_INCOMPATIBLE_DRIVER :
-          throw std::runtime_error("failed to create VkInstance: incompatible driver");
-        default :
-          throw std::runtime_error("failed to create VkInstance: unknown error");
-      }
+      auto       ptr    = VkInstance{};
+      auto const result = vkCreateInstance(&info, nullptr, &ptr);
+      if(std::to_underlying(result) < 0)
+        throw std::runtime_error(std::string(std::source_location::current().function_name()) +
+                                 ":\033[1;31m error:\033[0m vulkan return a negative VkResult (" + std::to_string(result) +
+                                 ")");
+      return ptr;
     }(),
     [](VkInstance const ptr) { vkDestroyInstance(ptr, nullptr); })
 {
 }
 
-VkInstance instance::get() const noexcept
-{
-  return _handle.get();
-}
-
 std::pair<std::vector<physical_device>, VkResult const> instance::enumerate_physical_devices() const
 {
-  std::uint32_t count  = 0;
-  auto          result = vkEnumeratePhysicalDevices(get(), &count, nullptr);
-  switch(result)
-  {
-    case VK_SUCCESS | VK_INCOMPLETE :
-    {
-      auto ptrs = std::vector<VkPhysicalDevice>(count);
-      vkEnumeratePhysicalDevices(get(), &count, ptrs.data());
-      auto physical_devices = std::vector<physical_device>();
-      physical_devices.reserve(count);
-      for(VkPhysicalDevice ptr : ptrs)
-        physical_devices.emplace_back(physical_device(_handle, ptr));
-      return std::make_pair(std::move(physical_devices), result);
-    }
-    case VK_ERROR_OUT_OF_HOST_MEMORY :
-      throw std::runtime_error("failed to enumerate VkPhysicalDevice: out of host memory");
-    case VK_ERROR_OUT_OF_DEVICE_MEMORY :
-      throw std::runtime_error("failed to enumerate VkPhysicalDevice: out of device memory");
-    case VK_ERROR_INITIALIZATION_FAILED :
-      throw std::runtime_error("failed to enumerate VkPhysicalDevice: initialization failed");
-    default :
-      throw std::runtime_error("failed to enumerate VkPhysicalDevice: unknown error");
-  }
+  std::uint32_t count = 0;
+  vkEnumeratePhysicalDevices(get(), &count, nullptr);
+  auto ptrs = std::vector<VkPhysicalDevice>(count);
+  auto return_value =
+    std::pair<std::vector<physical_device>, VkResult const>({}, vkEnumeratePhysicalDevices(get(), &count, ptrs.data()));
+  if(std::to_underlying(return_value.second) < 0)
+    throw std::runtime_error(std::string(std::source_location::current().function_name()) +
+                             ":\033[1;31m error:\033[0m vulkan return a negative VkResult (" +
+                             std::to_string(return_value.second) + ")");
+  std::ranges::transform(ptrs,
+                         std::back_inserter(return_value.first),
+                         [this](auto const ptr) { return physical_device(_smart_ptr, ptr); });
+  return return_value;
 }
 
-ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT const &create_info) const
+ext::debug_utils_messenger instance::create_debug_utils_messenger(VkDebugUtilsMessengerCreateInfoEXT const &info) const
 {
-  VkDebugUtilsMessengerEXT ptr = VK_NULL_HANDLE;
-  switch(std::invoke(get_proc_addr<PFN_vkCreateDebugUtilsMessengerEXT>("vkCreateDebugUtilsMessengerEXT"),
-                     get(),
-                     &create_info,
-                     nullptr,
-                     &ptr))
-  {
-    case VK_SUCCESS :
-      return ext::debug_utils_messenger(_handle, ptr);
-    case VK_ERROR_OUT_OF_HOST_MEMORY :
-      throw std::runtime_error("failed to create VkDebugUtilsMessengerEXT: out of host memory");
-    default :
-      throw std::runtime_error("failed to create VkDebugUtilsMessengerEXT: unknown error");
-  }
+  return internal::make_unique<ext::internal::create_debug_utils_messenger,
+                               ext::internal::destroy_debug_utils_messenger,
+                               VkDebugUtilsMessengerEXT>(_smart_ptr, &info);
 }
 
-ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT const &create_info) const
+ext::debug_report_callback instance::create_debug_report_callback(VkDebugReportCallbackCreateInfoEXT const &info) const
 {
-  VkDebugReportCallbackEXT ptr = VK_NULL_HANDLE;
-  switch(std::invoke(get_proc_addr<PFN_vkCreateDebugReportCallbackEXT>("vkCreateDebugReportCallbackEXT"),
-                     get(),
-                     &create_info,
-                     nullptr,
-                     &ptr))
-  {
-    case VK_SUCCESS :
-      return ext::debug_report_callback(_handle, ptr);
-    case VK_ERROR_OUT_OF_HOST_MEMORY :
-      throw std::runtime_error("failed to create VkDebugReportCallbackEXT: out of host memory");
-    default :
-      throw std::runtime_error("failed to create VkDebugReportCallbackEXT: unknown error");
-  }
+  return internal::make_unique<ext::internal::create_debug_report_callback,
+                               ext::internal::destroy_debug_report_callback,
+                               VkDebugReportCallbackEXT>(_smart_ptr, &info);
 }
 
-khr::surface instance::create_surface(GLFWwindow *const window_ptr) const
+khr::surface instance::create_surface(GLFWwindow *const window) const
 {
-  VkSurfaceKHR ptr = VK_NULL_HANDLE;
-  switch(glfwCreateWindowSurface(get(), window_ptr, nullptr, &ptr))
-  {
-    case VK_SUCCESS :
-      return khr::surface(_handle, ptr);
-    case VK_ERROR_INITIALIZATION_FAILED :
-      throw std::runtime_error("failed to create VkSurfaceKHR: initialization failed");
-    case VK_ERROR_EXTENSION_NOT_PRESENT :
-      throw std::runtime_error("failed to create VkSurfaceKHR: extension not present");
-    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR :
-      throw std::runtime_error("failed to create VkSurfaceKHR: native window in use");
-    default :
-      throw std::runtime_error("failed to create VkSurfaceKHR: unknown error");
-  }
-}
-
-bool instance::operator==(instance const &other) const noexcept
-{
-  return _handle == other._handle;
-}
-
-bool instance::operator!=(instance const &other) const noexcept
-{
-  return _handle != other._handle;
+  return internal::make_unique<glfwCreateWindowSurface, vkDestroySurfaceKHR, VkSurfaceKHR>(_smart_ptr, window);
 }
 }

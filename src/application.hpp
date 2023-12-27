@@ -12,7 +12,6 @@ struct application final
 
     struct log final
     {
-      private:
         enum struct severity_level
         {
           warning,
@@ -24,22 +23,20 @@ struct application final
         struct ostream final
         {
             template <typename T>
-            std::ostream &operator<<(T const &value) const
+            constexpr std::ostream &operator<<(T const &value) const
             {
               switch(severity)
               {
                 case severity_level::warning :
-                  return std::cerr << "[warning] " << value;
+                  return std::cerr << "\n[warning] " << value;
                 case severity_level::error :
-                  return std::cerr << "[error] " << value;
+                  return std::cerr << "\n[error] " << value;
                 case severity_level::info :
-                  return std::cout << "[info] " << value;
+                  return std::cout << "\n[info] " << value;
               }
-              return std::cout << value;
             }
         };
 
-      public:
         static constexpr auto const warning = ostream<severity_level::warning>{};
         static constexpr auto const error   = ostream<severity_level::error>{};
         static constexpr auto const info    = ostream<severity_level::info>{};

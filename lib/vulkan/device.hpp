@@ -1,114 +1,126 @@
 #pragma once
 
-#include "non_dispatchable.hpp"
+#include "non_dispatchable_handles.hpp"
+#include "ranges.hpp"
 
-#include <string>
+#include <algorithm>
 #include <unordered_map>
-#include <vector>
 
 namespace vulkan
 {
-struct command_buffers;
-struct descriptor_sets;
 struct non_dispatchable;
 struct physical_device;
 struct queue;
 
 struct device final
 {
-    [[nodiscard]]
-    VkDevice get() const noexcept;
+    using pointer      = typename std::pointer_traits<VkDevice>::pointer;
+    using element_type = typename std::pointer_traits<VkDevice>::element_type;
 
     [[nodiscard]]
-    VkInstance get_instance() const noexcept;
+    buffer create_buffer(VkBufferCreateInfo const &info) const;
 
     [[nodiscard]]
-    buffer create_buffer(VkBufferCreateInfo const &create_info) const;
+    buffer_view create_buffer_view(VkBufferViewCreateInfo const &info) const;
 
     [[nodiscard]]
-    buffer_view create_buffer_view(VkBufferViewCreateInfo const &create_info) const;
+    command_buffers allocate_command_buffers(VkCommandBufferAllocateInfo const &info) const;
 
     [[nodiscard]]
-    command_buffers allocate_command_buffers(VkCommandBufferAllocateInfo const &allocate_info) const;
+    command_pool create_command_pool(VkCommandPoolCreateInfo const &info) const;
 
     [[nodiscard]]
-    command_pool create_command_pool(VkCommandPoolCreateInfo const &create_info) const;
+    descriptor_pool create_descriptor_pool(VkDescriptorPoolCreateInfo const &info) const;
 
     [[nodiscard]]
-    descriptor_pool create_descriptor_pool(VkDescriptorPoolCreateInfo const &create_info) const;
+    descriptor_set_layout create_descriptor_set_layout(VkDescriptorSetLayoutCreateInfo const &info) const;
 
     [[nodiscard]]
-    descriptor_set_layout create_descriptor_set_layout(VkDescriptorSetLayoutCreateInfo const &create_info) const;
+    descriptor_sets allocate_descriptor_sets(VkDescriptorSetAllocateInfo const &info) const;
 
     [[nodiscard]]
-    descriptor_sets allocate_descriptor_sets(VkDescriptorSetAllocateInfo const &allocate_info) const;
+    device_memory allocate_memory(VkMemoryAllocateInfo const &info) const;
 
     [[nodiscard]]
-    device_memory allocate_memory(VkMemoryAllocateInfo const &allocate_info) const;
+    event create_event(VkEventCreateInfo const &info) const;
 
     [[nodiscard]]
-    event create_event(VkEventCreateInfo const &create_info) const;
+    fence create_fence(VkFenceCreateInfo const &info) const;
 
     [[nodiscard]]
-    fence create_fence(VkFenceCreateInfo const &create_info) const;
+    framebuffer create_framebuffer(VkFramebufferCreateInfo const &info) const;
 
     [[nodiscard]]
-    framebuffer create_framebuffer(VkFramebufferCreateInfo const &create_info) const;
+    image create_image(VkImageCreateInfo const &info) const;
 
     [[nodiscard]]
-    image create_image(VkImageCreateInfo const &create_info) const;
+    image_view create_image_view(VkImageViewCreateInfo const &info) const;
 
     [[nodiscard]]
-    image_view create_image_view(VkImageViewCreateInfo const &create_info) const;
+    pipeline_cache create_pipeline_cache(VkPipelineCacheCreateInfo const &info) const;
 
     [[nodiscard]]
-    std::pair<std::vector<pipeline>, VkResult const>
-    create_compute_pipelines(VkPipelineCache const                    &pipeline_cache,
-                             std::ranges::contiguous_range auto const &create_infos) const
-      requires std::same_as<std::ranges::range_value_t<decltype(create_infos)>, VkComputePipelineCreateInfo>
+    pipeline_layout create_pipeline_layout(VkPipelineLayoutCreateInfo const &info) const;
+
+    [[nodiscard]]
+    query_pool create_query_pool(VkQueryPoolCreateInfo const &info) const;
+
+    [[nodiscard]]
+    queue get_device_queue(VkDeviceQueueInfo2 const &queue_info) const noexcept;
+
+    [[nodiscard]]
+    render_pass create_render_pass(VkRenderPassCreateInfo2 const &info) const;
+
+    [[nodiscard]]
+    sampler create_sampler(VkSamplerCreateInfo const &info) const;
+
+    [[nodiscard]]
+    semaphore create_semaphore(VkSemaphoreCreateInfo const &info) const;
+
+    [[nodiscard]]
+    shader_module create_shader_module(VkShaderModuleCreateInfo const &info) const;
+
+    [[nodiscard]]
+    khr::swapchain create_swapchain(VkSwapchainCreateInfoKHR const &info) const;
+
+    [[nodiscard]]
+    std::pair<std::vector<pipeline>, VkResult const> create_compute_pipelines(
+      VkPipelineCache const                    &pipeline_cache,
+      std::ranges::contiguous_range auto const &infos) const
+    requires std::same_as<std::ranges::range_value_t<decltype(infos)>, VkComputePipelineCreateInfo>
     {
-      return create_pipeline<vkCreateComputePipelines, "VkComputePipelineCreateInfo">(pipeline_cache, create_infos);
+      return create_pipeline<vkCreateComputePipelines>(pipeline_cache, infos);
     }
 
     [[nodiscard]]
-    std::pair<std::vector<pipeline>, VkResult const>
-    create_graphics_pipelines(VkPipelineCache const                    &pipeline_cache,
-                              std::ranges::contiguous_range auto const &create_infos) const
-      requires std::same_as<std::ranges::range_value_t<decltype(create_infos)>, VkGraphicsPipelineCreateInfo>
+    std::pair<std::vector<pipeline>, VkResult const> create_graphics_pipelines(
+      VkPipelineCache const                    &pipeline_cache,
+      std::ranges::contiguous_range auto const &infos) const
+    requires std::same_as<std::ranges::range_value_t<decltype(infos)>, VkGraphicsPipelineCreateInfo>
     {
-      return create_pipeline<vkCreateGraphicsPipelines, "VkGraphicsPipelineCreateInfo">(pipeline_cache, create_infos);
+      return create_pipeline<vkCreateGraphicsPipelines>(pipeline_cache, infos);
     }
 
     [[nodiscard]]
-    pipeline_cache create_pipeline_cache(VkPipelineCacheCreateInfo const &create_info) const;
+    constexpr VkDevice get() const noexcept
+    {
+      return _smart_ptr.get();
+    }
 
-    [[nodiscard]]
-    pipeline_layout create_pipeline_layout(VkPipelineLayoutCreateInfo const &create_info) const;
+    constexpr operator bool() const noexcept
+    {
+      return static_cast<bool>(_smart_ptr);
+    }
 
-    [[nodiscard]]
-    query_pool create_query_pool(VkQueryPoolCreateInfo const &create_info) const;
+    constexpr bool operator==(device const &other) noexcept
+    {
+      return _smart_ptr == other._smart_ptr;
+    }
 
-    [[nodiscard]]
-    queue get_device_queue(VkDeviceQueueInfo2 const &create_info) const;
-
-    [[nodiscard]]
-    render_pass create_render_pass(VkRenderPassCreateInfo2 const &create_info) const;
-
-    [[nodiscard]]
-    sampler create_sampler(VkSamplerCreateInfo const &create_info) const;
-
-    [[nodiscard]]
-    semaphore create_semaphore(VkSemaphoreCreateInfo const &create_info) const;
-
-    [[nodiscard]]
-    shader_module create_shader_module(VkShaderModuleCreateInfo const &create_info) const;
-
-    [[nodiscard]]
-    khr::swapchain create_swapchain(VkSwapchainCreateInfoKHR const &create_info) const;
-
-    bool operator==(device const &other) const noexcept;
-
-    bool operator!=(device const &other) const noexcept;
+    constexpr bool operator!=(device const &other) noexcept
+    {
+      return _smart_ptr != other._smart_ptr;
+    }
 
     device(device &&)                 = default;
     device(device const &)            = delete;
@@ -117,40 +129,29 @@ struct device final
     ~device()                         = default;
 
   private:
-    template <auto const create_function, char const *const create_info_name>
+    template <auto create_fn>
     [[nodiscard]]
-    std::pair<std::vector<pipeline>, VkResult const>
-    create_pipelines(VkPipelineCache const &pipeline_cache, std::ranges::contiguous_range auto const &create_infos) const
+    std::pair<std::vector<pipeline>, VkResult const> create_pipelines(
+      VkPipelineCache const                    &pipeline_cache,
+      std::ranges::contiguous_range auto const &infos,
+      std::source_location                      location = std::source_location::current()) const
     {
-      if(std::cmp_greater(std::ranges::size(create_infos), std::numeric_limits<std::uint32_t>::max()))
-        throw std::runtime_error(std::string("failed to create VkPipeline: too many ") + create_info_name);
-      auto ptrs   = std::vector<VkPipeline>(std::ranges::size(create_infos));
-      auto result = create_function(get(),
-                                    pipeline_cache,
-                                    static_cast<std::uint32_t>(std::ranges::size(create_infos)),
-                                    std::ranges::data(create_infos),
-                                    nullptr,
-                                    ptrs.data());
-      switch(result)
-      {
-        case VK_SUCCESS | VK_PIPELINE_COMPILE_REQUIRED_EXT :
-        {
-          auto pipelines = std::vector<pipeline>();
-          pipelines.reserve(std::ranges::size(create_infos));
-          std::ranges::transform(ptrs,
-                                 std::back_inserter(pipelines),
-                                 [this](auto const &ptr) { return pipeline(_handle, ptr); });
-          return std::make_pair(std::move(pipelines), result);
-        }
-        case VK_ERROR_OUT_OF_HOST_MEMORY :
-          throw std::runtime_error("failed to create VkPipeline: out of host memory");
-        case VK_ERROR_OUT_OF_DEVICE_MEMORY :
-          throw std::runtime_error("failed to create VkPipeline: out of device memory");
-        case VK_ERROR_INVALID_SHADER_NV :
-          throw std::runtime_error("failed to create VkPipeline: invalid shader");
-        default :
-          throw std::runtime_error("failed to create VkPipeline: unknown error");
-      }
+      if(std::ranges::size(infos) > std::numeric_limits<std::uint32_t>::max())
+        throw std::runtime_error(std::string(location.function_name()) +
+                                 " :\033[1;31m error:\033[0m too many configurations given (" +
+                                 std::to_string(std::ranges::size(infos)) + ")");
+      auto ptrs         = std::vector<VkPipeline>(std::ranges::size(infos));
+      auto return_value = std::make_pair<std::vector<pipeline>, VkResult const>(
+        {},
+        create_fn(get(), pipeline_cache, ranges::size(infos), ranges::data(infos), nullptr, ptrs.data()));
+      if(std::to_underlying(return_value.second) < 0)
+        throw std::runtime_error(std::string(location.function_name()) +
+                                 ":\033[1;31m error:\033[0m vulkan return a negative VkResult (" +
+                                 std::to_string(return_value.second) + ")");
+      std::ranges::transform(ptrs,
+                             std::back_inserter(return_value.first),
+                             [this](auto const &ptr) { return pipeline(_smart_ptr, ptr); });
+      return return_value;
     }
 
     friend struct physical_device;
@@ -161,7 +162,7 @@ struct device final
                        std::weak_ptr<std::pointer_traits<VkCommandPool>::element_type>> mutable _registered_command_pools;
     std::unordered_map<VkDescriptorPool,
                        std::weak_ptr<std::pointer_traits<VkDescriptorPool>::element_type>> mutable _registered_descriptor_pools;
-    std::shared_ptr<std::pointer_traits<VkDevice>::element_type> _handle;
+    std::shared_ptr<std::pointer_traits<VkDevice>::element_type> _smart_ptr;
 };
 }
 

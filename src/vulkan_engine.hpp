@@ -7,9 +7,9 @@
 
 struct vulkan_engine final
 {
-    vulkan_engine([[maybe_unused]] std::span<std::string_view const> const args);
+    vulkan_engine(std::span<std::string_view const> const args);
 
-    void run();
+    void draw_frame();
 
     vulkan_engine(vulkan_engine &&)                 = delete;
     vulkan_engine(vulkan_engine const &)            = delete;
@@ -18,7 +18,9 @@ struct vulkan_engine final
     ~vulkan_engine()                                = default;
 
   private:
-    vulkan::instance        _instance;
-    vulkan::physical_device _physical_device;
-    vulkan::device          _device;
+    vulkan::instance                                  _instance;
+    vulkan::physical_device                           _physical_device;
+    vulkan::device                                    _device;
+    std::optional<vulkan::ext::debug_utils_messenger> _utils_messenger;
+    std::optional<vulkan::ext::debug_report_callback> _report_callback;
 };

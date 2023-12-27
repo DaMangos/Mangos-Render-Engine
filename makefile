@@ -11,7 +11,7 @@ OBJS      = $(patsubst $(CURDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 DEPS      = $(patsubst $(CURDIR)/%.cpp, $(DEPDIR)/%.d, $(SRCS))
 
 CXX      = clang++
-CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
+CXXFLAGS = -std=c++2b -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
 CPPFLAGS = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(INCLUDES))
 LDLIBS   = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 

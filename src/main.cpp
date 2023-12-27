@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "glfw/wrappers.hpp"
 
 #include <exception>
 #include <iostream>
