@@ -39,8 +39,8 @@ struct dispatchable_handle<VkQueue> final
         [&dispatcher, &info]()
         {
           value_type ptr;
-          auto const result = vkGetDeviceQueue2(dispatcher.get(), std::forward<decltype(info)>(info), &ptr);
-          return std::to_underlying(result) >= 0 ? ptr : throw bad_result(result);
+          vkGetDeviceQueue2(dispatcher.get(), std::forward<decltype(info)>(info), &ptr);
+          return ptr;
         }())
     {
     }
