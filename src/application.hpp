@@ -6,7 +6,7 @@
 
 struct application final
 {
-    application([[maybe_unused]] std::span<std::string_view const> const args);
+    application(std::span<std::string_view const> const args);
 
     void run();
 
@@ -28,9 +28,9 @@ struct application final
               switch(severity)
               {
                 case severity_level::warning :
-                  return std::cerr << "\n[warning] " << value;
+                  return std::cout << "\n[warning] " << value;
                 case severity_level::error :
-                  return std::cerr << "\n[error] " << value;
+                  return std::cout << "\n[error] " << value;
                 case severity_level::info :
                   return std::cout << "\n[info] " << value;
               }
@@ -42,13 +42,17 @@ struct application final
         static constexpr auto const info    = ostream<severity_level::info>{};
     };
 
-    application(application &&) = delete;
-
+    application(application &&)                 = delete;
     application(application const &)            = delete;
     application &operator=(application &&)      = delete;
     application &operator=(application const &) = delete;
     ~application()                              = default;
 
   private:
+    enum struct flag_index : std::size_t
+    {
+      debug_verbose,
+    };
+    std::bitset<32> mutable _flags;
     vulkan_engine _renderer;
 };

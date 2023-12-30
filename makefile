@@ -18,7 +18,7 @@ LDLIBS   = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan
 CLANGFORMATFLAGS = -i -style=file
 
 .PHONY: all
-all: build format
+all: format compile_commands
 
 .PHONY: build
 build: $(EXEDIR)/$(PROGRAM)
@@ -31,7 +31,7 @@ format:
 
 .PHONY: compile_commands
 compile_commands:
-	@bear -- make clean build
+	@bear -- make build
 	@echo "compile commands success!"
 
 .PHONY: clean

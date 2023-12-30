@@ -1,9 +1,10 @@
 #pragma once
 
+#include <glfw/handles.hpp>
 #include <span>
 #include <string_view>
 #include <unordered_map>
-#include <vulkan/wrappers.hpp>
+#include <vulkan/handles.hpp>
 
 struct vulkan_engine final
 {

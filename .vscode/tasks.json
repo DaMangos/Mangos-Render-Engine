@@ -28,7 +28,7 @@
             ]
         },
         {
-            "label": "[MRE] complier commands",
+            "label": "[MRE] compile commands",
             "type": "shell",
             "command": [
                 "make compile_commands"

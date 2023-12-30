@@ -1,5 +1,4 @@
 #include "application.hpp"
-#include "glfw/wrappers.hpp"
 
 #include <exception>
 #include <iostream>
@@ -18,17 +17,11 @@ int better_main([[maybe_unused]] std::span<std::string_view const> const args) n
 {
   try
   {
-    auto app = application(args);
-    app.run();
+    application(args).run();
   }
   catch(std::exception &error)
   {
-    application::log::error << error.what();
-    return EXIT_FAILURE;
-  }
-  catch(...)
-  {
-    application::log::error << "unknown exception";
+    application::log::error << error.what() << std::endl;
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
