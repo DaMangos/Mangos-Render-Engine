@@ -21,9 +21,7 @@ constexpr std::array const debug_extensions = {
 constexpr std::array const device_extensions = {
   VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME,
   VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-#ifdef __APPLE__
   VK_NV_GLSL_SHADER_EXTENSION_NAME,
-#endif
 };
 
 constexpr std::array const debug_layers = {"VK_LAYER_KHRONOS_validation"};

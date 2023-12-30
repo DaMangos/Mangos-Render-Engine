@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-int main(int const argc, char const *const *const argv)
+int main(int const argc, char const *const *const argv) noexcept
 {
   [[nodiscard]]
   int        better_main([[maybe_unused]] std::span<std::string_view const> const args) noexcept;
