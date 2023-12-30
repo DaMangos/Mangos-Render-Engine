@@ -171,15 +171,14 @@ struct dispatchable_handle<VkDevice> final
     requires(std::same_as<std::ranges::range_value_t<decltype(infos)>, VkComputePipelineCreateInfo> or
              std::same_as<std::ranges::range_value_t<decltype(infos)>, VkGraphicsPipelineCreateInfo>)
     {
-      auto ptrs   = std::vector<VkPipeline>(ranges::size(infos));
-      auto result = VK_SUCCESS;
+      auto ptrs         = std::vector<VkPipeline>(ranges::size(infos));
+      auto return_value = std::pair<std::vector<pipeline>, VkResult>();
       if constexpr(std::same_as<std::ranges::range_value_t<decltype(infos)>, VkComputePipelineCreateInfo>)
-        result = vkCreateComputePipelines(get(), cache, ranges::size(infos), ranges::data(infos), nullptr, ptrs.data());
+        return_value.second = vkCreateComputePipelines(get(), cache, ranges::size(infos), ranges::data(infos), nullptr, ptrs.data());
       if constexpr(std::same_as<std::ranges::range_value_t<decltype(infos)>, VkGraphicsPipelineCreateInfo>)
-        result = vkCreateGraphicsPipelines(get(), cache, ranges::size(infos), ranges::data(infos), nullptr, ptrs.data());
-      if(std::to_underlying(result) < 0)
-        throw bad_result(result);
-      auto return_value = std::pair<std::vector<pipeline>, VkResult>({}, result);
+        return_value.second = vkCreateGraphicsPipelines(get(), cache, ranges::size(infos), ranges::data(infos), nullptr, ptrs.data());
+      if(std::to_underlying(return_value.second) < 0)
+        throw bad_result(return_value.second);
       return_value.first.reserve(ranges::size(infos));
       std::ranges::transform(ptrs, std::back_inserter(return_value.first), [this](auto const ptr) { return graphical_pipeline(_smart_ptr, ptr); });
       return return_value;
