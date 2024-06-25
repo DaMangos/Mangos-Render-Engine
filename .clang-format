@@ -66,10 +66,10 @@ NamespaceIndentation: None
 PPIndentWidth: -1
 PenaltyReturnTypeOnItsOwnLine: 1000000
 PackConstructorInitializers: Never
-PointerAlignment: Right
+PointerAlignment: Middle
 QualifierAlignment: Custom
 QualifierOrder: [friend, static, inline, constexpr, volatile, restrict, type, const]
-ReferenceAlignment: Right
+ReferenceAlignment: Middle
 ReflowComments: true
 RemoveSemicolon: false
 RequiresClausePosition: OwnLine
@@ -105,3 +105,7 @@ SpacesInSquareBrackets: false
 Standard: Latest
 TabWidth: 2
 UseTab: Never
+IncludeCategories:
+  - Regex:           '[A-Za-z]+/[A-Za-z]+'
+    Priority:        2
+    SortPriority:    2

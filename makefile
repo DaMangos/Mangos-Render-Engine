@@ -4,14 +4,15 @@ OBJDIR = $(CURDIR)/obj
 DEPDIR = $(CURDIR)/dep
 EXEDIR = $(CURDIR)/bin
 
-INCLUDES := $(shell find -L $(CURDIR) -name "include")
-HEADERS  := $(shell find -L $(CURDIR) -name "*.hpp")
-SRCS     := $(shell find -L $(CURDIR) -name "*.cpp")
-OBJS      = $(patsubst $(CURDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
-DEPS      = $(patsubst $(CURDIR)/%.cpp, $(DEPDIR)/%.d, $(SRCS))
+INCLUDES        := $(shell find -L $(CURDIR) -name "include")
+HEADERS         := $(shell find -L $(CURDIR) -name "*.hpp")
+IMPLEMENTATIONS := $(shell find -L $(CURDIR) -name "*.ipp")
+SRCS            := $(shell find -L $(CURDIR) -name "*.cpp")
+OBJS             = $(patsubst $(CURDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+DEPS             = $(patsubst $(CURDIR)/%.cpp, $(DEPDIR)/%.d, $(SRCS))
 
 CXX      = clang++
-CXXFLAGS = -std=c++2b -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
+CXXFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror -O
 CPPFLAGS = `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(INCLUDES))
 LDLIBS   = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 
@@ -26,7 +27,7 @@ build: $(EXEDIR)/$(PROGRAM)
 
 .PHONY: format
 format:
-	@clang-format $(HEADERS) $(SRCS) $(CLANGFORMATFLAGS)
+	@clang-format $(HEADERS) $(IMPLEMENTATIONS) $(SRCS) $(CLANGFORMATFLAGS)
 	@echo "format success!"
 
 .PHONY: compile_commands
