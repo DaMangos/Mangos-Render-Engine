@@ -42,11 +42,6 @@ void vulkan::physical_device::reset() noexcept
   _allocation_callbacks.reset();
 }
 
-vulkan::device::device(nullhandle_t) noexcept(std::is_nothrow_default_constructible_v<registered_command_pools_type> and
-                                              std::is_nothrow_default_constructible_v<registered_descriptor_pools_type>)
-{
-}
-
 vulkan::physical_device & vulkan::physical_device::operator=(nullhandle_t) noexcept
 {
   reset();

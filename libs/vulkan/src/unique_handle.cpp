@@ -77,6 +77,8 @@ vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::operator bool() const n
   return _handle != VK_NULL_HANDLE;
 }
 
+template class vulkan::unique_handle<VkDevice, VkCommandPool, vkDestroyCommandPool>;
+template class vulkan::unique_handle<VkDevice, VkDescriptorPool, vkDestroyDescriptorPool>;
 template class vulkan::unique_handle<VkDevice, VkBuffer, vkDestroyBuffer>;
 template class vulkan::unique_handle<VkDevice, VkBufferView, vkDestroyBufferView>;
 template class vulkan::unique_handle<VkDevice, VkDescriptorSetLayout, vkDestroyDescriptorSetLayout>;

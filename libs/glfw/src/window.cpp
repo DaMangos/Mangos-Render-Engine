@@ -727,6 +727,11 @@ void glfw::window::reset() noexcept
   _window.reset();
 }
 
+glfw::window::window() noexcept
+: _window(nullptr, glfwDestroyWindow)
+{
+}
+
 glfw::window::window(nullhandle_t) noexcept
 : _window(nullptr, glfwDestroyWindow)
 {
@@ -751,8 +756,7 @@ glfw::window::window(window && other) noexcept
   on_file_drop(std::move(other.on_file_drop)),
   _window(std::move(other._window))
 {
-  if(_window)
-    glfwSetWindowUserPointer(_window.get(), this);
+  glfwSetWindowUserPointer(_window.get(), this);
 }
 
 glfw::window & glfw::window::operator=(nullhandle_t) noexcept
@@ -781,8 +785,7 @@ glfw::window & glfw::window::operator=(window && other) noexcept
   on_file_drop               = std::move(other.on_file_drop);
   _window                    = std::move(other._window);
 
-  if(_window)
-    glfwSetWindowUserPointer(_window.get(), this);
+  glfwSetWindowUserPointer(_window.get(), this);
 
   return *this;
 }
