@@ -36,6 +36,7 @@ release: $(CURDIR)/bin/release/$(EXE)
 .PHONY: test
 test: $(CURDIR)/bin/test/$(EXE)
 	@echo "test build success!"
+	@$(CURDIR)/bin/test/$(EXE)
 
 .PHONY: clean
 clean:
