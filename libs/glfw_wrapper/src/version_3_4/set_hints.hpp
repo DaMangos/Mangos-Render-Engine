@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glfw_wrapper/version_3_4/library_hints.hpp>
 #include <glfw_wrapper/version_3_4/window_hints.hpp>
 
