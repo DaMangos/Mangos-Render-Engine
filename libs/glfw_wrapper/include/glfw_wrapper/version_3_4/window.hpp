@@ -110,23 +110,23 @@ class window
 
     void reset_aspect_ratio() noexcept;
 
-    void reset_icon() noexcept;
-
     void reset_size_limits() noexcept;
 
     void restore() noexcept;
 
-    void set_aspect_ratio(extent<int> const aspect_ratio) noexcept;
+    void set_aspect_ratio(extent<int> const & aspect_ratio) noexcept;
+
+    void set_cursor(cursor const & cursor) noexcept;
 
     void set_icon(std::span<image> const icons) noexcept;
 
     void set_opacity(float const alpha) noexcept;
 
-    void set_position(coordinates<int> const position) noexcept;
+    void set_position(coordinates<int> const & position) noexcept;
 
-    void set_size(extent<int> const size) noexcept;
+    void set_size(extent<int> const & size) noexcept;
 
-    void set_size_limits(extent<int> const min_size, extent<int> const max_size) noexcept;
+    void set_size_limits(extent<int> const & min_size, extent<int> const & max_size) noexcept;
 
     void set_title(std::string const & title) noexcept;
 
@@ -184,22 +184,22 @@ class window
       exited_window,
     };
 
-    std::function<void(window &, coordinates<int> const)>                              on_position_update;
-    std::function<void(window &, coordinates<int> const)>                              on_size_update;
-    std::function<void(window &)>                                                      on_close;
-    std::function<void(window &)>                                                      on_refresh_required;
-    std::function<void(window &, focused_state const)>                                 on_focus_update;
-    std::function<void(window &, iconified_state const)>                               on_iconify_update;
-    std::function<void(window &, maximized_state const)>                               on_maximize_update;
-    std::function<void(window &, extent<pixel> const)>                                 on_framebuffer_size_update;
-    std::function<void(window &, scale<float> const)>                                  on_content_scale_update;
-    std::function<void(window &, mouse_button const, action const, modifiers const)>   on_mouse_button_action;
-    std::function<void(window &, coordinates<double> const)>                           on_cursor_position_update;
-    std::function<void(window &, cursor_location_state const)>                         on_cursor_location_update;
-    std::function<void(window &, offset<double> const)>                                on_scroll_update;
-    std::function<void(window &, int const, key const, action const, modifiers const)> on_key_action;
-    std::function<void(window &, unsigned int const)>                                  on_char_input;
-    std::function<void(window &, std::vector<std::filesystem::path> const &)>          on_file_drop;
+    std::function<void(window &, coordinates<int>)>                           on_position_update;
+    std::function<void(window &, coordinates<int>)>                           on_size_update;
+    std::function<void(window &)>                                             on_close;
+    std::function<void(window &)>                                             on_refresh_required;
+    std::function<void(window &, focused_state)>                              on_focus_update;
+    std::function<void(window &, iconified_state)>                            on_iconify_update;
+    std::function<void(window &, maximized_state)>                            on_maximize_update;
+    std::function<void(window &, extent<pixel>)>                              on_framebuffer_size_update;
+    std::function<void(window &, scale<float>)>                               on_content_scale_update;
+    std::function<void(window &, mouse_button, action, modifiers)>            on_mouse_button_action;
+    std::function<void(window &, coordinates<double>)>                        on_cursor_position_update;
+    std::function<void(window &, cursor_location_state)>                      on_cursor_location_update;
+    std::function<void(window &, offset<double>)>                             on_scroll_update;
+    std::function<void(window &, int, key, action, modifiers)>                on_key_action;
+    std::function<void(window &, unsigned int)>                               on_char_input;
+    std::function<void(window &, std::vector<std::filesystem::path> const &)> on_file_drop;
 
   private:
     window(GLFWwindow * const window, library const library) noexcept;

@@ -1,6 +1,6 @@
 #include "set_hints.hpp"
 
-#include "glfw_wrapper/version_3_4/window_hints.hpp"
+#include <glfw_wrapper/version_3_4/cursor.hpp>
 #include <glfw_wrapper/version_3_4/library.hpp>
 #include <glfw_wrapper/version_3_4/monitor.hpp>
 #include <glfw_wrapper/version_3_4/window.hpp>
@@ -25,28 +25,76 @@ void glfw::library::reset() noexcept
   glfwTerminate();
 }
 
-glfw::window glfw::library::create_window(extent<int> const size, std::string const & title) const noexcept
+glfw::cursor glfw::library::create_cursor(image image, coordinates<pixel> const & hotspot) const noexcept
+{
+  GLFWimage const glfw_image = {
+    .width  = image.size.width,
+    .height = image.size.height,
+    .pixels = reinterpret_cast<unsigned char *>(image.pixels.data()),
+  };
+
+  auto * const cursor = glfwCreateCursor(&glfw_image, to_int(hotspot.x), to_int(hotspot.y));
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::cursor glfw::library::create_standard_arrow_cursor() const noexcept
+{
+  auto * const cursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::cursor glfw::library::create_standard_i_beam_cursor() const noexcept
+{
+  auto * const cursor = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::cursor glfw::library::create_standard_crosshair_cursor() const noexcept
+{
+  auto * const cursor = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::cursor glfw::library::create_standard_hand_cursor() const noexcept
+{
+  auto * const cursor = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::cursor glfw::library::create_standard_horizontal_resize_cursor() const noexcept
+{
+  auto * const cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::cursor glfw::library::create_standard_vertical_resize_cursor() const noexcept
+{
+  auto * const cursor = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+  return cursor ? glfw::cursor(cursor, *this) : nullhandle;
+}
+
+glfw::window glfw::library::create_window(extent<int> const & size, std::string const & title) const noexcept
 {
   glfwDefaultWindowHints();
   auto * const window = glfwCreateWindow(size.width, size.height, title.c_str(), nullptr, nullptr);
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const size, std::string const & title, monitor const & monitor) const noexcept
+glfw::window glfw::library::create_window(extent<int> const & size, std::string const & title, monitor const & monitor) const noexcept
 {
   glfwDefaultWindowHints();
   auto * const window = glfwCreateWindow(size.width, size.height, title.c_str(), monitor.get(), nullptr);
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const size, std::string const & title, window const & share) const noexcept
+glfw::window glfw::library::create_window(extent<int> const & size, std::string const & title, window const & share) const noexcept
 {
   glfwDefaultWindowHints();
   auto * const window = glfwCreateWindow(size.width, size.height, title.c_str(), nullptr, share.get());
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const   size,
+glfw::window glfw::library::create_window(extent<int> const & size,
                                           std::string const & title,
                                           monitor const &     monitor,
                                           window const &      share) const noexcept
@@ -56,7 +104,7 @@ glfw::window glfw::library::create_window(extent<int> const   size,
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const size, std::string const & title, window_hints const & hints) const noexcept
+glfw::window glfw::library::create_window(extent<int> const & size, std::string const & title, window_hints const & hints) const noexcept
 {
   glfwDefaultWindowHints();
   set_hints(hints);
@@ -64,7 +112,7 @@ glfw::window glfw::library::create_window(extent<int> const size, std::string co
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const    size,
+glfw::window glfw::library::create_window(extent<int> const &  size,
                                           std::string const &  title,
                                           monitor const &      monitor,
                                           window_hints const & hints) const noexcept
@@ -75,7 +123,7 @@ glfw::window glfw::library::create_window(extent<int> const    size,
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const    size,
+glfw::window glfw::library::create_window(extent<int> const &  size,
                                           std::string const &  title,
                                           window const &       share,
                                           window_hints const & hints) const noexcept
@@ -86,7 +134,7 @@ glfw::window glfw::library::create_window(extent<int> const    size,
   return window ? glfw::window(window, *this) : nullhandle;
 }
 
-glfw::window glfw::library::create_window(extent<int> const    size,
+glfw::window glfw::library::create_window(extent<int> const &  size,
                                           std::string const &  title,
                                           monitor const &      monitor,
                                           window const &       share,

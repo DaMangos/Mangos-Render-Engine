@@ -1,4 +1,5 @@
 #include <glfw_wrapper/version_3_4/action.hpp>
+#include <glfw_wrapper/version_3_4/cursor.hpp>
 #include <glfw_wrapper/version_3_4/library.hpp>
 #include <glfw_wrapper/version_3_4/monitor.hpp>
 #include <glfw_wrapper/version_3_4/window.hpp>
@@ -304,12 +305,14 @@ constexpr glfw::action to_action(int const action)
 [[nodiscard]]
 constexpr glfw::modifiers to_modifier(int const mods) noexcept
 {
-  return {.Shift     = static_cast<bool>(mods & GLFW_MOD_SHIFT),
-          .Control   = static_cast<bool>(mods & GLFW_MOD_CONTROL),
-          .Alt       = static_cast<bool>(mods & GLFW_MOD_ALT),
-          .Super     = static_cast<bool>(mods & GLFW_MOD_SUPER),
-          .Caps_Lock = static_cast<bool>(mods & GLFW_MOD_CAPS_LOCK),
-          .Num_Lock  = static_cast<bool>(mods & GLFW_MOD_NUM_LOCK)};
+  return {
+    .Shift     = static_cast<bool>(mods & GLFW_MOD_SHIFT),
+    .Control   = static_cast<bool>(mods & GLFW_MOD_CONTROL),
+    .Alt       = static_cast<bool>(mods & GLFW_MOD_ALT),
+    .Super     = static_cast<bool>(mods & GLFW_MOD_SUPER),
+    .Caps_Lock = static_cast<bool>(mods & GLFW_MOD_CAPS_LOCK),
+    .Num_Lock  = static_cast<bool>(mods & GLFW_MOD_NUM_LOCK),
+  };
 }
 
 void window_pos_callback(GLFWwindow * window, int xpos, int ypos)
@@ -612,12 +615,6 @@ void glfw::window::reset_aspect_ratio() noexcept
     glfwSetWindowAspectRatio(_window.get(), GLFW_DONT_CARE, GLFW_DONT_CARE);
 }
 
-void glfw::window::reset_icon() noexcept
-{
-  if(_window)
-    glfwSetWindowIcon(_window.get(), 0, nullptr);
-}
-
 void glfw::window::reset_size_limits() noexcept
 {
   if(_window)
@@ -630,10 +627,16 @@ void glfw::window::restore() noexcept
     glfwRestoreWindow(_window.get());
 }
 
-void glfw::window::set_aspect_ratio(extent<int> const aspect_ratio) noexcept
+void glfw::window::set_aspect_ratio(extent<int> const & aspect_ratio) noexcept
 {
   if(_window)
     glfwSetWindowAspectRatio(_window.get(), aspect_ratio.width, aspect_ratio.height);
+}
+
+void glfw::window::set_cursor(cursor const & cursor) noexcept
+{
+  if(_window)
+    glfwSetCursor(_window.get(), cursor.get());
 }
 
 void glfw::window::set_icon(std::span<image> const icons) noexcept
@@ -660,19 +663,19 @@ void glfw::window::set_opacity(float const alpha) noexcept
     glfwSetWindowOpacity(_window.get(), alpha);
 }
 
-void glfw::window::set_position(coordinates<int> const position) noexcept
+void glfw::window::set_position(coordinates<int> const & position) noexcept
 {
   if(_window)
     glfwSetWindowPos(_window.get(), position.x, position.y);
 }
 
-void glfw::window::set_size(extent<int> const size) noexcept
+void glfw::window::set_size(extent<int> const & size) noexcept
 {
   if(_window)
     glfwSetWindowSize(_window.get(), size.width, size.height);
 }
 
-void glfw::window::set_size_limits(extent<int> const min_size, extent<int> const max_size) noexcept
+void glfw::window::set_size_limits(extent<int> const & min_size, extent<int> const & max_size) noexcept
 {
   if(_window)
     glfwSetWindowSizeLimits(_window.get(), min_size.width, min_size.height, max_size.width, max_size.height);
@@ -752,7 +755,8 @@ glfw::window::window(window && other) noexcept
   on_file_drop(std::move(other.on_file_drop)),
   _window(std::move(other._window))
 {
-  glfwSetWindowUserPointer(_window.get(), this);
+  if(_window)
+    glfwSetWindowUserPointer(_window.get(), this);
 }
 
 glfw::window & glfw::window::operator=(nullhandle_t) noexcept
@@ -781,7 +785,8 @@ glfw::window & glfw::window::operator=(window && other) noexcept
   on_file_drop               = std::move(other.on_file_drop);
   _window                    = std::move(other._window);
 
-  glfwSetWindowUserPointer(_window.get(), this);
+  if(_window)
+    glfwSetWindowUserPointer(_window.get(), this);
 
   return *this;
 }
@@ -805,22 +810,24 @@ glfw::window::window(GLFWwindow * const window, library const library) noexcept
 : _library(library),
   _window(window, glfwDestroyWindow)
 {
-  assert(_window);
-  glfwSetWindowUserPointer(_window.get(), this);
-  glfwSetWindowPosCallback(_window.get(), &window_pos_callback);
-  glfwSetWindowSizeCallback(_window.get(), &window_size_callback);
-  glfwSetWindowCloseCallback(_window.get(), &window_close_callback);
-  glfwSetWindowRefreshCallback(_window.get(), &window_refresh_callback);
-  glfwSetWindowFocusCallback(_window.get(), &window_focus_callback);
-  glfwSetWindowIconifyCallback(_window.get(), &window_iconify_callback);
-  glfwSetWindowMaximizeCallback(_window.get(), &window_maximize_callback);
-  glfwSetFramebufferSizeCallback(_window.get(), &framebuffer_size_callback);
-  glfwSetWindowContentScaleCallback(_window.get(), &window_content_scale_callback);
-  glfwSetMouseButtonCallback(_window.get(), &mouse_button_callback);
-  glfwSetCursorPosCallback(_window.get(), &cursor_pos_callback);
-  glfwSetCursorEnterCallback(_window.get(), &cursor_enter_callback);
-  glfwSetScrollCallback(_window.get(), &scroll_callback);
-  glfwSetKeyCallback(_window.get(), &key_callback);
-  glfwSetCharCallback(_window.get(), &char_callback);
-  glfwSetDropCallback(_window.get(), &drop_callback);
+  if(_window)
+  {
+    glfwSetWindowUserPointer(_window.get(), this);
+    glfwSetWindowPosCallback(_window.get(), &window_pos_callback);
+    glfwSetWindowSizeCallback(_window.get(), &window_size_callback);
+    glfwSetWindowCloseCallback(_window.get(), &window_close_callback);
+    glfwSetWindowRefreshCallback(_window.get(), &window_refresh_callback);
+    glfwSetWindowFocusCallback(_window.get(), &window_focus_callback);
+    glfwSetWindowIconifyCallback(_window.get(), &window_iconify_callback);
+    glfwSetWindowMaximizeCallback(_window.get(), &window_maximize_callback);
+    glfwSetFramebufferSizeCallback(_window.get(), &framebuffer_size_callback);
+    glfwSetWindowContentScaleCallback(_window.get(), &window_content_scale_callback);
+    glfwSetMouseButtonCallback(_window.get(), &mouse_button_callback);
+    glfwSetCursorPosCallback(_window.get(), &cursor_pos_callback);
+    glfwSetCursorEnterCallback(_window.get(), &cursor_enter_callback);
+    glfwSetScrollCallback(_window.get(), &scroll_callback);
+    glfwSetKeyCallback(_window.get(), &key_callback);
+    glfwSetCharCallback(_window.get(), &char_callback);
+    glfwSetDropCallback(_window.get(), &drop_callback);
+  }
 }

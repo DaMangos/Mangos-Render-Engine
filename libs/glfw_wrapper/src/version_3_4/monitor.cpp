@@ -78,7 +78,7 @@ std::vector<glfw::video_mode> glfw::monitor::get_video_modes() const noexcept
                              return video_mode{
                                {mode.width, mode.height},
                                {mode.redBits, mode.greenBits, mode.blueBits},
-                               to_hertz(mode.refreshRate)
+                               to_hertz(mode.refreshRate),
                              };
                            });
 
@@ -159,10 +159,12 @@ void glfw::monitor::set_gamma_ramp(std::span<channel<unsigned short>> const ramp
     green_chanel.resize(static_cast<std::size_t>(current_gamma_ramp->size), {});
     blue_chanel.resize(static_cast<std::size_t>(current_gamma_ramp->size), {});
 
-    GLFWgammaramp const new_gamma_ramp = {.red   = red_chanel.data(),
-                                          .green = green_chanel.data(),
-                                          .blue  = blue_chanel.data(),
-                                          .size  = current_gamma_ramp->size};
+    GLFWgammaramp const new_gamma_ramp = {
+      .red   = red_chanel.data(),
+      .green = green_chanel.data(),
+      .blue  = blue_chanel.data(),
+      .size  = current_gamma_ramp->size,
+    };
 
     glfwSetGammaRamp(_monitor, &new_gamma_ramp);
   }
@@ -216,5 +218,4 @@ glfw::monitor::monitor(GLFWmonitor * const monitor, library const library)
 : _library(library),
   _monitor(monitor)
 {
-  assert(_monitor);
 }

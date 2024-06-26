@@ -1,6 +1,9 @@
 #pragma once
 
+#include <glfw_wrapper/pixel.hpp>
+#include <glfw_wrapper/version_3_4/coordinates.hpp>
 #include <glfw_wrapper/version_3_4/extent.hpp>
+#include <glfw_wrapper/version_3_4/image.hpp>
 #include <glfw_wrapper/version_3_4/library_hints.hpp>
 #include <glfw_wrapper/version_3_4/nullhandle.hpp>
 #include <glfw_wrapper/version_3_4/window_hints.hpp>
@@ -25,21 +28,35 @@ class library
 
     void reset() noexcept;
 
-    window create_window(extent<int> const size, std::string const & title) const noexcept;
+    cursor create_cursor(image image, coordinates<pixel> const & hotspot) const noexcept;
 
-    window create_window(extent<int> const size, std::string const & title, monitor const & monitor) const noexcept;
+    cursor create_standard_arrow_cursor() const noexcept;
 
-    window create_window(extent<int> const size, std::string const & title, window const & share) const noexcept;
+    cursor create_standard_i_beam_cursor() const noexcept;
 
-    window create_window(extent<int> const size, std::string const & title, monitor const & monitor, window const & share) const noexcept;
+    cursor create_standard_crosshair_cursor() const noexcept;
 
-    window create_window(extent<int> const size, std::string const & title, window_hints const & hints) const noexcept;
+    cursor create_standard_hand_cursor() const noexcept;
 
-    window create_window(extent<int> const size, std::string const & title, monitor const & monitor, window_hints const & hints) const noexcept;
+    cursor create_standard_horizontal_resize_cursor() const noexcept;
 
-    window create_window(extent<int> const size, std::string const & title, window const & share, window_hints const & hints) const noexcept;
+    cursor create_standard_vertical_resize_cursor() const noexcept;
 
-    window create_window(extent<int> const    size,
+    window create_window(extent<int> const & size, std::string const & title) const noexcept;
+
+    window create_window(extent<int> const & size, std::string const & title, monitor const & monitor) const noexcept;
+
+    window create_window(extent<int> const & size, std::string const & title, window const & share) const noexcept;
+
+    window create_window(extent<int> const & size, std::string const & title, monitor const & monitor, window const & share) const noexcept;
+
+    window create_window(extent<int> const & size, std::string const & title, window_hints const & hints) const noexcept;
+
+    window create_window(extent<int> const & size, std::string const & title, monitor const & monitor, window_hints const & hints) const noexcept;
+
+    window create_window(extent<int> const & size, std::string const & title, window const & share, window_hints const & hints) const noexcept;
+
+    window create_window(extent<int> const &  size,
                          std::string const &  title,
                          monitor const &      monitor,
                          window const &       share,

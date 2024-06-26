@@ -40,8 +40,12 @@ class cursor
     explicit operator bool() const noexcept;
 
   private:
+    cursor(GLFWcursor * cursor, library const & library) noexcept;
+
     std::optional<library>                              _library;
     std::unique_ptr<GLFWcursor, void (*)(GLFWcursor *)> _cursor;
+
+    friend class library;
 };
 }
 }
