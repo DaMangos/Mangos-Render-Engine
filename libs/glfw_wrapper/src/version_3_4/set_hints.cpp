@@ -97,7 +97,6 @@ constexpr int to_int(glfw::library_hints::wayland_libdecor_type const type) noex
       return GLFW_WAYLAND_PREFER_LIBDECOR;
   }
 }
-
 }
 
 void glfw::set_hints(window_hints const & hints) noexcept

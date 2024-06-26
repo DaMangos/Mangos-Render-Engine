@@ -28,42 +28,59 @@ class library
 
     void reset() noexcept;
 
+    [[nodiscard]]
     cursor create_cursor(image image, coordinates<pixel> const & hotspot) const noexcept;
 
+    [[nodiscard]]
     cursor create_standard_arrow_cursor() const noexcept;
 
+    [[nodiscard]]
     cursor create_standard_i_beam_cursor() const noexcept;
 
+    [[nodiscard]]
     cursor create_standard_crosshair_cursor() const noexcept;
 
+    [[nodiscard]]
     cursor create_standard_hand_cursor() const noexcept;
 
+    [[nodiscard]]
     cursor create_standard_horizontal_resize_cursor() const noexcept;
 
+    [[nodiscard]]
     cursor create_standard_vertical_resize_cursor() const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title, monitor const & monitor) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title, window const & share) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title, monitor const & monitor, window const & share) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title, window_hints const & hints) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title, monitor const & monitor, window_hints const & hints) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const & size, std::string const & title, window const & share, window_hints const & hints) const noexcept;
 
+    [[nodiscard]]
     window create_window(extent<int> const &  size,
                          std::string const &  title,
                          monitor const &      monitor,
                          window const &       share,
                          window_hints const & hints) const noexcept;
 
+    [[nodiscard]]
     monitor get_primary_monitor() const noexcept;
 
+    [[nodiscard]]
     std::vector<monitor> get_monitors() const noexcept;
 
     library() noexcept;

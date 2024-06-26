@@ -2,6 +2,8 @@
 
 #include <glfw_wrapper/version_3_4/cursor.hpp>
 
+#include <optional>
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
@@ -46,7 +48,7 @@ glfw::cursor::operator bool() const noexcept
   return static_cast<bool>(_cursor);
 }
 
-glfw::cursor::cursor(GLFWcursor * cursor, library const & library) noexcept
+glfw::cursor::cursor(GLFWcursor * const cursor, library const library) noexcept
 : _library(library),
   _cursor(cursor, glfwDestroyCursor)
 {
