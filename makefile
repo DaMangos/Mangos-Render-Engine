@@ -5,7 +5,7 @@ CXXFLAGS      = -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werro
 CPPFLAGS      = `pkg-config --cflags gtest_main` `pkg-config --cflags glfw3` `pkg-config --cflags vulkan` $(patsubst %, -I%, $(shell find -L $(CURDIR) -name "include"))
 LDLIBS        = `pkg-config --static --libs glfw3` `pkg-config --static --libs vulkan`
 
-SRCS      := $(shell find -L $(CURDIR) -name "*.cpp" -not -path -not -path "*/test/*")
+SRCS      := $(shell find -L $(CURDIR) -name "*.cpp" -not -path "*/test/*")
 TEST_SRCS := $(shell find -L $(CURDIR) -name "*.cpp" -not -path "*/main.cpp")
 
 DEBUG_CXXFLAGS   = $(CXXFLAGS) -UNDEBUG -g
