@@ -4,6 +4,10 @@
 #include <random>
 #include <string>
 
+static_assert(std::is_trivial_v<glfw::hertz>);
+static_assert(std::is_standard_layout_v<glfw::hertz>);
+static_assert(sizeof(glfw::hertz) == sizeof(int));
+
 TEST(glfw, hertz_arithmetic)
 {
   std::random_device rd;

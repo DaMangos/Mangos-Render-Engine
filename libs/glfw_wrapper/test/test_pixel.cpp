@@ -3,6 +3,11 @@
 
 #include <random>
 #include <string>
+#include <type_traits>
+
+static_assert(std::is_trivial_v<glfw::pixel>);
+static_assert(std::is_standard_layout_v<glfw::pixel>);
+static_assert(sizeof(glfw::pixel) == sizeof(int));
 
 TEST(glfw, pixel_arithmetic)
 {

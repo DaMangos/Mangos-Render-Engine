@@ -4,6 +4,10 @@
 #include <random>
 #include <string>
 
+static_assert(std::is_trivial_v<glfw::millimetre>);
+static_assert(std::is_standard_layout_v<glfw::millimetre>);
+static_assert(sizeof(glfw::millimetre) == sizeof(int));
+
 TEST(glfw, millimetre_arithmetic)
 {
   std::random_device rd;
