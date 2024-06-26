@@ -1,19 +1,20 @@
 #pragma once
 
-#include <glfw_wrapper.hpp>
+#include <glfw_wrapper/glfw_wrapper.hpp>
+#include <vulkan_wrapper/vulkan_wrapper.hpp>
+
 #include <optional>
-#include <span>
 #include <string_view>
-#include <vulkan_wrapper.hpp>
+#include <vector>
 
 namespace mangos_render_engine
 {
 class application
 {
   public:
-    explicit application(std::span<std::string_view> const args) noexcept;
+    explicit application(std::vector<std::string_view> const & args);
 
-    void run() noexcept;
+    void run();
 
   private:
     glfw::library                                     _library;
