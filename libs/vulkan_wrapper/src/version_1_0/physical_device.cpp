@@ -1,6 +1,6 @@
-#include "internal.hpp"
-
 #include <vulkan_wrapper/version_1_0/physical_device.hpp>
+
+#include "internal.hpp"
 
 VkPhysicalDevice vulkan::physical_device::get() const noexcept
 {

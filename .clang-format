@@ -106,6 +106,12 @@ Standard: Latest
 TabWidth: 2
 UseTab: Never
 IncludeCategories:
-  - Regex:           '[A-Za-z]+/[A-Za-z]+'
-    Priority:        2
-    SortPriority:    2
+- Regex: '\.\./[A-Za-z0-9]+/[A-Za-z0-9]+'
+  Priority: 1
+  SortPriority: 1
+- Regex: '[A-Za-z0-9]+/[A-Za-z0-9]+'
+  Priority: 2
+  SortPriority: 2
+- Regex: '.*'
+  Priority: 3
+  SortPriority: 3

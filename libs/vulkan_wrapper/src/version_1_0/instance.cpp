@@ -1,7 +1,6 @@
-#include "internal.hpp"
-
 #include <vulkan_wrapper/version_1_0/instance.hpp>
 
+#include "internal.hpp"
 #include <algorithm>
 
 #define GLFW_INCLUDE_VULKAN

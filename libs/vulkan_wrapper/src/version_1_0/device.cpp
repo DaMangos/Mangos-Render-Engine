@@ -1,7 +1,6 @@
-#include "internal.hpp"
-
 #include <vulkan_wrapper/version_1_0/device.hpp>
 
+#include "internal.hpp"
 #include <exception>
 #include <ranges>
 
