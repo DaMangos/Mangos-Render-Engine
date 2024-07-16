@@ -1,8 +1,0 @@
-bin/*
-obj/*
-dep/*
-
-.cache/*
-.DS_Store
-
-compile_commands.json
