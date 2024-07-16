@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "[MRE] build",
+            "type": "shell",
+            "command": [
+                "make build"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "[MRE] clean",
+            "type": "shell",
+            "command": [
+                "make clean"
+            ]
+        },
+        {
+            "label": "[MRE] format ",
+            "type": "shell",
+            "command": [
+                "make format"
+            ]
+        },
+        {
+            "label": "[MRE] compile commands",
+            "type": "shell",
+            "command": [
+                "make compile_commands"
+            ]
+        }
+    ]
+}
