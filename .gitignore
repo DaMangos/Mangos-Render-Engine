@@ -1,9 +1,0 @@
-bin/*
-obj/*
-dep/*
-spv/*
-
-.cache/*
-.DS_Store
-
-compile_commands.json
