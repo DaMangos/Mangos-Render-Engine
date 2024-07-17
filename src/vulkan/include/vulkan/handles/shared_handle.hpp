@@ -51,7 +51,7 @@ class shared_handle
     explicit operator bool() const noexcept;
 
   private:
-    std::shared_ptr<unique_handle<Dispatcher, Handle, DeleteHandle>> _shared;
+    std::shared_ptr<unique_handle<Dispatcher, Handle, DeleteHandle>> _underlying_handle;
 
     friend internal::make_shared_handle_t;
     friend internal::create_shared_handle_t;

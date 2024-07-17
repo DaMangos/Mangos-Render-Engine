@@ -43,5 +43,5 @@ TEST(Glfw, defaultWindowHints)
   ASSERT_TRUE(hints.cocoa_frame_name.empty());
   ASSERT_FALSE(hints.cocoa_graphics_switching);
   ASSERT_TRUE(hints.x11_class_name.empty());
-  ASSERT_TRUE(hints.x11_instance_name.empty());
+  ASSERT_TRUE(hints.x11_shared_instance_name.empty());
 }

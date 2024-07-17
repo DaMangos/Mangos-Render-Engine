@@ -10,6 +10,7 @@
 namespace vulkan
 {
 class device;
+class instance;
 
 class physical_device
 {
@@ -21,7 +22,7 @@ class physical_device
     VkAllocationCallbacks const * get_allocation_callbacks() const noexcept;
 
     [[nodiscard]]
-    std::pair<device, VkResult const> create_device(VkDeviceCreateInfo const & info);
+    std::pair<device, VkResult const> create_shared_instance(VkDeviceCreateInfo const & info);
 
     void reset() noexcept;
 
@@ -48,10 +49,10 @@ class physical_device
     explicit operator bool() const noexcept;
 
   private:
-    std::shared_ptr<VkInstance_T>                _instance;
+    std::shared_ptr<VkInstance_T>                _shared_instance;
     VkPhysicalDevice                             _physical_device;
-    std::shared_ptr<VkAllocationCallbacks const> _allocation_callbacks;
+    std::shared_ptr<VkAllocationCallbacks const> _shared_allocation_callbacks;
 
-    friend class instance;
+    friend instance;
 };
 }

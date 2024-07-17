@@ -24,7 +24,7 @@ class runtime_error : public exception, public std::runtime_error
 };
 
 using out_of_host_memory             = runtime_error<VK_ERROR_OUT_OF_HOST_MEMORY>;
-using out_of_device_memory           = runtime_error<VK_ERROR_OUT_OF_DEVICE_MEMORY>;
+using out_of_shared_instance_memory  = runtime_error<VK_ERROR_OUT_OF_DEVICE_MEMORY>;
 using initialization_failed          = runtime_error<VK_ERROR_INITIALIZATION_FAILED>;
 using device_lost                    = runtime_error<VK_ERROR_DEVICE_LOST>;
 using memory_map_failed              = runtime_error<VK_ERROR_MEMORY_MAP_FAILED>;
@@ -68,7 +68,7 @@ using full_screen_exclusive_mode_lost          = runtime_error<VK_ERROR_FULL_SCR
 using compression_exhausted                    = runtime_error<VK_ERROR_COMPRESSION_EXHAUSTED_EXT>;
 using fragmentation                            = runtime_error<VK_ERROR_FRAGMENTATION_EXT>;
 using not_permitted                            = runtime_error<VK_ERROR_NOT_PERMITTED_EXT>;
-using invalid_device_address                   = runtime_error<VK_ERROR_INVALID_DEVICE_ADDRESS_EXT>;
+using invalid_shared_instance_address          = runtime_error<VK_ERROR_INVALID_DEVICE_ADDRESS_EXT>;
 }
 
 namespace vulkan::nv

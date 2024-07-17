@@ -47,7 +47,7 @@
 // int           glfwInit();
 // void          glfwTerminate();
 // void          glfwInitHint(int hint, int value);
-// void          glfwInitAllocator(GLFWallocator const * allocator);
+// void          glfwInitAllocator(GLFWallocator const * shared_allocation_callback);
 // void          glfwInitVulkanLoader(PFN_vkGetInstanceProcAddr loader);
 // void          glfwGetVersion(int * major, int * minor, int * rev);
 // char const *  glfwGetVersionString();

@@ -1,8 +1,5 @@
 #pragma once
 
-#include "glfw/structs/extent.hpp"
-#include "vulkan/handles/device.hpp"
-#include "vulkan/handles/physical_device.hpp"
 #include <glfw/handles.hpp>
 #include <vulkan/handles.hpp>
 

@@ -4,7 +4,7 @@
 #include <type_traits>
 
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::out_of_host_memory>);
-static_assert(std::is_base_of_v<vulkan::exception, vulkan::out_of_device_memory>);
+static_assert(std::is_base_of_v<vulkan::exception, vulkan::out_of_shared_instance_memory>);
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::initialization_failed>);
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::device_lost>);
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::memory_map_failed>);
@@ -40,11 +40,11 @@ static_assert(std::is_base_of_v<vulkan::exception, vulkan::ext::full_screen_excl
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::ext::compression_exhausted>);
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::ext::fragmentation>);
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::ext::not_permitted>);
-static_assert(std::is_base_of_v<vulkan::exception, vulkan::ext::invalid_device_address>);
+static_assert(std::is_base_of_v<vulkan::exception, vulkan::ext::invalid_shared_instance_address>);
 static_assert(std::is_base_of_v<vulkan::exception, vulkan::nv::invalid_shader>);
 
 static_assert(std::is_base_of_v<std::exception, vulkan::out_of_host_memory>);
-static_assert(std::is_base_of_v<std::exception, vulkan::out_of_device_memory>);
+static_assert(std::is_base_of_v<std::exception, vulkan::out_of_shared_instance_memory>);
 static_assert(std::is_base_of_v<std::exception, vulkan::initialization_failed>);
 static_assert(std::is_base_of_v<std::exception, vulkan::device_lost>);
 static_assert(std::is_base_of_v<std::exception, vulkan::memory_map_failed>);
@@ -80,11 +80,11 @@ static_assert(std::is_base_of_v<std::exception, vulkan::ext::full_screen_exclusi
 static_assert(std::is_base_of_v<std::exception, vulkan::ext::compression_exhausted>);
 static_assert(std::is_base_of_v<std::exception, vulkan::ext::fragmentation>);
 static_assert(std::is_base_of_v<std::exception, vulkan::ext::not_permitted>);
-static_assert(std::is_base_of_v<std::exception, vulkan::ext::invalid_device_address>);
+static_assert(std::is_base_of_v<std::exception, vulkan::ext::invalid_shared_instance_address>);
 static_assert(std::is_base_of_v<std::exception, vulkan::nv::invalid_shader>);
 
 static_assert(std::is_nothrow_move_constructible_v<vulkan::out_of_host_memory>);
-static_assert(std::is_nothrow_move_constructible_v<vulkan::out_of_device_memory>);
+static_assert(std::is_nothrow_move_constructible_v<vulkan::out_of_shared_instance_memory>);
 static_assert(std::is_nothrow_move_constructible_v<vulkan::initialization_failed>);
 static_assert(std::is_nothrow_move_constructible_v<vulkan::device_lost>);
 static_assert(std::is_nothrow_move_constructible_v<vulkan::memory_map_failed>);
@@ -120,11 +120,11 @@ static_assert(std::is_nothrow_move_constructible_v<vulkan::ext::full_screen_excl
 static_assert(std::is_nothrow_move_constructible_v<vulkan::ext::compression_exhausted>);
 static_assert(std::is_nothrow_move_constructible_v<vulkan::ext::fragmentation>);
 static_assert(std::is_nothrow_move_constructible_v<vulkan::ext::not_permitted>);
-static_assert(std::is_nothrow_move_constructible_v<vulkan::ext::invalid_device_address>);
+static_assert(std::is_nothrow_move_constructible_v<vulkan::ext::invalid_shared_instance_address>);
 static_assert(std::is_nothrow_move_constructible_v<vulkan::nv::invalid_shader>);
 
 static_assert(std::is_nothrow_move_assignable_v<vulkan::out_of_host_memory>);
-static_assert(std::is_nothrow_move_assignable_v<vulkan::out_of_device_memory>);
+static_assert(std::is_nothrow_move_assignable_v<vulkan::out_of_shared_instance_memory>);
 static_assert(std::is_nothrow_move_assignable_v<vulkan::initialization_failed>);
 static_assert(std::is_nothrow_move_assignable_v<vulkan::device_lost>);
 static_assert(std::is_nothrow_move_assignable_v<vulkan::memory_map_failed>);
@@ -160,11 +160,11 @@ static_assert(std::is_nothrow_move_assignable_v<vulkan::ext::full_screen_exclusi
 static_assert(std::is_nothrow_move_assignable_v<vulkan::ext::compression_exhausted>);
 static_assert(std::is_nothrow_move_assignable_v<vulkan::ext::fragmentation>);
 static_assert(std::is_nothrow_move_assignable_v<vulkan::ext::not_permitted>);
-static_assert(std::is_nothrow_move_assignable_v<vulkan::ext::invalid_device_address>);
+static_assert(std::is_nothrow_move_assignable_v<vulkan::ext::invalid_shared_instance_address>);
 static_assert(std::is_nothrow_move_assignable_v<vulkan::nv::invalid_shader>);
 
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::out_of_host_memory>);
-static_assert(std::is_nothrow_copy_constructible_v<vulkan::out_of_device_memory>);
+static_assert(std::is_nothrow_copy_constructible_v<vulkan::out_of_shared_instance_memory>);
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::initialization_failed>);
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::device_lost>);
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::memory_map_failed>);
@@ -200,11 +200,11 @@ static_assert(std::is_nothrow_copy_constructible_v<vulkan::ext::full_screen_excl
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::ext::compression_exhausted>);
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::ext::fragmentation>);
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::ext::not_permitted>);
-static_assert(std::is_nothrow_copy_constructible_v<vulkan::ext::invalid_device_address>);
+static_assert(std::is_nothrow_copy_constructible_v<vulkan::ext::invalid_shared_instance_address>);
 static_assert(std::is_nothrow_copy_constructible_v<vulkan::nv::invalid_shader>);
 
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::out_of_host_memory>);
-static_assert(std::is_nothrow_copy_assignable_v<vulkan::out_of_device_memory>);
+static_assert(std::is_nothrow_copy_assignable_v<vulkan::out_of_shared_instance_memory>);
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::initialization_failed>);
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::device_lost>);
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::memory_map_failed>);
@@ -240,5 +240,5 @@ static_assert(std::is_nothrow_copy_assignable_v<vulkan::ext::full_screen_exclusi
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::ext::compression_exhausted>);
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::ext::fragmentation>);
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::ext::not_permitted>);
-static_assert(std::is_nothrow_copy_assignable_v<vulkan::ext::invalid_device_address>);
+static_assert(std::is_nothrow_copy_assignable_v<vulkan::ext::invalid_shared_instance_address>);
 static_assert(std::is_nothrow_copy_assignable_v<vulkan::nv::invalid_shader>);

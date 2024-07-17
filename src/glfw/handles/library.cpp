@@ -239,7 +239,7 @@ bool glfw::library::is_vulkan_supported() const
   return glfwVulkanSupported() == GLFW_TRUE;
 }
 
-std::vector<std::string> glfw::library::get_required_instance_extensions() const
+std::vector<std::string> glfw::library::get_required_shared_instance_extensions() const
 {
   std::uint32_t      count      = {};
   auto const * const extensions = glfwGetRequiredInstanceExtensions(&count);

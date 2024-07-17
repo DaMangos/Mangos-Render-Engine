@@ -10,15 +10,15 @@ Handle vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::get() const noex
 template <class Dispatcher, class Handle, auto DeleteHandle>
 VkAllocationCallbacks const * vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::get_allocation_callbacks() const noexcept
 {
-  return _allocation_callbacks.get();
+  return _shared_allocation_callbacks.get();
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
 void vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::reset() noexcept
 {
-  _dispatcher.reset();
+  _shared_dispatcher.reset();
   _handle = VK_NULL_HANDLE;
-  _allocation_callbacks.reset();
+  _shared_allocation_callbacks.reset();
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
@@ -28,9 +28,9 @@ vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::unique_handle(nullhandl
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
 vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::unique_handle(unique_handle && other) noexcept
-: _dispatcher(std::move(other._dispatcher)),
+: _shared_dispatcher(std::move(other._shared_dispatcher)),
   _handle(std::exchange(other._handle, VK_NULL_HANDLE)),
-  _allocation_callbacks(std::move(other._allocation_callbacks))
+  _shared_allocation_callbacks(std::move(other._shared_allocation_callbacks))
 {
 }
 
@@ -45,9 +45,9 @@ template <class Dispatcher, class Handle, auto DeleteHandle>
 vulkan::unique_handle<Dispatcher, Handle, DeleteHandle> & vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::operator=(
   unique_handle && other) noexcept
 {
-  _dispatcher           = std::move(other._dispatcher);
-  _handle               = std::exchange(other._handle, VK_NULL_HANDLE);
-  _allocation_callbacks = std::move(other._allocation_callbacks);
+  _shared_dispatcher           = std::move(other._shared_dispatcher);
+  _handle                      = std::exchange(other._handle, VK_NULL_HANDLE);
+  _shared_allocation_callbacks = std::move(other._shared_allocation_callbacks);
   return *this;
 }
 
@@ -55,7 +55,7 @@ template <class Dispatcher, class Handle, auto DeleteHandle>
 vulkan::unique_handle<Dispatcher, Handle, DeleteHandle>::~unique_handle<Dispatcher, Handle, DeleteHandle>() noexcept
 {
   if(_handle != VK_NULL_HANDLE)
-    DeleteHandle(_dispatcher.get(), _handle, _allocation_callbacks.get());
+    DeleteHandle(_shared_dispatcher.get(), _handle, _shared_allocation_callbacks.get());
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>

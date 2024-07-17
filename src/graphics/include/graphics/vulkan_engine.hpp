@@ -1,25 +1,21 @@
 #pragma once
 
-#include "glfw/structs/extent.hpp"
-#include "vulkan/handles/device.hpp"
-#include "vulkan/handles/physical_device.hpp"
-#include <glfw/handles.hpp>
 #include <vulkan/handles.hpp>
+
+#include <optional>
 
 namespace graphics
 {
-class render_window
+class vulkan_engine
 {
-    render_window(std::string const & title, glfw::extent<int> const & size);
+    vulkan_engine(std::optional<int> const logging_level = std::nullopt);
 
   private:
-    glfw::library _library;
-    glfw::window  _window;
-
     vulkan::instance                   _instance;
     vulkan::ext::debug_report_callback _debug_report_callback;
     vulkan::ext::debug_utils_messenger _debug_utils_messenger;
     vulkan::device                     _device;
     vulkan::physical_device            _physical_device;
+    vulkan::khr::surface               _surface;
 };
 }

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vulkan/handles/command_buffer.hpp>
 #include <vulkan/handles/range_element_handle.hpp>
+
+#include <concepts>
 
 namespace vulkan::internal
 {
@@ -8,14 +11,14 @@ struct make_range_element_handle_t
 {
     template <class Handle>
     [[nodiscard]]
-    static range_element_handle<Handle> invoke(std::shared_ptr<Handle[]> const & handles,
-                                               std::uint32_t const               size,
-                                               std::uint32_t const               index) noexcept
+    static range_element_handle<Handle> invoke(std::shared_ptr<Handle[]> const & shared_handles,
+                                               std::uint32_t const               array_size,
+                                               std::uint32_t const               array_index) noexcept
     {
       range_element_handle<Handle> result;
-      result._handles = handles;
-      result._size    = size;
-      result._index   = index;
+      result._shared_handles = shared_handles;
+      result._array_size     = array_size;
+      result._array_index    = array_index;
       return result;
     }
 };

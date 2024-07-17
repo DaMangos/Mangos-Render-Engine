@@ -13,6 +13,9 @@
 
 namespace vulkan
 {
+class command_buffer;
+class physical_device;
+
 class device
 {
   public:
@@ -129,12 +132,12 @@ class device
     using registered_descriptor_pools_type =
       std::unordered_map<VkDescriptorPool, std::weak_ptr<unique_handle<VkDevice, VkDescriptorPool, vkDestroyDescriptorPool>>>;
 
-    std::shared_ptr<VkInstance_T>                _instance;
-    std::shared_ptr<VkDevice_T>                  _device;
-    std::shared_ptr<VkAllocationCallbacks const> _allocation_callbacks;
+    std::shared_ptr<VkInstance_T>                _shared_instance;
+    std::shared_ptr<VkDevice_T>                  _shared_device;
+    std::shared_ptr<VkAllocationCallbacks const> _shared_allocation_callbacks;
     registered_command_pools_type                _registered_command_pools;
     registered_descriptor_pools_type             _registered_descriptor_pools;
 
-    friend class physical_device;
+    friend physical_device;
 };
 }

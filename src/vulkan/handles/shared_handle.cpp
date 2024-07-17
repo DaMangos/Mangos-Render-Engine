@@ -4,19 +4,19 @@
 template <class Dispatcher, class Handle, auto DeleteHandle>
 Handle vulkan::shared_handle<Dispatcher, Handle, DeleteHandle>::get() const noexcept
 {
-  return _shared ? _shared->get() : VK_NULL_HANDLE;
+  return _underlying_handle ? _underlying_handle->get() : VK_NULL_HANDLE;
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
 VkAllocationCallbacks const * vulkan::shared_handle<Dispatcher, Handle, DeleteHandle>::get_allocation_callbacks() const noexcept
 {
-  return _shared ? _shared->get_allocation_callbacks() : nullptr;
+  return _underlying_handle ? _underlying_handle->get_allocation_callbacks() : nullptr;
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
 void vulkan::shared_handle<Dispatcher, Handle, DeleteHandle>::reset() noexcept
 {
-  _shared.reset();
+  _underlying_handle.reset();
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
@@ -34,25 +34,25 @@ vulkan::shared_handle<Dispatcher, Handle, DeleteHandle> & vulkan::shared_handle<
 template <class Dispatcher, class Handle, auto DeleteHandle>
 std::strong_ordering vulkan::shared_handle<Dispatcher, Handle, DeleteHandle>::operator<=>(nullhandle_t) const noexcept
 {
-  return _shared ? *_shared <=> nullhandle : std::strong_ordering::less;
+  return _underlying_handle ? *_underlying_handle <=> nullhandle : std::strong_ordering::less;
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
 std::strong_ordering vulkan::shared_handle<Dispatcher, Handle, DeleteHandle>::operator<=>(shared_handle const & other) const noexcept
 {
-  if(not _shared)
+  if(not _underlying_handle)
     return std::strong_ordering::less;
 
-  if(not other._shared)
+  if(not other._underlying_handle)
     return std::strong_ordering::greater;
 
-  return *_shared <=> *other._shared;
+  return *_underlying_handle <=> *other._underlying_handle;
 }
 
 template <class Dispatcher, class Handle, auto DeleteHandle>
 vulkan::shared_handle<Dispatcher, Handle, DeleteHandle>::operator bool() const noexcept
 {
-  return _shared and *_shared;
+  return _underlying_handle and *_underlying_handle;
 }
 
 template class vulkan::shared_handle<VkDevice, VkCommandPool, vkDestroyCommandPool>;

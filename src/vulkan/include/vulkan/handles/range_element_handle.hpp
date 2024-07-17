@@ -21,13 +21,13 @@ class range_element_handle
     Handle get() const noexcept;
 
     [[nodiscard]]
-    std::uint32_t index() const noexcept;
+    std::uint32_t array_index() const noexcept;
 
     [[nodiscard]]
-    std::uint32_t size() const noexcept;
+    std::uint32_t array_size() const noexcept;
 
     [[nodiscard]]
-    Handle const * data() const noexcept;
+    Handle const * array_data() const noexcept;
 
     void reset() noexcept;
 
@@ -54,13 +54,12 @@ class range_element_handle
     explicit operator bool() const noexcept;
 
   private:
-    std::shared_ptr<Handle[]> _handles;
-    std::uint32_t             _size  = 0;
-    std::uint32_t             _index = 0;
+    std::shared_ptr<Handle[]> _shared_handles;
+    std::uint32_t             _array_size  = 0;
+    std::uint32_t             _array_index = 0;
 
     friend internal::make_range_element_handle_t;
 };
 
-using command_buffer = range_element_handle<VkCommandBuffer>;
 using descriptor_set = range_element_handle<VkDescriptorSet>;
 }

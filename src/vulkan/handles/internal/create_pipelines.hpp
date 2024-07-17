@@ -14,13 +14,13 @@ struct create_pipelines_t
 {
     template <auto CreatePipeline>
     [[nodiscard]]
-    static std::pair<std::vector<pipeline>, VkResult const> invoke(std::shared_ptr<VkInstance_T> const &                instance,
-                                                                   std::shared_ptr<VkDevice_T> const &                  device,
+    static std::pair<std::vector<pipeline>, VkResult const> invoke(std::shared_ptr<VkInstance_T> const &                shared_instance,
+                                                                   std::shared_ptr<VkDevice_T> const &                  shared_device,
                                                                    VkPipelineCache const                                cache,
                                                                    std::ranges::contiguous_range auto const &           infos,
-                                                                   std::shared_ptr<VkAllocationCallbacks const> const & allocator)
+                                                                   std::shared_ptr<VkAllocationCallbacks const> const & shared_allocator_callback)
     {
-      if(not instance or not device or std::ranges::size(infos) > static_cast<std::size_t>(std::numeric_limits<std::uint32_t>::max()))
+      if(not shared_instance or not shared_device or std::ranges::size(infos) > static_cast<std::size_t>(std::numeric_limits<std::uint32_t>::max()))
         return {std::vector<pipeline>(), VK_ERROR_UNKNOWN};
 
       std::vector<pipeline> pipelines;
@@ -29,18 +29,18 @@ struct create_pipelines_t
 
       std::vector<VkPipeline> handles(std::ranges::size(infos), VK_NULL_HANDLE);
 
-      auto const result = CreatePipeline(device.get(),
+      auto const result = CreatePipeline(shared_device.get(),
                                          cache,
                                          static_cast<std::uint32_t>(std::ranges::size(infos)),
                                          std::ranges::data(infos),
-                                         allocator.get(),
+                                         shared_allocator_callback.get(),
                                          handles.data());
 
       if(static_cast<int>(result) < 0)
         return {std::vector<pipeline>(), result};
 
       for(auto const handle : handles)
-        pipelines.emplace_back(make_unique_handle<VkPipeline, vkDestroyPipeline>(instance, device, handle, allocator));
+        pipelines.emplace_back(make_unique_handle<VkPipeline, vkDestroyPipeline>(shared_instance, shared_device, handle, shared_allocator_callback));
 
       return {std::move(pipelines), result};
     }

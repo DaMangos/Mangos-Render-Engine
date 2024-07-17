@@ -105,7 +105,7 @@ class library
     bool is_vulkan_supported() const;
 
     [[nodiscard]]
-    std::vector<std::string> get_required_instance_extensions() const;
+    std::vector<std::string> get_required_shared_instance_extensions() const;
 
     [[nodiscard]]
     int get_key_scancode(key const key) const;

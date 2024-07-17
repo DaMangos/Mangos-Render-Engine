@@ -7,7 +7,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-std::pair<vulkan::instance, VkResult const> vulkan::create_instance(VkInstanceCreateInfo const & info)
+std::pair<vulkan::instance, VkResult const> vulkan::create_shared_instance(VkInstanceCreateInfo const & info)
 {
   VkInstance handle = VK_NULL_HANDLE;
   auto const result = vkCreateInstance(&info, nullptr, &handle);
@@ -16,12 +16,12 @@ std::pair<vulkan::instance, VkResult const> vulkan::create_instance(VkInstanceCr
     return {nullhandle, result};
 
   instance instance;
-  instance._instance = std::shared_ptr<VkInstance_T>(handle, [](auto const handle) { vkDestroyInstance(handle, nullptr); });
+  instance._shared_instance = std::shared_ptr<VkInstance_T>(handle, [](auto const handle) { vkDestroyInstance(handle, nullptr); });
   return {std::move(instance), result};
 }
 
-std::pair<vulkan::instance, VkResult const> vulkan::create_instance(VkInstanceCreateInfo const &  info,
-                                                                    VkAllocationCallbacks const & allocation_callbacks)
+std::pair<vulkan::instance, VkResult const> vulkan::create_shared_instance(VkInstanceCreateInfo const &  info,
+                                                                           VkAllocationCallbacks const & allocation_callbacks)
 {
   auto const shared_allocation_callbacks = std::make_shared<VkAllocationCallbacks const>(allocation_callbacks);
 
@@ -36,57 +36,59 @@ std::pair<vulkan::instance, VkResult const> vulkan::create_instance(VkInstanceCr
                                                 { vkDestroyInstance(handle, shared_allocation_callbacks.get()); });
 
   instance instance;
-  instance._instance             = shared_instance;
-  instance._allocation_callbacks = shared_allocation_callbacks;
+  instance._shared_instance             = shared_instance;
+  instance._shared_allocation_callbacks = shared_allocation_callbacks;
 
   return {std::move(instance), result};
 }
 
 VkInstance vulkan::instance::get() const noexcept
 {
-  return _instance.get();
+  return _shared_instance.get();
 }
 
 VkAllocationCallbacks const * vulkan::instance::get_allocation_callbacks() const noexcept
 {
-  return _allocation_callbacks.get();
+  return _shared_allocation_callbacks.get();
 }
 
 std::pair<vulkan::ext::debug_report_callback, VkResult const> vulkan::instance::create_debug_report_callback(
   VkDebugReportCallbackCreateInfoEXT const & info)
 {
   return internal::create_unique_handle<VkDebugReportCallbackEXT, ext::create_debug_report_callback, ext::destroy_debug_report_callback>(
-    _instance,
+    _shared_instance,
     &info,
-    _allocation_callbacks);
+    _shared_allocation_callbacks);
 }
 
 std::pair<vulkan::ext::debug_utils_messenger, VkResult const> vulkan::instance::create_debug_utils_messenger(
   VkDebugUtilsMessengerCreateInfoEXT const & info)
 {
   return internal::create_unique_handle<VkDebugUtilsMessengerEXT, ext::create_debug_utils_messenger, ext::destroy_debug_utils_messenger>(
-    _instance,
+    _shared_instance,
     &info,
-    _allocation_callbacks);
+    _shared_allocation_callbacks);
 }
 
 std::pair<vulkan::khr::surface, VkResult const> vulkan::instance::create_surface(GLFWwindow * const window)
 {
-  return internal::create_unique_handle<VkSurfaceKHR, glfwCreateWindowSurface, vkDestroySurfaceKHR>(_instance, window, _allocation_callbacks);
+  return internal::create_unique_handle<VkSurfaceKHR, glfwCreateWindowSurface, vkDestroySurfaceKHR>(_shared_instance,
+                                                                                                    window,
+                                                                                                    _shared_allocation_callbacks);
 }
 
 std::pair<std::vector<vulkan::physical_device>, VkResult const> vulkan::instance::enumerate_physical_devices()
 {
   std::uint32_t count = 0;
 
-  auto const first_result = vkEnumeratePhysicalDevices(_instance.get(), &count, nullptr);
+  auto const first_result = vkEnumeratePhysicalDevices(_shared_instance.get(), &count, nullptr);
 
   if(static_cast<int>(first_result) < 0)
     return {std::vector<physical_device>(), first_result};
 
   std::vector<VkPhysicalDevice> handles(count, VK_NULL_HANDLE);
 
-  auto const second_result = vkEnumeratePhysicalDevices(_instance.get(), &count, handles.data());
+  auto const second_result = vkEnumeratePhysicalDevices(_shared_instance.get(), &count, handles.data());
 
   if(static_cast<int>(second_result) < 0)
     return {std::vector<physical_device>(), second_result};
@@ -98,9 +100,9 @@ std::pair<std::vector<vulkan::physical_device>, VkResult const> vulkan::instance
                          [this](auto const handle)
                          {
                            physical_device physical_device;
-                           physical_device._instance             = _instance;
-                           physical_device._physical_device      = handle;
-                           physical_device._allocation_callbacks = _allocation_callbacks;
+                           physical_device._shared_instance             = _shared_instance;
+                           physical_device._physical_device             = handle;
+                           physical_device._shared_allocation_callbacks = _shared_allocation_callbacks;
                            return physical_device;
                          });
 
@@ -109,8 +111,8 @@ std::pair<std::vector<vulkan::physical_device>, VkResult const> vulkan::instance
 
 void vulkan::instance::reset() noexcept
 {
-  _instance.reset();
-  _allocation_callbacks.reset();
+  _shared_instance.reset();
+  _shared_allocation_callbacks.reset();
 }
 
 vulkan::instance::instance(nullhandle_t) noexcept
@@ -125,15 +127,15 @@ vulkan::instance & vulkan::instance::operator=(nullhandle_t) noexcept
 
 std::strong_ordering vulkan::instance::operator<=>(instance const & other) const noexcept
 {
-  return _instance <=> other._instance;
+  return _shared_instance <=> other._shared_instance;
 }
 
 std::strong_ordering vulkan::instance::operator<=>(nullhandle_t) const noexcept
 {
-  return _instance <=> nullptr;
+  return _shared_instance <=> nullptr;
 }
 
 vulkan::instance::operator bool() const noexcept
 {
-  return static_cast<bool>(_instance);
+  return static_cast<bool>(_shared_instance);
 }

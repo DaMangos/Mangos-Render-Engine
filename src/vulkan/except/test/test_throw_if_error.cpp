@@ -5,7 +5,7 @@
 TEST(Vulkan, ThrowIfBadResult)
 {
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_OUT_OF_HOST_MEMORY), vulkan::out_of_host_memory);
-  EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_OUT_OF_DEVICE_MEMORY), vulkan::out_of_device_memory);
+  EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_OUT_OF_DEVICE_MEMORY), vulkan::out_of_shared_instance_memory);
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_INITIALIZATION_FAILED), vulkan::initialization_failed);
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_DEVICE_LOST), vulkan::device_lost);
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_MEMORY_MAP_FAILED), vulkan::memory_map_failed);
@@ -74,7 +74,7 @@ TEST(VulkanEXT, ThrowIfBadResult)
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_COMPRESSION_EXHAUSTED_EXT), ext::compression_exhausted);
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_FRAGMENTATION_EXT), ext::fragmentation);
   EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_NOT_PERMITTED_EXT), ext::not_permitted);
-  EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_INVALID_DEVICE_ADDRESS_EXT), ext::invalid_device_address);
+  EXPECT_THROW(vulkan::throw_if_error(VK_ERROR_INVALID_DEVICE_ADDRESS_EXT), ext::invalid_shared_instance_address);
 }
 
 TEST(VulkanEXT, ReturnIfGoodResult)

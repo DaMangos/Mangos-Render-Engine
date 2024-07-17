@@ -78,6 +78,6 @@ struct window_hints
     std::string                   cocoa_frame_name;
     bool                          cocoa_graphics_switching = false;
     std::string                   x11_class_name;
-    std::string                   x11_instance_name;
+    std::string                   x11_shared_instance_name;
 };
 }

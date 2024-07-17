@@ -137,7 +137,7 @@ void glfw::internal::set_hints(window_hints const & hints) noexcept
   glfwWindowHintString(GLFW_COCOA_FRAME_NAME, hints.cocoa_frame_name.c_str());
   glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, hints.cocoa_graphics_switching ? GLFW_TRUE : GLFW_FALSE);
   glfwWindowHintString(GLFW_X11_CLASS_NAME, hints.x11_class_name.c_str());
-  glfwWindowHintString(GLFW_X11_INSTANCE_NAME, hints.x11_instance_name.c_str());
+  glfwWindowHintString(GLFW_X11_INSTANCE_NAME, hints.x11_shared_instance_name.c_str());
 }
 
 void glfw::internal::set_hints(library_hints const & hints) noexcept

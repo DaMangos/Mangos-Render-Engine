@@ -15,10 +15,11 @@ class instance;
 class physical_device;
 
 [[nodiscard]]
-std::pair<instance, VkResult const> create_instance(VkInstanceCreateInfo const & info, VkAllocationCallbacks const & allocator);
+std::pair<instance, VkResult const> create_shared_instance(VkInstanceCreateInfo const &  info,
+                                                           VkAllocationCallbacks const & shared_allocation_callback);
 
 [[nodiscard]]
-std::pair<instance, VkResult const> create_instance(VkInstanceCreateInfo const & info);
+std::pair<instance, VkResult const> create_shared_instance(VkInstanceCreateInfo const & info);
 
 class instance
 {
@@ -73,11 +74,12 @@ class instance
     explicit operator bool() const noexcept;
 
   private:
-    std::shared_ptr<VkInstance_T>                _instance;
-    std::shared_ptr<VkAllocationCallbacks const> _allocation_callbacks;
+    std::shared_ptr<VkInstance_T>                _shared_instance;
+    std::shared_ptr<VkAllocationCallbacks const> _shared_allocation_callbacks;
 
-    friend std::pair<instance, VkResult const> create_instance(VkInstanceCreateInfo const & info, VkAllocationCallbacks const & allocator);
-    friend std::pair<instance, VkResult const> create_instance(VkInstanceCreateInfo const & info);
+    friend std::pair<instance, VkResult const> create_shared_instance(VkInstanceCreateInfo const &  info,
+                                                                      VkAllocationCallbacks const & shared_allocation_callback);
+    friend std::pair<instance, VkResult const> create_shared_instance(VkInstanceCreateInfo const & info);
 };
 }
 

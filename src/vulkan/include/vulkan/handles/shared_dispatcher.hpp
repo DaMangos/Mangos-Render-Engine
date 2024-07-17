@@ -15,15 +15,15 @@ struct shared_dispatcher<VkInstance>
     [[nodiscard]]
     VkInstance get() const noexcept
     {
-      return instance.get();
+      return shared_instance.get();
     }
 
     void reset() noexcept
     {
-      instance.reset();
+      shared_instance.reset();
     }
 
-    std::shared_ptr<VkInstance_T> instance;
+    std::shared_ptr<VkInstance_T> shared_instance;
 };
 
 template <>
@@ -32,16 +32,16 @@ struct shared_dispatcher<VkDevice>
     [[nodiscard]]
     VkDevice get() const noexcept
     {
-      return device.get();
+      return shared_device.get();
     }
 
     void reset() noexcept
     {
-      device.reset();
-      instance.reset();
+      shared_device.reset();
+      shared_instance.reset();
     }
 
-    std::shared_ptr<VkDevice_T>   device;
-    std::shared_ptr<VkInstance_T> instance;
+    std::shared_ptr<VkDevice_T>   shared_device;
+    std::shared_ptr<VkInstance_T> shared_instance;
 };
 }

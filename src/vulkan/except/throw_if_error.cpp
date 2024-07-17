@@ -10,7 +10,7 @@ VkResult vulkan::throw_if_error_t::operator()(VkResult const result) const
     case VK_ERROR_OUT_OF_HOST_MEMORY :
       throw out_of_host_memory();
     case VK_ERROR_OUT_OF_DEVICE_MEMORY :
-      throw out_of_device_memory();
+      throw out_of_shared_instance_memory();
     case VK_ERROR_INITIALIZATION_FAILED :
       throw initialization_failed();
     case VK_ERROR_DEVICE_LOST :

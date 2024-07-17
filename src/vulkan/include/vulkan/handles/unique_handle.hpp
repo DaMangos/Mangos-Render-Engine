@@ -49,9 +49,9 @@ class unique_handle
     explicit operator bool() const noexcept;
 
   private:
-    shared_dispatcher<Dispatcher>                _dispatcher;
+    shared_dispatcher<Dispatcher>                _shared_dispatcher;
     Handle                                       _handle = VK_NULL_HANDLE;
-    std::shared_ptr<VkAllocationCallbacks const> _allocation_callbacks;
+    std::shared_ptr<VkAllocationCallbacks const> _shared_allocation_callbacks;
 
     friend internal::make_unique_handle_t;
     friend internal::create_unique_handle_t;
