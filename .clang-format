@@ -106,12 +106,15 @@ Standard: Latest
 TabWidth: 2
 UseTab: Never
 IncludeCategories:
-- Regex: '\.\./[A-Za-z0-9]+/[A-Za-z0-9]+'
-  Priority: 1
-  SortPriority: 1
-- Regex: '[A-Za-z0-9]+/[A-Za-z0-9]+'
-  Priority: 2
-  SortPriority: 2
-- Regex: '.*'
-  Priority: 3
-  SortPriority: 3
+  # Headers in <> without extension.
+  - Regex:           '<([A-Za-z0-9\Q/-_\E])+>'
+    Priority:        4
+  # Headers in <> from specific external libraries.
+  - Regex:           '<(boost|GLFW|vulkan|gtest|gmock)\/'
+    Priority:        3
+  # Headers in <> with extension.
+  - Regex:           '<([A-Za-z0-9.\Q/-_\E])+>'
+    Priority:        2
+  # Headers in "" with extension.
+  - Regex:           '"([A-Za-z0-9.\Q/-_\E])+"'
+    Priority:        1

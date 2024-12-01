@@ -1,22 +1,23 @@
 #pragma once
 
-#include <glfw/handles.hpp>
-#include <vulkan/handles.hpp>
+#include "pixel.hpp"
+
+#include <memory>
+#include <string>
 
 namespace graphics
 {
 class render_window
 {
-    render_window(std::string const & title, glfw::extent<int> const & size);
+  public:
+    static std::ostream error_out;
+    static std::ostream warning_out;
+    static std::ostream info_out;
+    static std::ostream verbose_out;
+
+    render_window(std::string const & title, pixel const width, pixel const height);
 
   private:
-    glfw::library _library;
-    glfw::window  _window;
-
-    vulkan::instance                   _instance;
-    vulkan::ext::debug_report_callback _debug_report_callback;
-    vulkan::ext::debug_utils_messenger _debug_utils_messenger;
-    vulkan::device                     _device;
-    vulkan::physical_device            _physical_device;
+    std::unique_ptr<class render_window_implementation, void (*)(render_window_implementation *)> underlying_implementation;
 };
 }
