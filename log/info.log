@@ -1,50 +1,50 @@
-{ General } { 2024-12-01 00:29:43.091981 } Portability enumeration bit was set, enumerating portability drivers.
-{ General } { 2024-12-01 00:29:43.092003 } Searching for implicit layer manifest files
-{ General } { 2024-12-01 00:29:43.092005 }    In following locations:
-{ General } { 2024-12-01 00:29:43.092007 }       /Users/oliverhorriganpierre/Documents/GitHub/Mangos-Render-Engine/bin/debug/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092008 }       /Users/oliverhorriganpierre/.config/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092010 }       /etc/xdg/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092011 }       /Users/lunarg/Dev/macos-sdk-build/Vulkan-Loader/build/install/etc/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092013 }       /etc/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092014 }       /Users/oliverhorriganpierre/.local/share/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092016 }       /usr/local/share/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092017 }       /usr/share/vulkan/implicit_layer.d
-{ General } { 2024-12-01 00:29:43.092038 }    Found no files
-{ General } { 2024-12-01 00:29:43.092048 } Searching for explicit layer manifest files
-{ General } { 2024-12-01 00:29:43.092049 }    In following locations:
-{ General } { 2024-12-01 00:29:43.092051 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d
-{ General } { 2024-12-01 00:29:43.092091 }    Found the following files:
-{ General } { 2024-12-01 00:29:43.092093 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_api_dump.json
-{ General } { 2024-12-01 00:29:43.092095 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_profiles.json
-{ General } { 2024-12-01 00:29:43.092096 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
-{ General } { 2024-12-01 00:29:43.092098 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_screenshot.json
-{ General } { 2024-12-01 00:29:43.092099 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_synchronization2.json
-{ General } { 2024-12-01 00:29:43.092101 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_shader_object.json
-{ General } { 2024-12-01 00:29:43.092162 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_api_dump.json (file version 1.2.0)
-{ General } { 2024-12-01 00:29:43.092431 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_profiles.json (file version 1.2.1)
-{ General } { 2024-12-01 00:29:43.092771 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json (file version 1.2.0)
-{ General } { 2024-12-01 00:29:43.092922 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_screenshot.json (file version 1.2.0)
-{ General } { 2024-12-01 00:29:43.092964 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_synchronization2.json (file version 1.2.0)
-{ General } { 2024-12-01 00:29:43.093009 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_shader_object.json (file version 1.2.0)
-{ General } { 2024-12-01 00:29:43.093038 } Searching for driver manifest files
-{ General } { 2024-12-01 00:29:43.093039 }    In following locations:
-{ General } { 2024-12-01 00:29:43.093041 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json
-{ General } { 2024-12-01 00:29:43.093043 }    Found the following files:
-{ General } { 2024-12-01 00:29:43.093044 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json
-{ General } { 2024-12-01 00:29:43.093095 } Found ICD manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json, version 1.0.0
-{ General } { 2024-12-01 00:29:43.096374 } Insert instance layer "VK_LAYER_KHRONOS_validation" (/Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib)
-{ General } { 2024-12-01 00:29:43.096378 } vkCreateInstance layer callstack setup to:
-{ General } { 2024-12-01 00:29:43.096379 }    <Application>
-{ General } { 2024-12-01 00:29:43.096381 }      ||
-{ General } { 2024-12-01 00:29:43.096382 }    <Loader>
-{ General } { 2024-12-01 00:29:43.096384 }      ||
-{ General } { 2024-12-01 00:29:43.096385 }    VK_LAYER_KHRONOS_validation
-{ General } { 2024-12-01 00:29:43.096386 }            Type: Explicit
-{ General } { 2024-12-01 00:29:43.096388 }            Manifest: /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
-{ General } { 2024-12-01 00:29:43.096390 }            Library:  /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
-{ General } { 2024-12-01 00:29:43.096391 }      ||
-{ General } { 2024-12-01 00:29:43.096393 }    <Drivers>
-{ General } { 2024-12-01 00:29:43.096968 } MoltenVK version 1.2.9, supporting Vulkan version 1.2.283.
+{ General } { 2025-01-22 15:11:43.509123 } Portability enumeration bit was set, enumerating portability drivers.
+{ General } { 2025-01-22 15:11:43.509155 } Searching for implicit layer manifest files
+{ General } { 2025-01-22 15:11:43.509157 }    In following locations:
+{ General } { 2025-01-22 15:11:43.509158 }       /Users/oliverhorriganpierre/Documents/GitHub/Mangos-Render-Engine/bin/debug/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509160 }       /Users/oliverhorriganpierre/.config/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509162 }       /etc/xdg/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509163 }       /Users/lunarg/Dev/macos-sdk-build/Vulkan-Loader/build/install/etc/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509165 }       /etc/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509166 }       /Users/oliverhorriganpierre/.local/share/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509168 }       /usr/local/share/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509169 }       /usr/share/vulkan/implicit_layer.d
+{ General } { 2025-01-22 15:11:43.509190 }    Found no files
+{ General } { 2025-01-22 15:11:43.509199 } Searching for explicit layer manifest files
+{ General } { 2025-01-22 15:11:43.509201 }    In following locations:
+{ General } { 2025-01-22 15:11:43.509203 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d
+{ General } { 2025-01-22 15:11:43.509299 }    Found the following files:
+{ General } { 2025-01-22 15:11:43.509301 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_api_dump.json
+{ General } { 2025-01-22 15:11:43.509303 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_profiles.json
+{ General } { 2025-01-22 15:11:43.509305 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
+{ General } { 2025-01-22 15:11:43.509306 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_screenshot.json
+{ General } { 2025-01-22 15:11:43.509308 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_synchronization2.json
+{ General } { 2025-01-22 15:11:43.509309 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_shader_object.json
+{ General } { 2025-01-22 15:11:43.509565 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_api_dump.json (file version 1.2.0)
+{ General } { 2025-01-22 15:11:43.510454 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_profiles.json (file version 1.2.1)
+{ General } { 2025-01-22 15:11:43.511174 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json (file version 1.2.0)
+{ General } { 2025-01-22 15:11:43.511483 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_screenshot.json (file version 1.2.0)
+{ General } { 2025-01-22 15:11:43.511652 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_synchronization2.json (file version 1.2.0)
+{ General } { 2025-01-22 15:11:43.511833 } Found manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_shader_object.json (file version 1.2.0)
+{ General } { 2025-01-22 15:11:43.511865 } Searching for driver manifest files
+{ General } { 2025-01-22 15:11:43.511867 }    In following locations:
+{ General } { 2025-01-22 15:11:43.511868 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json
+{ General } { 2025-01-22 15:11:43.511870 }    Found the following files:
+{ General } { 2025-01-22 15:11:43.511872 }       /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json
+{ General } { 2025-01-22 15:11:43.511930 } Found ICD manifest file /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/MoltenVK_icd.json, version 1.0.0
+{ General } { 2025-01-22 15:11:44.396262 } Insert instance layer "VK_LAYER_KHRONOS_validation" (/Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib)
+{ General } { 2025-01-22 15:11:44.396277 } vkCreateInstance layer callstack setup to:
+{ General } { 2025-01-22 15:11:44.396279 }    <Application>
+{ General } { 2025-01-22 15:11:44.396281 }      ||
+{ General } { 2025-01-22 15:11:44.396282 }    <Loader>
+{ General } { 2025-01-22 15:11:44.396283 }      ||
+{ General } { 2025-01-22 15:11:44.396285 }    VK_LAYER_KHRONOS_validation
+{ General } { 2025-01-22 15:11:44.396286 }            Type: Explicit
+{ General } { 2025-01-22 15:11:44.396288 }            Manifest: /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
+{ General } { 2025-01-22 15:11:44.396289 }            Library:  /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
+{ General } { 2025-01-22 15:11:44.396291 }      ||
+{ General } { 2025-01-22 15:11:44.396292 }    <Drivers>
+{ General } { 2025-01-22 15:11:44.397402 } MoltenVK version 1.2.9, supporting Vulkan version 1.2.283.
 	The following 110 Vulkan extensions are supported:
 		VK_KHR_16bit_storage v1
 		VK_KHR_8bit_storage v1
@@ -156,7 +156,7 @@
 		VK_MVK_moltenvk v37
 		VK_NV_fragment_shader_barycentric v1
 		VK_NV_glsl_shader v1
-{ General } { 2024-12-01 00:29:43.100363 } GPU device:
+{ General } { 2025-01-22 15:11:44.402110 } GPU device:
 		model: Apple M1 Pro
 		type: Integrated
 		vendorID: 0x106b
@@ -183,32 +183,32 @@
 		macOS GPU Family 1 v3
 		macOS GPU Family 1 v2
 		macOS GPU Family 1 v1
-{ General } { 2024-12-01 00:29:43.100375 } Created VkInstance for Vulkan version 1.2.283, as requested by app, with the following 3 Vulkan extensions enabled:
+{ General } { 2025-01-22 15:11:44.402123 } Created VkInstance for Vulkan version 1.2.283, as requested by app, with the following 3 Vulkan extensions enabled:
 		VK_KHR_surface v25
 		VK_EXT_debug_utils v2
 		VK_EXT_metal_surface v1
-{ Validation } { 2024-12-01 00:29:43.100552 } Validation Information: [ WARNING-CreateInstance-status-message ] Object 0: handle = 0x11e00fe00, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x23dfd876 | vkCreateInstance():  Khronos Validation Layer Active:
+{ Validation } { 2025-01-22 15:11:44.402390 } Validation Information: [ WARNING-CreateInstance-status-message ] Object 0: handle = 0x15284b000, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x23dfd876 | vkCreateInstance():  Khronos Validation Layer Active:
     Settings File: None. Default location is /Users/oliverhorriganpierre/Documents/GitHub/Mangos-Render-Engine\vk_layer_settings.txt.
     Current Enables: None.
     Current Disables: None.
 
-{ General } { 2024-12-01 00:29:43.102464 } Inserted device layer "VK_LAYER_KHRONOS_validation" (/Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib)
-{ General } { 2024-12-01 00:29:43.102473 } vkCreateDevice layer callstack setup to:
-{ General } { 2024-12-01 00:29:43.102475 }    <Application>
-{ General } { 2024-12-01 00:29:43.102477 }      ||
-{ General } { 2024-12-01 00:29:43.102479 }    <Loader>
-{ General } { 2024-12-01 00:29:43.102480 }      ||
-{ General } { 2024-12-01 00:29:43.102481 }    VK_LAYER_KHRONOS_validation
-{ General } { 2024-12-01 00:29:43.102483 }            Type: Explicit
-{ General } { 2024-12-01 00:29:43.102484 }            Manifest: /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
-{ General } { 2024-12-01 00:29:43.102486 }            Library:  /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
-{ General } { 2024-12-01 00:29:43.102488 }      ||
-{ General } { 2024-12-01 00:29:43.102489 }    <Device>
-{ General } { 2024-12-01 00:29:43.102532 }        Using "Apple M1 Pro" with driver: "/Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/../../../lib/libMoltenVK.dylib"
-{ General } { 2024-12-01 00:29:43.102538 } Vulkan semaphores using MTLEvent.
-{ General } { 2024-12-01 00:29:43.104026 } Created VkDevice to run on GPU Apple M1 Pro with the following 2 Vulkan extensions enabled:
+{ General } { 2025-01-22 15:11:44.404935 } Inserted device layer "VK_LAYER_KHRONOS_validation" (/Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib)
+{ General } { 2025-01-22 15:11:44.404940 } vkCreateDevice layer callstack setup to:
+{ General } { 2025-01-22 15:11:44.404942 }    <Application>
+{ General } { 2025-01-22 15:11:44.404944 }      ||
+{ General } { 2025-01-22 15:11:44.404945 }    <Loader>
+{ General } { 2025-01-22 15:11:44.404947 }      ||
+{ General } { 2025-01-22 15:11:44.404948 }    VK_LAYER_KHRONOS_validation
+{ General } { 2025-01-22 15:11:44.404950 }            Type: Explicit
+{ General } { 2025-01-22 15:11:44.404951 }            Manifest: /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json
+{ General } { 2025-01-22 15:11:44.404953 }            Library:  /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
+{ General } { 2025-01-22 15:11:44.404955 }      ||
+{ General } { 2025-01-22 15:11:44.404956 }    <Device>
+{ General } { 2025-01-22 15:11:44.405050 }        Using "Apple M1 Pro" with driver: "/Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/icd.d/../../../lib/libMoltenVK.dylib"
+{ General } { 2025-01-22 15:11:44.405064 } Vulkan semaphores using MTLEvent.
+{ General } { 2025-01-22 15:11:44.723802 } Created VkDevice to run on GPU Apple M1 Pro with the following 2 Vulkan extensions enabled:
 		VK_KHR_portability_subset v1
 		VK_KHR_swapchain v70
-{ General } { 2024-12-01 00:29:43.104986 } Destroyed VkDevice on GPU Apple M1 Pro with 2 Vulkan extensions enabled.
-{ General } { 2024-12-01 00:29:43.105179 } Destroyed VkPhysicalDevice for GPU Apple M1 Pro with 0 MB of GPU memory still allocated.
-{ General } { 2024-12-01 00:29:43.105191 } Destroying VkInstance for Vulkan version 1.2.283 with 3 Vulkan extensions enabled.
+{ General } { 2025-01-22 15:11:44.725574 } Destroyed VkDevice on GPU Apple M1 Pro with 2 Vulkan extensions enabled.
+{ General } { 2025-01-22 15:11:44.725852 } Destroyed VkPhysicalDevice for GPU Apple M1 Pro with 0 MB of GPU memory still allocated.
+{ General } { 2025-01-22 15:11:44.725861 } Destroying VkInstance for Vulkan version 1.2.283 with 3 Vulkan extensions enabled.

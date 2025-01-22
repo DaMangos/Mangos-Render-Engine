@@ -1,3 +1,3 @@
-{ General } { 2024-12-01 00:29:43.093097 } Searching for ICD drivers named ../../../lib/libMoltenVK.dylib
-{ General } { 2024-12-01 00:29:43.096364 } Loading layer library /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
-{ General } { 2024-12-01 00:29:43.105336 } Unloading layer library /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
+{ General } { 2025-01-22 15:11:43.511933 } Searching for ICD drivers named ../../../lib/libMoltenVK.dylib
+{ General } { 2025-01-22 15:11:44.396246 } Loading layer library /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib
+{ General } { 2025-01-22 15:11:44.726039 } Unloading layer library /Users/oliverhorriganpierre/VulkanSDK/1.3.290.0/macOS/share/vulkan/explicit_layer.d/../../../lib/libVkLayer_khronos_validation.dylib

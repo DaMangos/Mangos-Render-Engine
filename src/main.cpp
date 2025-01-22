@@ -30,6 +30,7 @@ int main()
     using namespace graphics::pixel_literals;
 
     graphics::render_window window("Hello, World!", 800_px, 600_px);
+    graphics::render_window windowq("Hello, World!", 800_px, 600_px);
 
     return 0;
   }

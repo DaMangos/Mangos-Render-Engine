@@ -7,6 +7,11 @@
 
 namespace graphics
 {
+namespace detail
+{
+class render_window_impl;
+}
+
 class render_window
 {
   public:
@@ -17,7 +22,9 @@ class render_window
 
     render_window(std::string const & title, pixel const width, pixel const height);
 
+    render_window(std::string const & title, pixel const width, pixel const height, bool const debug);
+
   private:
-    std::unique_ptr<class render_window_implementation, void (*)(render_window_implementation *)> underlying_implementation;
+    std::unique_ptr<detail::render_window_impl, void (*)(detail::render_window_impl * const)> underlying_implementation;
 };
 }

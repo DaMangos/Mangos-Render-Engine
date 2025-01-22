@@ -3,7 +3,7 @@ EXE = MangosRenderEngine
 ROOTDIR = $(CURDIR)
 
 .PHONY: all
-all: format compile_commands shaders debug release test
+all: compile_commands format shaders debug release test
 
 .PHONY: format
 format:
@@ -12,7 +12,7 @@ format:
 .PHONY: compile_commands
 compile_commands :
 	@rm -rf $(ROOTDIR)/compile_commands.json
-	@bear -- make debug
+	@bear -- make -f $(ROOTDIR)/make/cpp.mk --warn-undefined-variables ROOTDIR="$(ROOTDIR)" BUILD_MODE="debug"
 
 .PHONY: debug
 debug:
